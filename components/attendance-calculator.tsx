@@ -1,8 +1,11 @@
 'use client'
 
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, CheckCircle2, XCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { AlertCircle, CheckCircle2, XCircle, Download } from "lucide-react"
+import { ExportSummaryModal } from "@/components/export-summary-modal"
 
 interface SimpleCalculatorProps {
   totalClasses: number
@@ -25,6 +28,8 @@ interface LTPSCalculatorProps {
 }
 
 export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorProps) {
+  const [isExportOpen, setIsExportOpen] = useState(false)
+
   const calculatePercentage = () => {
     if (totalClasses === 0) return 0
     return (presents / totalClasses) * 100
@@ -92,18 +97,48 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
 
   return (
     <div className="space-y-6">
+      <ExportSummaryModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        reportTitle="Simple Attendance Summary"
+        overallPercentage={percentage}
+        statusLabel={attendanceStatus}
+        items={[
+          {
+            label: 'Overall Classes',
+            attended: presents,
+            conducted: totalClasses,
+            percentage: percentage
+          }
+        ]}
+        bunkAnalysis={classesCanMiss > 0 ? `You can safely bunk ${classesCanMiss} more class(es) while keeping >=75%.` : undefined}
+        attendAnalysis={classesToAttend75 > 0 ? `You need to attend ${classesToAttend75} more class(es) to reach 75%.` : undefined}
+      />
+
       <div className={percentage >= 85 ? "always-glow-success" : percentage >= 75 ? "always-glow-warning" : "always-glow-danger"}>
         <Card className="bg-card/90 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl">Attendance Analysis</CardTitle>
-            <div className="flex items-center gap-2">
-              <span className={`text-4xl font-bold ${attendanceColor}`}>
-                {percentage.toFixed(2)}%
-              </span>
-              <span className={`text-sm font-medium ${attendanceColor}`}>
-                ({attendanceStatus})
-              </span>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <div>
+              <CardTitle className="text-2xl">Attendance Analysis</CardTitle>
+              <div className="flex items-center gap-2 mt-1">
+                <span className={`text-4xl font-bold ${attendanceColor}`}>
+                  {percentage.toFixed(2)}%
+                </span>
+                <span className={`text-sm font-medium ${attendanceColor}`}>
+                  ({attendanceStatus})
+                </span>
+              </div>
             </div>
+
+            <Button
+              onClick={() => setIsExportOpen(true)}
+              variant="outline"
+              size="sm"
+              className="gap-2 shadow-sm font-outfit"
+            >
+              <Download className="h-4 w-4 text-blue-500" />
+              <span>Export Card</span>
+            </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -212,6 +247,8 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
 }
 
 export function LTPSCalculator({ components }: LTPSCalculatorProps) {
+  const [isExportOpen, setIsExportOpen] = useState(false)
+
   const calculateClassesFromPercentage = (percentage: number | null): { total: number, present: number } => {
     if (percentage === null) return { total: 0, present: 0 }
     // Assuming a base of 100 for calculations
@@ -272,20 +309,58 @@ export function LTPSCalculator({ components }: LTPSCalculatorProps) {
   const attendanceColor = getAttendanceColor();
   const attendanceStatus = getAttendanceStatus();
 
+  // Construct report items
+  const reportItems = [
+    { label: 'Lecture Component', val: components.lecture.percentage, weight: 'Weightage: 100%' },
+    { label: 'Tutorial Component', val: components.tutorial.percentage, weight: 'Weightage: 25%' },
+    { label: 'Practical Component', val: components.practical.percentage, weight: 'Weightage: 50%' },
+    { label: 'Skilling Component', val: components.skilling.percentage, weight: 'Weightage: 25%' },
+  ]
+    .filter(item => item.val !== null)
+    .map(item => ({
+      label: item.label,
+      attended: Math.round(((item.val || 0) / 100) * 100),
+      conducted: 100,
+      weightage: item.weight,
+      percentage: item.val || 0
+    }))
+
   return (
     <div className="space-y-6">
+      <ExportSummaryModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        reportTitle="LTPS Component Attendance Report"
+        overallPercentage={finalPercentage}
+        statusLabel={attendanceStatus}
+        items={reportItems}
+        bunkAnalysis="Calculated using KL LTPS component weightage rules (Lecture: 1.0, Tutorial: 0.25, Practical: 0.5, Skilling: 0.25)."
+      />
+
       <div className={finalPercentage >= 85 ? "always-glow-success" : finalPercentage >= 75 ? "always-glow-warning" : "always-glow-danger"}>
         <Card className="bg-card/90 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-2xl">Final Attendance</CardTitle>
-            <div className="flex items-center gap-2">
-              <span className={`text-4xl font-bold ${attendanceColor}`}>
-                {finalPercentage.toFixed(2)}%
-              </span>
-              <span className={`text-sm font-medium ${attendanceColor}`}>
-                ({attendanceStatus})
-              </span>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <div>
+              <CardTitle className="text-2xl">Final Attendance</CardTitle>
+              <div className="flex items-center gap-2 mt-1">
+                <span className={`text-4xl font-bold ${attendanceColor}`}>
+                  {finalPercentage.toFixed(2)}%
+                </span>
+                <span className={`text-sm font-medium ${attendanceColor}`}>
+                  ({attendanceStatus})
+                </span>
+              </div>
             </div>
+
+            <Button
+              onClick={() => setIsExportOpen(true)}
+              variant="outline"
+              size="sm"
+              className="gap-2 shadow-sm font-outfit"
+            >
+              <Download className="h-4 w-4 text-blue-500" />
+              <span>Export Card</span>
+            </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

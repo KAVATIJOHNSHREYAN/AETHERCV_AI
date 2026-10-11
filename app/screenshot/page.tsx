@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Upload, Image as ImageIcon, Loader2, Save, Trash2, AlertCircle, CheckCircle2, XCircle, Terminal, Eye, EyeOff, X } from "lucide-react"
+import { Upload, Image as ImageIcon, Loader2, Save, Trash2, AlertCircle, CheckCircle2, XCircle, Terminal, Eye, EyeOff, X, Download } from "lucide-react"
 import Image from 'next/image'
 import Cookies from 'js-cookie'
 import Script from 'next/script'
+import { ExportSummaryModal, ExportSummaryModalProps } from '@/components/export-summary-modal'
 
 interface AttendanceRecord {
   coursecode: string
@@ -28,33 +29,25 @@ interface AttendanceRecord {
 }
 
 interface ColumnData {
-  courseCode: string[]
-  courseName: string[]
-  type: string[]
-  timeSlot: string[]
-  academicYear: string[]
-  semester: string[]
-  status: string[]
-  totalConducted: number[]
-  totalAttended: number[]
-  totalAbsent: number[]
-  tcbr: number[]
-  percentage: number[]
+  headers: string[]
+  rows: string[][]
+}
+
+interface ComponentDetail {
+  type: string
+  conducted: number
+  attended: number
+  percentage: number
+  weight: number
 }
 
 interface GroupedSubject {
   coursecode: string
   coursename: string
-  components: {
-    L?: AttendanceRecord
-    T?: AttendanceRecord
-    P?: AttendanceRecord
-    S?: AttendanceRecord
-  }
-  finalPercentage: number
-  status: string
-  attendanceOptions?: AttendanceOption[]
-  skippableClasses?: SkippableOption[]
+  components: ComponentDetail[]
+  weightedPercentage: number
+  totalWeight: number
+  status: 'eligible' | 'condonation' | 'detained'
 }
 
 interface AttendanceOption {
@@ -97,6 +90,7 @@ export default function ScreenshotCalculatorPage() {
   const [savedResults, setSavedResults] = useState<SavedScreenshotResult[]>([])
   const [csvHeaders, setCsvHeaders] = useState<string[]>([])
   const [csvRows, setCsvRows] = useState<string[]>([])
+  const [exportModalConfig, setExportModalConfig] = useState<Partial<ExportSummaryModalProps> | null>(null)
 
   useEffect(() => {
     // Load saved results from cookies
@@ -630,6 +624,18 @@ export default function ScreenshotCalculatorPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
+      {exportModalConfig && (
+        <ExportSummaryModal
+          isOpen={true}
+          onClose={() => setExportModalConfig(null)}
+          reportTitle={exportModalConfig.reportTitle || 'OCR Scanned Report'}
+          reportSubtitle={exportModalConfig.reportSubtitle}
+          courseCode={exportModalConfig.courseCode}
+          overallPercentage={exportModalConfig.overallPercentage || 0}
+          statusLabel={exportModalConfig.statusLabel || 'Eligible'}
+          items={exportModalConfig.items || []}
+        />
+      )}
       <Script
         id="screenshot-calc-jsonld"
         type="application/ld+json"
@@ -812,11 +818,43 @@ export default function ScreenshotCalculatorPage() {
         >
           {groupedSubjects.length > 0 && (
             <Card>
-              <CardHeader>
-                <CardTitle>Attendance Results</CardTitle>
-                <CardDescription>
-                  Subject-wise attendance with LTPS weighting
-                </CardDescription>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <div>
+                  <CardTitle>Attendance Results</CardTitle>
+                  <CardDescription>
+                    Subject-wise attendance with LTPS weighting
+                  </CardDescription>
+                </div>
+
+                <Button
+                  onClick={() => {
+                    if (!groupedSubjects.length) return
+                    let totalWeighted = 0
+                    const items = groupedSubjects.map(sub => {
+                      totalWeighted += sub.finalPercentage
+                      return {
+                        label: `${sub.coursecode}: ${sub.coursename}`,
+                        attended: Math.round(sub.finalPercentage),
+                        conducted: 100,
+                        percentage: sub.finalPercentage
+                      }
+                    })
+                    const avg = groupedSubjects.length > 0 ? totalWeighted / groupedSubjects.length : 0
+                    setExportModalConfig({
+                      reportTitle: 'OCR Screenshot Analysis Report',
+                      reportSubtitle: `Extracted across ${groupedSubjects.length} subjects`,
+                      overallPercentage: avg,
+                      statusLabel: avg >= 85 ? 'Eligible' : avg >= 75 ? 'Conditional Eligibility' : 'Not Eligible',
+                      items
+                    })
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 shadow-sm font-outfit"
+                >
+                  <Download className="h-4 w-4 text-blue-500" />
+                  <span>Export All OCR Cards</span>
+                </Button>
               </CardHeader>
               <CardContent className="space-y-6">
                 {groupedSubjects.map((subject, index) => (
@@ -826,14 +864,42 @@ export default function ScreenshotCalculatorPage() {
                         <h3 className="text-lg font-semibold">{subject.coursename}</h3>
                         <p className="text-base text-muted-foreground">{subject.coursecode}</p>
                       </div>
-                      <div className="text-right">
-                        <div className={`text-3xl font-bold ${getStatusColor(subject.status)}`}>
-                          {subject.finalPercentage}%
+                      <div className="flex items-center gap-4">
+                        <div className="text-right">
+                          <div className={`text-3xl font-bold ${getStatusColor(subject.status)}`}>
+                            {subject.finalPercentage}%
+                          </div>
+                          <div className={`flex items-center gap-2 text-base ${getStatusColor(subject.status)}`}>
+                            {getStatusIcon(subject.status)}
+                            {subject.status}
+                          </div>
                         </div>
-                        <div className={`flex items-center gap-2 text-base ${getStatusColor(subject.status)}`}>
-                          {getStatusIcon(subject.status)}
-                          {subject.status}
-                        </div>
+
+                        <Button
+                          onClick={() => {
+                            const items = Object.entries(subject.components)
+                              .filter(([_, rec]) => rec !== undefined)
+                              .map(([type, rec]) => ({
+                                label: type,
+                                attended: rec!.totalAttended,
+                                conducted: rec!.totalConducted,
+                                percentage: rec!.percentage
+                              }))
+                            setExportModalConfig({
+                              reportTitle: subject.coursename,
+                              courseCode: subject.coursecode,
+                              overallPercentage: subject.finalPercentage,
+                              statusLabel: subject.status,
+                              items
+                            })
+                          }}
+                          variant="ghost"
+                          size="sm"
+                          className="text-muted-foreground hover:text-blue-500 font-outfit gap-1 text-xs"
+                        >
+                          <Download className="h-3.5 w-3.5" />
+                          <span>Card</span>
+                        </Button>
                       </div>
                     </div>
                     

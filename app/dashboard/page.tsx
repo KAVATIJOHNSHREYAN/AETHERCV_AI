@@ -5,12 +5,14 @@ import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, CheckCircle2, XCircle } from "lucide-react"
+import { AlertCircle, CheckCircle2, XCircle, Download } from "lucide-react"
 import { useRouter } from 'next/navigation'
+import { ExportSummaryModal, ExportSummaryModalProps } from "@/components/export-summary-modal"
 
 export default function DashboardPage() {
   const router = useRouter()
   const [data, setData] = useState<any>(null)
+  const [exportModalConfig, setExportModalConfig] = useState<Partial<ExportSummaryModalProps> | null>(null)
 
   const [cleanedData, setCleanedData] = useState<any[]>([])
   const [courseWiseData, setCourseWiseData] = useState<any[]>([])
@@ -134,10 +136,76 @@ export default function DashboardPage() {
     return { label: "Not Eligible", color: "text-red-600 dark:text-red-400", alert: "destructive" };
   }
 
+  const openCourseExport = (course: any) => {
+    const displayPercentage = Math.ceil(course.finalPercentage);
+    const status = getAttendanceStatus(displayPercentage);
+    
+    const items = Object.entries(course.components)
+      .filter(([_, comp]: [string, any]) => comp.conducted > 0)
+      .map(([type, comp]: [string, any]) => ({
+        label: type,
+        attended: comp.attended,
+        conducted: comp.conducted,
+        weightage: `Weight: ${comp.weight * 100}%`,
+        percentage: comp.conducted > 0 ? (comp.attended / comp.conducted) * 100 : 0
+      }));
+
+    setExportModalConfig({
+      reportTitle: course.description || 'Course Attendance Summary',
+      courseCode: course.code,
+      overallPercentage: displayPercentage,
+      statusLabel: status.label,
+      items
+    })
+  }
+
+  const openAllCoursesExport = () => {
+    if (!courseWiseData.length) return
+    let totalWeightedAttended = 0
+    let totalWeight = 0
+
+    const items = courseWiseData.map(course => {
+      const displayPercentage = Math.ceil(course.finalPercentage)
+      totalWeightedAttended += (displayPercentage * (course.totalWeight || 1))
+      totalWeight += (course.totalWeight || 1)
+      return {
+        label: `${course.code}: ${course.description}`,
+        attended: Math.round(displayPercentage),
+        conducted: 100,
+        weightage: `Course Weight`,
+        percentage: displayPercentage
+      }
+    })
+
+    const avgPercentage = totalWeight > 0 ? totalWeightedAttended / totalWeight : 0
+    const status = getAttendanceStatus(avgPercentage)
+
+    setExportModalConfig({
+      reportTitle: 'KL ERP Overall Semester Report',
+      reportSubtitle: `Summary across ${courseWiseData.length} registered courses`,
+      overallPercentage: avgPercentage,
+      statusLabel: status.label,
+      items
+    })
+  }
+
   if (!data) return <div className="min-h-screen flex items-center justify-center font-poppins text-lg">Loading...</div>
 
   return (
     <div className="container mx-auto p-8 max-w-5xl min-h-screen">
+      {exportModalConfig && (
+        <ExportSummaryModal
+          isOpen={true}
+          onClose={() => setExportModalConfig(null)}
+          reportTitle={exportModalConfig.reportTitle || 'ERP Report'}
+          reportSubtitle={exportModalConfig.reportSubtitle}
+          courseCode={exportModalConfig.courseCode}
+          overallPercentage={exportModalConfig.overallPercentage || 0}
+          statusLabel={exportModalConfig.statusLabel || 'Eligible'}
+          items={exportModalConfig.items || []}
+        />
+      )}
+
       <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
         <div className="relative">
             <h1 className="text-3xl md:text-4xl font-bold font-poppins text-foreground">Attendance Dashboard</h1>
@@ -148,10 +216,23 @@ export default function DashboardPage() {
                 transition={{ duration: 0.8, ease: "easeOut" }}
             />
         </div>
-        <Button onClick={() => {
-          localStorage.removeItem('attendanceData')
-          router.push('/login')
-        }} variant="outline" className="font-outfit hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all">Logout</Button>
+
+        <div className="flex items-center gap-3">
+          {courseWiseData && courseWiseData.length > 0 && (
+            <Button
+              onClick={openAllCoursesExport}
+              className="font-outfit shadow-md gap-2"
+            >
+              <Download className="h-4 w-4" />
+              <span>Export Full Semester Card</span>
+            </Button>
+          )}
+
+          <Button onClick={() => {
+            localStorage.removeItem('attendanceData')
+            router.push('/login')
+          }} variant="outline" className="font-outfit hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all">Logout</Button>
+        </div>
       </div>
 
       {/* Course-wise Calculated Attendance */}
@@ -168,13 +249,25 @@ export default function DashboardPage() {
                       <CardTitle className="text-xl font-bold font-poppins text-foreground/90">{course.description}</CardTitle>
                       <p className="text-sm font-outfit text-muted-foreground">{course.code}</p>
                     </div>
-                    <div className="text-right">
-                       <span className={`text-3xl font-bold font-outfit ${status.color}`}>
-                         {displayPercentage}%
-                       </span>
-                       <p className={`text-xs font-medium font-outfit mt-1 ${status.color}`}>
-                         {status.label}
-                       </p>
+                    <div className="flex items-center gap-4">
+                       <div className="text-right">
+                         <span className={`text-3xl font-bold font-outfit ${status.color}`}>
+                           {displayPercentage}%
+                         </span>
+                         <p className={`text-xs font-medium font-outfit mt-1 ${status.color}`}>
+                           {status.label}
+                         </p>
+                       </div>
+
+                       <Button
+                        onClick={() => openCourseExport(course)}
+                        variant="ghost"
+                        size="sm"
+                        className="text-muted-foreground hover:text-blue-500 font-outfit gap-1 text-xs"
+                       >
+                         <Download className="h-3.5 w-3.5" />
+                         <span>Card</span>
+                       </Button>
                      </div>
                    </div>
                  </CardHeader>
