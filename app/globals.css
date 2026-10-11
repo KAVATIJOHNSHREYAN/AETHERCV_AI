@@ -28,7 +28,7 @@
     --success: #22C55E;
     --warning: #F59E0B;
     --info: #3B82F6;
-    --danger: #EF4444;
+    --danger: #4D48E6;
 
     /* Shadcn HSL mappings for unified dark enterprise palette */
     --background: 218 51% 7%; /* #07101F */
@@ -45,7 +45,7 @@
     --muted-foreground: 216 28% 70%; /* #9CAEC9 */
     --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 242 75% 59%; /* #4D48E6 dark purple-blue dual shade */
     --destructive-foreground: 0 0% 100%;
     --border: 217 91% 60% / 0.18;
     --input: 217 91% 60% / 0.18;
@@ -75,7 +75,7 @@
     --muted-foreground: 216 28% 70%;
     --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    --destructive: 242 75% 59%;
     --destructive-foreground: 0 0% 100%;
     --border: 217 91% 60% / 0.18;
     --input: 217 91% 60% / 0.18;
@@ -209,7 +209,7 @@
 .always-glow-danger {
   position: relative;
   border-radius: 24px;
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.25);
+  box-shadow: 0 0 20px rgba(77, 72, 230, 0.35);
 }
 
 .always-glow {

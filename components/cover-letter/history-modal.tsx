@@ -170,7 +170,7 @@ export function CoverLetterHistoryModal({
                     size="sm"
                     variant="ghost"
                     onClick={() => onDeleteRecord(rec.id)}
-                    className="h-8 w-8 p-0 text-red-400 hover:bg-red-500/20 hover:text-red-300"
+                    className="h-8 w-8 p-0 text-slate-400 hover:bg-[#4D48E6]/20 hover:text-white"
                     title="Delete"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

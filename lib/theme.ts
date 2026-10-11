@@ -36,7 +36,7 @@ export const themeTokens = {
     success: '#22C55E',
     warning: '#F59E0B',
     info: '#3B82F6',
-    error: '#EF4444'
+    error: '#4D48E6'
   },
   radii: {
     button: '14px',

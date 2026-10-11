@@ -348,15 +348,15 @@ export default function Home() {
             <div>
               <CardHeader>
                 <div className="flex items-center gap-2.5">
-                  <div className="h-6 w-6 rounded-full border-2 border-red-500/80 flex items-center justify-center text-red-500 font-bold text-xs">
+                  <div className="h-6 w-6 rounded-full border-2 border-[#4D48E6] flex items-center justify-center text-[#818CF8] font-bold text-xs">
                     !
                   </div>
                   <CardTitle className="font-poppins font-bold text-lg">Critical Warnings & Detention</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4 font-outfit">
-                <div className="bg-red-500/5 border border-red-500/15 rounded-xl p-4">
-                  <h4 className="font-semibold text-red-600 dark:text-red-400 mb-1">Detention Risk (&lt;75%)</h4>
+                <div className="bg-[#4D48E6]/10 border border-[#4D48E6]/25 rounded-xl p-4">
+                  <h4 className="font-semibold text-[#818CF8] mb-1">Detention Risk (&lt;75%)</h4>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     Students holding less than 75% attendance (65% for Law) are automatically detained and will not be permitted to take examinations.
                   </p>
@@ -364,11 +364,11 @@ export default function Home() {
 
                 <div className="space-y-2.5 mt-2">
                   <div className="flex items-center gap-2.5 text-xs text-muted-foreground">
-                    <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#4D48E6]"></span>
                     <span>Absolutely no relaxation below 75% under any standard condition.</span>
                   </div>
                   <div className="flex items-center gap-2.5 text-xs text-muted-foreground">
-                    <span className="h-1.5 w-1.5 rounded-full bg-red-500"></span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#4D48E6]"></span>
                     <span>Submit official medical or duty certificates promptly.</span>
                   </div>
                 </div>

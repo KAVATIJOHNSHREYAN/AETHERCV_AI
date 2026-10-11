@@ -204,7 +204,7 @@ export default function LTPSCalculatorPage() {
         <div className="relative inline-block">
           <h1 className="text-2xl sm:text-3xl font-bold font-poppins letter-spacing-tight">LTPS Attendance Calculator</h1>
           <motion.div
-            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-red-500 via-red-400 to-red-600 rounded-full"
+            className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-[#4D48E6] via-[#3B82F6] to-[#2563EB] rounded-full"
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
             transition={{ duration: 1, delay: 0.3 }}

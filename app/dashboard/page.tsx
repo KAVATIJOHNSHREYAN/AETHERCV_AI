@@ -134,7 +134,7 @@ export default function DashboardPage() {
   const getAttendanceStatus = (percentage: number) => {
     if (percentage >= 85) return { label: "Eligible", color: "text-green-600 dark:text-green-400", alert: "success" };
     if (percentage >= 75) return { label: "Conditional Eligibility", color: "text-yellow-600 dark:text-yellow-400", alert: "warning" };
-    return { label: "Not Eligible", color: "text-red-600 dark:text-red-400", alert: "destructive" };
+    return { label: "Not Eligible", color: "text-[#818CF8]", alert: "destructive" };
   }
 
   const openCourseExport = (course: any) => {
@@ -211,7 +211,7 @@ export default function DashboardPage() {
         <div className="relative">
             <h1 className="text-3xl md:text-4xl font-bold font-poppins text-foreground">Attendance Dashboard</h1>
             <motion.div 
-                className="absolute -bottom-2 left-0 h-1.5 bg-gradient-to-r from-red-500 via-red-400 to-red-600 rounded-full"
+                className="absolute -bottom-2 left-0 h-1.5 bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] rounded-full"
                 initial={{ width: "0%" }}
                 animate={{ width: "100%" }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
@@ -232,7 +232,7 @@ export default function DashboardPage() {
           <Button onClick={() => {
             localStorage.removeItem('attendanceData')
             router.push('/login')
-          }} variant="outline" className="font-outfit hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all">Logout</Button>
+          }} variant="outline" className="font-outfit hover:bg-[#4D48E6]/20 hover:text-white hover:border-[#4D48E6]/40 transition-all">Logout</Button>
         </div>
       </div>
 
@@ -273,7 +273,7 @@ export default function DashboardPage() {
              const displayPercentage = Math.ceil(course.finalPercentage);
              const status = getAttendanceStatus(displayPercentage);
              return (
-               <Card key={index} className={`border-l-4 ${displayPercentage >= 85 ? 'border-l-green-500' : displayPercentage >= 75 ? 'border-l-yellow-500' : 'border-l-red-500'} shadow-sm hover:shadow-md transition-shadow`}>
+               <Card key={index} className={`border-l-4 ${displayPercentage >= 85 ? 'border-l-green-500' : displayPercentage >= 75 ? 'border-l-yellow-500' : 'border-l-[#4D48E6]'} shadow-sm hover:shadow-md transition-shadow`}>
                  <CardHeader className="pb-2">
                    <div className="flex justify-between items-start">
                     <div className="space-y-1">

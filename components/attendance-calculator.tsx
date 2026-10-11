@@ -83,7 +83,7 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
   const getAttendanceColor = () => {
     if (percentage >= 85) return "text-green-500"
     if (percentage >= 75) return "text-yellow-500"
-    return "text-red-500"
+    return "text-[#818CF8]"
   }
 
   const getAttendanceStatus = () => {
@@ -297,7 +297,7 @@ export function LTPSCalculator({ components }: LTPSCalculatorProps) {
   const getAttendanceColor = () => {
     if (finalPercentage >= 85) return "text-green-500";
     if (finalPercentage >= 75) return "text-yellow-500";
-    return "text-red-500";
+    return "text-[#818CF8]";
   }
 
   const getAttendanceStatus = () => {

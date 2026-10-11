@@ -69,9 +69,9 @@ export function ExportSummaryModal({
     }
     return {
       text: 'NOT ELIGIBLE / DETAINED (<75%)',
-      bg: 'bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/30',
-      badgeBg: '#ef4444',
-      textColor: '#dc2626'
+      bg: 'bg-[#4D48E6]/15 text-[#818CF8] border-[#4D48E6]/30',
+      badgeBg: '#4D48E6',
+      textColor: '#818CF8'
     }
   }
 

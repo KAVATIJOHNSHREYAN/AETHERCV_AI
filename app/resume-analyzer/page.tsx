@@ -171,7 +171,7 @@ export default function ResumeAnalyzerPage() {
 
       // 2. Authenticity Pre-Flight Validation
       if (textContent) {
-        const validation = validateIsResume(textContent, fileName || file?.name || '')
+        const validation = validateIsResume(textContent, fileName || file?.name || '', file?.type || '', file?.size || 0)
         if (!validation.isValid) {
           console.warn('[Resume Analyzer] Document failed authenticity check:', validation.reason)
           throw new Error(validation.reason)

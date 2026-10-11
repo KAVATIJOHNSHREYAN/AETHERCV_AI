@@ -552,7 +552,7 @@ export default function ScreenshotCalculatorPage() {
     switch (status) {
       case 'Eligible': return 'text-green-500'
       case 'Conditional Eligibility': return 'text-yellow-500'
-      default: return 'text-red-500'
+      default: return 'text-[#818CF8]'
     }
   }
 
@@ -568,7 +568,7 @@ export default function ScreenshotCalculatorPage() {
     switch (status) {
       case 'Eligible': return 'shadow-[0_0_25px_-5px_rgba(34,197,94,0.4)] border-green-500/50 hover:shadow-[0_0_30px_-5px_rgba(34,197,94,0.6)]'
       case 'Conditional Eligibility': return 'shadow-[0_0_25px_-5px_rgba(234,179,8,0.4)] border-yellow-500/50 hover:shadow-[0_0_30px_-5px_rgba(234,179,8,0.6)]'
-      default: return 'shadow-[0_0_25px_-5px_rgba(239,68,68,0.4)] border-red-500/50 hover:shadow-[0_0_30px_-5px_rgba(239,68,68,0.6)]'
+      default: return 'shadow-[0_0_25px_-5px_rgba(77,72,230,0.4)] border-[#4D48E6]/50 hover:shadow-[0_0_30px_-5px_rgba(77,72,230,0.6)]'
     }
   }
 
@@ -652,7 +652,7 @@ export default function ScreenshotCalculatorPage() {
             Screenshot Attendance Calculator
           </h1>
           <motion.div
-            className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-red-600 rounded-full"
+            className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] rounded-full"
             initial={{ width: "0%" }}
             animate={{ width: "100%" }}
             transition={{ duration: 1, delay: 0.5 }}
@@ -672,10 +672,10 @@ export default function ScreenshotCalculatorPage() {
           className="lg:col-span-1"
         >
           <div className="gradient-glow">
-            <Card className="border-red-500/20 bg-card/80 backdrop-blur-sm">
+            <Card className="border-[#4D48E6]/25 bg-card/80 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <ImageIcon className="h-5 w-5 text-red-500" />
+                  <ImageIcon className="h-5 w-5 text-[#818CF8]" />
                   Upload Attendance Screenshot
                 </CardTitle>
                 <CardDescription>

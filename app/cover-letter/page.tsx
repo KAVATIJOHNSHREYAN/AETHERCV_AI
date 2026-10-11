@@ -252,8 +252,8 @@ export default function CoverLetterGeneratorPage() {
 
         {/* Error Alert */}
         {errorMsg && (
-          <div className="p-4 rounded-2xl bg-red-500/10 border border-red-500/30 text-xs text-red-200 flex items-center gap-2.5">
-            <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+          <div className="p-4 rounded-2xl bg-[#111D34] border border-[#4D48E6]/40 text-xs text-blue-200 flex items-center gap-2.5 shadow-[0_0_15px_rgba(77,72,230,0.2)]">
+            <AlertCircle className="w-4 h-4 text-[#818CF8] shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}

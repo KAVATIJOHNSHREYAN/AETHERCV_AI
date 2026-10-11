@@ -272,7 +272,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify Document Authenticity as a Resume / CV
-    const validation = validateIsResume(textContent, fileName)
+    const validation = validateIsResume(textContent, fileName, fileType, fileSize)
     if (!validation.isValid) {
       console.warn(`[Resume Parse] [Stage 3: Validation Failed] Document rejected: ${validation.reason} (confidence: ${validation.confidence}%)`)
       return NextResponse.json(
@@ -309,6 +309,7 @@ export async function POST(req: NextRequest) {
         timestamp: new Date().toISOString(),
         executionTimeMs
       },
+      validation,
       parsedData,
       atsBreakdown,
       formatting,
