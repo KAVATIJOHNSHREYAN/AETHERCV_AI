@@ -1,18 +1,23 @@
 {
-  "name": "KL University Attendance Calculator",
-  "short_name": "KLU Attendance",
-  "description": "Calculate your attendance percentage and check eligibility for KL University exams",
+  "name": "KL University Attendance Calculator & AETHERCV AI",
+  "short_name": "AETHERCV AI",
+  "description": "Calculate your attendance percentage, eligibility, and evaluate resumes with AI intelligence",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#ef4444",
+  "background_color": "#08111F",
+  "theme_color": "#2563EB",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/KL_University_logo.svg",
+      "src": "/aethercv-logo.png",
       "sizes": "192x192 512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
   ]
-} 
+}

@@ -44,15 +44,23 @@ export default function Header() {
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
           <Link
             href="/"
-            className="flex items-center gap-2"
+            className="flex items-center gap-2.5 group"
           >
-            <div className="relative flex items-center">
+            <div className="relative flex items-center gap-2">
+              <Image
+                src="/aethercv-logo.png"
+                alt="AETHERCV AI Logo"
+                width={40}
+                height={40}
+                className="h-9 sm:h-10 w-9 sm:w-10 rounded-xl object-contain shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform"
+                priority
+              />
               <Image
                 src="/KL_University_logo.svg"
                 alt="KL Logo"
                 width={42}
                 height={42}
-                className="h-9 sm:h-11 w-auto"
+                className="h-8 sm:h-9 w-auto opacity-85 group-hover:opacity-100 transition-opacity"
                 priority
               />
             </div>

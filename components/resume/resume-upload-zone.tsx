@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Upload, FileText, AlertCircle, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { SAMPLE_RESUMES } from '@/lib/resume/sample-resumes'
 
@@ -157,8 +158,19 @@ export function ResumeUploadZone({ onAnalyze, isLoading }: ResumeUploadZoneProps
             className="hidden"
           />
 
-          <div className="p-4 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 text-white group-hover:scale-110 transition-transform mb-4 shadow-[0_0_20px_rgba(59,130,246,0.45)]">
-            <Upload className="w-8 h-8" />
+          <div className="relative mb-4 group-hover:scale-105 transition-transform">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl p-1 bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 shadow-[0_0_25px_rgba(59,130,246,0.5)] flex items-center justify-center">
+              <Image
+                src="/aethercv-logo.png"
+                alt="AETHERCV AI Upload"
+                width={76}
+                height={76}
+                className="w-full h-full object-contain rounded-xl"
+              />
+            </div>
+            <div className="absolute -bottom-1 -right-1 p-1.5 rounded-lg bg-blue-600 text-white shadow-md border border-sky-300/40">
+              <Upload className="w-3.5 h-3.5" />
+            </div>
           </div>
 
           <h3 className="text-base sm:text-lg font-bold font-poppins text-white mb-1">

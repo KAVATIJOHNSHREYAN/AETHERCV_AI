@@ -44,6 +44,7 @@ import {
   Award, FileText, Check
 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function ResumeAnalyzerPage() {
   const [analysisData, setAnalysisData] = useState<{
@@ -347,17 +348,29 @@ export default function ResumeAnalyzerPage() {
       <div className="max-w-7xl mx-auto space-y-10 relative z-10">
         {/* Top Header Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-blue-500/20">
-          <div className="space-y-2.5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-cyan-300 border border-blue-500/30 backdrop-blur-md shadow-[0_0_15px_-3px_rgba(59,130,246,0.25)]">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Enterprise AI Resume Intelligence</span>
+          <div className="flex items-start sm:items-center gap-4 sm:gap-5">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-2xl overflow-hidden border border-blue-400/40 shadow-[0_0_25px_rgba(59,130,246,0.4)] bg-[#0F172A]/90 p-1 group hover:scale-105 transition-transform">
+              <Image
+                src="/aethercv-logo.png"
+                alt="AETHERCV AI Emblem"
+                width={80}
+                height={80}
+                className="w-full h-full object-contain rounded-xl"
+                priority
+              />
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-poppins tracking-tight text-white">
-              AI Resume <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-300">Analyzer</span>
-            </h1>
-            <p className="text-sm sm:text-base text-slate-400 font-outfit max-w-2xl leading-relaxed">
-              Upload your resume for instant rule-based ATS scoring (100 pts), 8-cluster skill taxonomy categorization, action verb audits, recruiter simulation, and job description alignment.
-            </p>
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-cyan-300 border border-blue-500/30 backdrop-blur-md shadow-[0_0_15px_-3px_rgba(59,130,246,0.25)]">
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Enterprise AI Resume Intelligence</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-poppins tracking-tight text-white">
+                AI Resume <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-300">Analyzer</span>
+              </h1>
+              <p className="text-sm sm:text-base text-slate-400 font-outfit max-w-2xl leading-relaxed">
+                Upload your resume for instant rule-based ATS scoring (100 pts), 8-cluster skill taxonomy categorization, action verb audits, recruiter simulation, and job description alignment.
+              </p>
+            </div>
           </div>
 
           {/* Action Buttons */}

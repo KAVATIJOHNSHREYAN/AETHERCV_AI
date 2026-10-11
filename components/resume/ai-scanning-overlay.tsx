@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Cpu, Sparkles, ShieldCheck, Zap } from 'lucide-react'
+import Image from 'next/image'
 
 interface AiScanningOverlayProps {
   isLoading: boolean
@@ -91,8 +92,14 @@ export function AiScanningOverlay({ isLoading }: AiScanningOverlayProps) {
             />
 
             {/* Center Core */}
-            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 flex items-center justify-center text-white shadow-[0_0_30px_rgba(59,130,246,0.6)]">
-              <Cpu className="w-8 h-8 animate-pulse text-white" />
+            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 p-1 flex items-center justify-center text-white shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+              <Image
+                src="/aethercv-logo.png"
+                alt="AETHERCV AI Scanner Core"
+                width={60}
+                height={60}
+                className="w-full h-full object-contain rounded-xl"
+              />
             </div>
           </div>
 

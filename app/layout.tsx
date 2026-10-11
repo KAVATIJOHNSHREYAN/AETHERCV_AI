@@ -64,10 +64,10 @@ export const metadata: Metadata = {
     siteName: 'KL University Attendance Calculator',
     images: [
       {
-        url: '/KL_University_logo.svg',
-        width: 800,
-        height: 600,
-        alt: 'KL University Attendance Calculator',
+        url: '/aethercv-logo.png',
+        width: 1024,
+        height: 1024,
+        alt: 'AETHERCV AI - KL University',
       },
     ],
     locale: 'en_US',
@@ -86,23 +86,31 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'KL University Attendance Calculator',
+    title: 'KL University Attendance Calculator & AETHERCV AI',
     description: 'Calculate your attendance percentage and check eligibility for KL University exams based on university policy.',
-    images: ['/KL_University_logo.svg'],
+    images: ['/aethercv-logo.png'],
   },
   verification: {
     google: 'YKmd0c6z13AOdpU7THbo1wqIqG4BBzjilNPhP-5_bps',
   },
   icons: {
-    icon: '/KL_University_Favicon.svg',
-    shortcut: '/KL_University_Favicon.svg',
-    apple: '/KL_University_Favicon.svg',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/aethercv-logo.png', type: 'image/png' },
+      { url: '/favicon.png', type: 'image/png' },
+    ],
+    shortcut: '/aethercv-logo.png',
+    apple: '/apple-touch-icon.png',
     other: [
       {
         rel: 'icon',
-        type: 'image/svg+xml',
+        type: 'image/png',
         sizes: 'any',
-        url: '/KL_University_Favicon.svg',
+        url: '/aethercv-logo.png',
+      },
+      {
+        rel: 'apple-touch-icon',
+        url: '/apple-touch-icon.png',
       },
       {
         rel: 'manifest',
