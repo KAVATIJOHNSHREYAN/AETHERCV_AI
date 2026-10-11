@@ -1,8 +1,9 @@
 # AETHERCV AI & Attendance Platform
 
-> **Next-Generation Academic Attendance Analytics & Enterprise-Grade AI Resume Evaluation Suite**
+> **Next-Generation Academic Attendance Analytics, Enterprise AI Resume Evaluation Suite & AI Cover Letter Generator**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-aethercv--ai.vercel.app-2662EB?style=for-the-badge&logo=vercel&logoColor=white)](https://aethercv-ai.vercel.app/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-AETHERCV__AI-4D48E6?style=for-the-badge&logo=github&logoColor=white)](https://github.com/KAVATIJOHNSHREYAN/AETHERCV_AI)
 [![Next.js](https://img.shields.io/badge/Next.js%2015-App%20Router-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS%203-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
@@ -11,10 +12,21 @@
 
 ## 🌟 Overview
 
-**AETHERCV AI** is an all-in-one productivity and career intelligence ecosystem built with Next.js 15, TypeScript, and modern UI engineering. It seamlessly combines:
+**AETHERCV AI** is a comprehensive, production-ready career intelligence and academic productivity ecosystem engineered with Next.js 15, TypeScript, and modern UI architectures. The platform integrates three core pillars into a unified enterprise SaaS experience:
 
-1. **AI Resume Analyzer & ATS Score Checker** — Comprehensive ATS compliance evaluation, 8-pillar scoring breakdown, STAR-method bullet rewriting, job description matching, and keyword audit tailored with a sleek enterprise dual-color UI (`#4D48E6` &rarr; `#1E50DA`).
-2. **KLU Attendance Calculator & Analytics** — Real-time academic tracking, LTPS component calculation, ERP attendance extraction via OCR, eligibility alerts (75% / 85%), and draft persistence.
+1. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching.
+2. **AI Cover Letter Generator** (`/cover-letter`) — Tailored, recruiter-ready cover letter generator based on resume content, job description, company name, target role, and tone selection with `.docx` export and draft history.
+3. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
+
+---
+
+## 🎨 Global Enterprise Design System (Zero Red Dark Theme)
+
+The entire application adopts a cohesive, high-end dark SaaS visual language:
+
+- **Unified Palette**: Deep obsidian backgrounds (`#07101F`, `#0A1528`), enterprise dark navy cards (`#111D34`, `#162440`), and vibrant purple-blue dual shade accents (`#4D48E6` &rarr; `#2662EB` &rarr; `#1E50DA`).
+- **Zero Red Aesthetic**: All harsh red elements are completely eliminated. Error states, critical alerts, and detention risks use sophisticated dark purple-blue mix borders (`#4D48E6`), glowing badges (`#818CF8`), and amber highlights.
+- **Glassmorphism & Depth**: Multi-layer backdrop blur panels, subtle borders (`rgba(59, 130, 246, 0.18)`), glowing ambient highlights, and fluid Framer Motion micro-interactions.
 
 ---
 
@@ -22,31 +34,52 @@
 
 ### 1. 🤖 AI Resume Analyzer & ATS Score Suite (`/resume-analyzer`)
 
-- **Multi-Format Document Ingestion**: Upload native `.pdf`, `.docx`, or `.txt` resumes, or paste plain text directly. Powered by an OCR and regex parser with zero cloud leakage.
-- **Precision Dual-Color Theme**: Styled in an enterprise violet-to-electric-blue gradient (`#4D48E6` &rarr; `#2662EB` &rarr; `#1E50DA`) against a deep dark navy container (`#0E1729`).
-- **Circular Neon ATS Gauge**: Dynamic SVG circular gauge calculating an overall qualification score (0–100) with grade classification (`Elite`, `Strong`, `Competitive`, `Needs Improvement`).
-- **Comprehensive 8-Category Audit**:
-  - Section Completeness (Header, Summary, Experience, Education, Projects, Skills)
-  - Keyword & Hard Skills Density
-  - Action Verbs & Power Phrasing
-  - Quantifiable Metrics & STAR Results
-  - Formatting & Structural Health (Flesch Reading Ease, paragraph density, page estimates)
-  - Work Experience Impact
-  - Technical & Soft Skills Balance
-  - Education & Credentials Verification
-- **STAR-Method Bullet Rewriter**: Generates before/after sentence optimizations transforming passive tasks into high-impact quantified achievements.
-- **Interactive Job Description Matcher**: Paste any job description to instantly compute ATS Match %, identify matched competencies, and pinpoint missing requirements.
-- **Export & Report Downloads**: One-click download of the optimized resume (`.md`), detailed ATS audit (`.txt`), or recruiter feedback memo.
+- **Multi-Format Document Ingestion**: Upload native `.pdf`, `.docx`, or `.txt` resumes, or paste plain text directly. Handled in-browser and server-side with zero cloud leakage.
+- **Intelligent Non-Blocking Validation Engine**:
+  - Resilient to OCR noise, uppercase/lowercase variations, and PDF formatting quirks (e.g., `WORK\nEXPERIENCE` wrapped lines).
+  - Recognizes wide synonyms for Experience, Education, Projects, Skills, and Contact details.
+  - Zero false rejections: accepts Freshers, Students, Experienced Candidates, Academic CVs, Overleaf, Canva, and Word exports.
+  - Diagnostic console debug logging for transparency.
+- **Circular Neon ATS Gauge**: Dynamic SVG circular gauge calculating an overall qualification score (0–100) with tier badges (`Tier 1 / Elite`, `Strong Candidate`, `Developing Fit`).
+- **8-Category Comprehensive Audit**:
+  1. *Section Completeness* (Contact, Summary, Experience, Education, Projects, Skills)
+  2. *Keywords & Hard Skills Density*
+  3. *Action Verbs & Leadership Phrasing*
+  4. *Quantifiable Metrics & Business Impact*
+  5. *Formatting & Structural Health* (Flesch Reading Ease, paragraph balance, page counts)
+  6. *Work Experience Depth & Timeline*
+  7. *Technical & Soft Skills Balance*
+  8. *Education Credentials Verification*
+- **STAR-Method Bullet Rewriter**: Transforms passive job responsibilities into impact-driven Situation-Task-Action-Result statements with measurable metrics.
+- **Interactive Job Description Matcher**: Paste any target job description to compute real-time Match %, matched keywords, and prioritized missing qualifications.
+- **Full Resume Rewriter & Report Downloads**: One-click download of the rewritten resume (`.md`), detailed ATS audit report (`.txt`), or recruiter feedback memo.
 
 ---
 
-### 2. 📊 Academic Attendance Platform
+### 2. ✍️ AI Cover Letter Generator (`/cover-letter`)
 
-- **Simple Calculator (`/simple`)**: Rapid attendance tracking based on conducted vs. attended classes.
-- **LTPS Calculator (`/ltps`)**: Advanced weighted calculation for Lecture, Tutorial, Practical, and Skilling course components.
-- **Screenshot / OCR Calculator (`/screenshot`)**: Upload ERP portal screenshots for automated tabular data extraction via OCR.space API.
-- **Eligibility Alerts**: Instant warnings and skippable class calculations to maintain 75% university eligibility or 85% distinction thresholds.
-- **Draft Management**: Save, view, reload, or delete semester subject records locally in browser storage.
+- **Context-Aware Generation**: Synthesizes uploaded resume data and target job requirements to generate bespoke, recruiter-ready cover letters.
+- **Configurable Parameters**:
+  - **Company Name & Job Role**: Personalized company context and target position.
+  - **Tone Selection**: *Professional*, *Confident*, *Enthusiastic*, *Creative*, or *Executive*.
+  - **Length Control**: Dynamic slider to adjust target word count (200 – 600 words).
+- **Interactive Live Editor**: Full markdown editing and live preview mode.
+- **Export Options**:
+  - Download formatted Word document (`.docx`).
+  - Download plain text (`.txt`).
+  - One-click copy to clipboard.
+- **Local History & Draft Management**: Automatically saves generated letters in browser storage with preview, re-load, download, and delete capabilities.
+
+---
+
+### 3. 📊 Academic Attendance Platform & ERP Suite
+
+- **Simple Attendance Calculator (`/simple`)**: Fast attendance calculation based on conducted vs. attended classes, displaying skippable or required recovery classes.
+- **LTPS Calculator (`/ltps`)**: Weighted academic calculations across Lecture (L), Tutorial (T), Practical (P), and Skilling (S) components.
+- **Screenshot / OCR Calculator (`/screenshot`)**: Upload ERP portal screenshots for automated tabular row parsing via OCR.space.
+- **ERP Authentication Helper (`/login`)**: Secure university ERP credentials login with automated CAPTCHA solving, device token cookies, and live sync.
+- **Student Analytics Dashboard (`/dashboard`)**: Comprehensive semester dashboard with course cards, status badges, and exportable consolidated semester summary cards.
+- **Eligibility Alerts**: Instant visibility into university thresholds: 75% examination eligibility and 85% distinction qualifications.
 
 ---
 
@@ -56,26 +89,12 @@
 |---|---|
 | **Framework** | [Next.js 15 (App Router)](https://nextjs.org/) |
 | **Language** | [TypeScript 5](https://www.typescriptlang.org/) |
-| **Styling** | [Tailwind CSS](https://tailwindcss.com/), Custom Dual-Color CSS Variables (`#4D48E6` &rarr; `#1E50DA`), Glassmorphism |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/), Dual-Color CSS Tokens (`#4D48E6` &rarr; `#2662EB` &rarr; `#1E50DA`), Glassmorphism |
 | **UI Components** | [Radix UI](https://www.radix-ui.com/), [Shadcn UI](https://ui.shadcn.com/), Lucide Icons |
 | **Animations** | [Framer Motion](https://www.framer.com/motion/) |
-| **Parsing & OCR** | PDF parsing engine, Docx text extraction, OCR.space API, Cheerio |
-| **Fonts** | Google Fonts (`Poppins`, `Outfit`) |
+| **Document Processing**| PDF.js parser, Mammoth / Docx text extraction, docx file generator |
+| **OCR & Scraping** | OCR.space API, Cheerio, Node Canvas |
 | **Deployment** | [Vercel](https://vercel.com/) |
-
----
-
-## 🎨 Dual-Color Design System
-
-The AI Resume Analyzer features a custom dual-color palette extracted directly from high-end SaaS designs:
-
-| Element | Color Value | Representation |
-|---|---|---|
-| **Left Gradient Stop** | `#4D48E6` | Electric Violet / Deep Indigo |
-| **Middle Accent** | `#2662EB` | Vibrant Enterprise Blue |
-| **Right Gradient Stop** | `#1E50DA` | Deep Royal Blue |
-| **Container Background**| `#0E1729` / `#08111F` | Obsidian Blue / Dark Navy |
-| **Border Highlights** | `rgba(77, 72, 230, 0.35)` | Glowing Ambient Outline |
 
 ---
 
@@ -90,7 +109,7 @@ The AI Resume Analyzer features a custom dual-color palette extracted directly f
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/KAVATIJOHNSHREYAN/AETHERCV_AI.git
-   cd AETHERCV_AI
+   cd Attendance-Calculator
    ```
 
 2. **Install dependencies**:
@@ -119,24 +138,33 @@ The AI Resume Analyzer features a custom dual-color palette extracted directly f
 
 ---
 
-## 📁 Project Structure
+## 📁 Project Directory Structure
 
 ```text
 ├── app/
 │   ├── layout.tsx                 # Root layout, favicon & metadata
 │   ├── page.tsx                   # Landing page
+│   ├── globals.css                # Enterprise design tokens & global CSS
 │   ├── resume-analyzer/           # AI Resume Analyzer & ATS suite
+│   ├── cover-letter/              # AI Cover Letter Generator
 │   ├── simple/                    # Simple attendance calculator
 │   ├── ltps/                      # LTPS component calculator
 │   ├── screenshot/                # Screenshot OCR calculator
+│   ├── login/                     # ERP portal authentication & captcha
 │   ├── dashboard/                 # Student analytics dashboard
 │   └── api/
 │       ├── resume/parse/          # Resume upload & parsing endpoint
+│       ├── cover-letter/generate/ # Cover letter AI generation endpoint
 │       ├── parse-ocr/             # OCR screenshot parser
-│       └── login/                 # ERP authentication helper
+│       ├── solve-captcha/         # Automated captcha solver
+│       └── fetch-attendance/      # ERP attendance sync endpoint
 ├── components/
-│   ├── header.tsx                 # Global header with logo & route links
+│   ├── header.tsx                 # Global navigation header
 │   ├── footer.tsx                 # Global footer
+│   ├── cover-letter/              # Cover Letter Generator sub-components
+│   │   ├── history-modal.tsx      # Past generated letters drawer
+│   │   ├── loading-animation.tsx  # Multi-step generation animation
+│   │   └── word-count-slider.tsx  # Interactive word length slider
 │   ├── resume/                    # Resume Analyzer sub-components
 │   │   ├── ats-circular-score.tsx # Circular SVG score gauge
 │   │   ├── category-breakdown.tsx # 8-category dual-color progress bars
@@ -148,23 +176,29 @@ The AI Resume Analyzer features a custom dual-color palette extracted directly f
 │   │   ├── ai-rewriter-view.tsx   # Full resume rewriter & markdown export
 │   │   ├── export-report-modal.tsx# Report & analysis download modal
 │   │   └── resume-upload-zone.tsx # File dropzone & text input
+│   └── ui/                        # Accessible Shadcn / Radix primitives
 ├── lib/
+│   ├── theme.ts                   # Unified enterprise design system tokens
 │   ├── resume/                    # Core ATS & Resume analysis engines
+│   │   ├── validator.ts           # Tolerant resume verification engine
 │   │   ├── ats-calculator.ts      # Multi-dimensional ATS scoring logic
 │   │   ├── parser.ts              # Document text normalization & regex
 │   │   ├── keywords-db.ts         # Industry keywords & power verbs database
 │   │   ├── rewriter.ts            # Markdown resume builder
 │   │   └── jd-matcher.ts          # TF-IDF & keyword matcher
+│   └── cover-letter/              # Cover letter generator templates & engine
 ├── public/                        # Static assets, logos & favicons
-└── README.md                      # Project documentation
+├── PROJECT_SUMMARY.md             # High-level architecture & feature summary
+└── README.md                      # Primary project documentation
 ```
 
 ---
 
 ## 🔒 Privacy & Security
 
-- **Client-Side First**: Resume texts and sensitive academic data are processed securely in memory without persistent storage.
-- **Zero Third-Party Model Selling**: Analysis engines evaluate documents on-demand without feeding personal career details into external generative model datasets.
+- **In-Memory Analysis**: Uploaded resumes and academic files are analyzed ephemerally in memory without persistent backend storage.
+- **Zero Third-Party Training**: Resume data is never sent to external training datasets.
+- **Local Storage Isolation**: Cover letter histories and attendance drafts reside exclusively within the user's browser localStorage.
 
 ---
 
