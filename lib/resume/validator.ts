@@ -1,10 +1,11 @@
 /**
  * Resume Document Authenticity Validator
- * Tolerant, intelligent resume structural verification engine.
- * Never falsely rejects authentic resumes (Freshers, Students, Experienced, Research CVs, ATS/Harvard templates).
+ * Intelligent, tolerant resume structural verification engine.
+ * Guarantees zero false negatives on genuine resumes (Student, Fresher, Experienced, Academic, LaTeX, Word, Canva).
  * 
  * Complies with strict non-blocking ATS guidelines:
- * If readable text is extracted, proceeds with ATS analysis and surfaces non-blocking advisory warnings.
+ * If readable text exists, ATS analysis always continues without interruption.
+ * Missing sections are converted into advisory warnings rather than blocking errors.
  */
 
 export interface ResumeValidationResult {
@@ -26,7 +27,7 @@ export interface ResumeValidationResult {
   }
 }
 
-// Strictly definite assignment / test paper indicators
+// Strictly definite classroom assignment or test paper indicators (only flagged if no resume sections exist)
 const DEFINITE_ASSIGNMENT_INDICATORS = [
   /\b(?:home\s+assignment|homework\s*(?:#|\d|no|one|two|three)?)\b/i,
   /\b(?:lab\s+(?:manual|record|exercise)|experiment\s+no\.?)\b/i,
@@ -36,39 +37,44 @@ const DEFINITE_ASSIGNMENT_INDICATORS = [
   /\b(?:internal\s+assessment|mid\s+exam\s+paper|semester\s+end\s+exam)\b/i
 ]
 
-// Strictly definite non-resume document indicators (e.g., invoices, legal contracts)
+// Strictly definite non-resume indicators (e.g. tax bills, legal agreements)
 const DEFINITE_NON_RESUME_INDICATORS = [
   /\b(?:tax\s+invoice|sales\s+invoice|bill\s+to|subtotal|balance\s+due|amount\s+payable)\b/i,
   /\b(?:terms\s+and\s+conditions|privacy\s+policy|end\s+user\s+license\s+agreement)\b/i,
   /\b(?:table\s+of\s+contents\s*\n|syllabus\s+for\s+course)\b/i
 ]
 
-// Comprehensive Section Variations (tolerant of whitespace, case, line wraps)
+// Comprehensive Section Variations (tolerant of whitespace, case, line wraps, aliases)
 const SECTION_VARIATIONS = {
+  // Experience variations
   experience: [
-    /\b(?:work\s+experience|professional\s+experience|employment\s+history|employment|career\s+history|professional\s+background|work\s+history|internships?|relevant\s+experience|experience)\b/i
+    /\b(?:work\s+experience|professional\s+experience|employment|professional\s+background|internships?|career\s+history|industry\s+experience|work\s+history|relevant\s+experience|experience)\b/i
   ],
+  // Education variations
   education: [
-    /\b(?:education|academic\s+background|qualifications?|academic\s+qualifications|educational\s+background|educational\s+qualifications|academics|degree|university|college|alma\s+mater)\b/i
+    /\b(?:education|academics|academic\s+background|qualifications?|educational\s+background|educational\s+qualifications|degrees?|universit(?:y|ies)|colleges?|alma\s+mater)\b/i
   ],
+  // Projects variations
   projects: [
-    /\b(?:projects?|personal\s+projects|academic\s+projects|portfolio|key\s+projects|notable\s+projects|technical\s+projects|research\s+projects|research)\b/i
+    /\b(?:projects?|project\s+experience|academic\s+projects|research|portfolio|personal\s+projects|key\s+projects|notable\s+projects|technical\s+projects)\b/i
   ],
+  // Skills variations
   skills: [
-    /\b(?:skills?|technical\s+skills|core\s+skills|competencies|core\s+competencies|technologies|tech\s+stack|programming\s+languages|tools\s+&?\s+technologies|skills\s+&?\s+abilities|areas\s+of\s+expertise)\b/i
+    /\b(?:skills?|technical\s+skills|core\s+skills|technologies|competencies|tech\s+stack|programming\s+languages|tools\s+&?\s+technologies|skills\s+&?\s+abilities|areas\s+of\s+expertise)\b/i
   ],
+  // Contact variations
   contact: [
     /\b(?:contact\s+information|contact\s+details|contact|get\s+in\s+touch)\b/i
   ]
 }
 
-// Resume structure & indicator cues
+// Structural indicator cues
 const STRUCTURAL_INDICATORS = {
-  bulletPoints: /[•\-\*–—]\s+[A-Za-z]/,
+  bulletPoints: /[•\-\*–—·▪]\s+[A-Za-z]/,
   dates: /\b(?:(?:19|20)\d{2}\s*(?:-|–|—|to)\s*(?:(?:19|20)\d{2}|present|current|till\s+date)|\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s+(?:19|20)\d{2})\b/i,
   degrees: /\b(?:B\.?Tech|Bachelor(?:\s+of\s+[A-Za-z]+)?|B\.?E\.?|B\.?S\.?|BCA|M\.?Tech|Master(?:\s+of\s+[A-Za-z]+)?|M\.?S\.?|MCA|MBA|Ph\.?D|Diploma|Secondary|High\s+School)\b/i,
   companiesOrRoles: /\b(?:intern|engineer|developer|software|analyst|designer|consultant|associate|lead|manager|assistant|trainee|technologies|solutions|pvt\.?\s*ltd\.?|limited|inc\.?|corp\.?|llc)\b/i,
-  techKeywords: /\b(?:python|javascript|typescript|react|next\.?js|node\.?js|html5?|css3?|java|c\+\+|sql|nosql|mongodb|postgresql|git|docker|aws|azure|express|tailwind|pandas|numpy|linux)\b/i
+  techKeywords: /\b(?:python|javascript|typescript|react|next\.?js|node\.?js|html5?|css3?|java|c\+\+|c#|sql|nosql|mongodb|postgresql|git|docker|aws|azure|express|tailwind|pandas|numpy|linux|flutter)\b/i
 }
 
 // Contact detection regexes
@@ -79,7 +85,11 @@ const GITHUB_REGEX = /(?:github\.com\/[a-zA-Z0-9_-]+|[a-zA-Z0-9_-]+\s*\|\s*githu
 const PORTFOLIO_REGEX = /(?:portfolio|github\.io|vercel\.app|https?:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/i
 
 /**
- * Normalizes input text for resilient OCR and multi-format parser tolerance.
+ * Normalizes extracted text before validation:
+ * - Unicode NFKC normalization
+ * - Removes hidden and zero-width characters
+ * - Normalizes line breaks and whitespace
+ * - Collapses split OCR header lines (e.g. WORK\nEXPERIENCE -> WORK EXPERIENCE)
  */
 function normalizeResumeText(text: string): { normalized: string; lines: string[]; paragraphs: string[] } {
   if (!text) return { normalized: '', lines: [], paragraphs: [] }
@@ -87,8 +97,9 @@ function normalizeResumeText(text: string): { normalized: string; lines: string[
   // 1. Unicode NFKC normalization
   let clean = text.normalize('NFKC')
 
-  // 2. Remove hidden non-printable control chars (preserve standard whitespace)
-  clean = clean.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F\u200B-\u200D\uFEFF]/g, ' ')
+  // 2. Remove zero-width & hidden Unicode characters
+  clean = clean.replace(/[\u200B-\u200D\uFEFF\u00A0\u2000-\u200A\u2028\u2029]/g, ' ')
+  clean = clean.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, ' ')
 
   // 3. Normalize newlines
   clean = clean.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
@@ -96,9 +107,9 @@ function normalizeResumeText(text: string): { normalized: string; lines: string[
   // 4. Normalize spaces and tabs
   clean = clean.replace(/[ \t]+/g, ' ')
 
-  // 5. Fix PDF split header wraps (e.g. "WORK\nEXPERIENCE" -> "WORK EXPERIENCE")
+  // 5. Collapse OCR line-break splits across section titles (e.g. "WORK\nEXPERIENCE" -> "WORK EXPERIENCE")
   clean = clean.replace(
-    /\b(work|professional|career|academic|educational|technical|core|key|personal|programming)\s*\n\s*(experience|background|history|skills|projects|competencies|qualifications|languages)\b/gi,
+    /\b(work|professional|career|industry|academic|educational|technical|core|key|personal|project|programming)\s*\n\s*(experience|background|history|skills|projects|competencies|qualifications|languages)\b/gi,
     '$1 $2'
   )
 
@@ -109,18 +120,17 @@ function normalizeResumeText(text: string): { normalized: string; lines: string[
 }
 
 /**
- * Tolerant Candidate Name Extractor from header lines.
+ * Candidate Name Extractor from header lines.
  */
 function detectCandidateName(lines: string[]): string | undefined {
-  for (let i = 0; i < Math.min(lines.length, 5); i++) {
+  for (let i = 0; i < Math.min(lines.length, 6); i++) {
     const line = lines[i].trim()
-    // Avoid headers that are contacts or generic titles
     if (
-      line.length >= 3 &&
-      line.length <= 40 &&
+      line.length >= 2 &&
+      line.length <= 45 &&
       !line.includes('@') &&
       !line.includes('http') &&
-      !/(?:resume|curriculum|vitae|page\s+\d+|phone|email)/i.test(line) &&
+      !/(?:resume|curriculum|vitae|page\s+\d+|phone|email|contact)/i.test(line) &&
       /^[A-Za-z\s\.\'-]+$/.test(line)
     ) {
       return line
@@ -130,8 +140,13 @@ function detectCandidateName(lines: string[]): string | undefined {
 }
 
 /**
- * Validates whether the uploaded content represents a genuine resume/CV.
- * Guarantees zero false negatives on genuine resumes while providing informative debug logs.
+ * Validates whether the extracted text represents an authentic resume/CV.
+ * 
+ * Follows strict non-blocking ATS guidelines:
+ * - Never falsely rejects genuine resumes (Freshers, Students, Experienced, LaTeX, Canva, Docs exports).
+ * - A resume is valid if Rule A, Rule B, Rule C, or Rule D matches.
+ * - If readable text exists (>25 chars), validation always succeeds so ATS analysis can proceed.
+ * - Missing sections are surfaced as non-blocking advisory warnings.
  */
 export function validateIsResume(
   text: string,
@@ -142,33 +157,13 @@ export function validateIsResume(
   const { normalized, lines, paragraphs } = normalizeResumeText(text)
   const lowerName = (fileName || '').toLowerCase()
 
-  // 1. Minimum character safety guard (< 50 chars is unreadable or empty)
-  if (normalized.length < 50) {
-    const reason = 'Document contains insufficient readable text (under 50 characters). Please upload a valid resume file.'
-    
-    // Debug logging
-    console.log('====== [AETHERCV AI RESUME VALIDATION DEBUG] ======')
-    console.log('Uploaded filename   :', fileName || 'unknown')
-    console.log('File type           :', fileType || 'unknown')
-    console.log('File size           :', fileSize ? `${fileSize} bytes` : 'unknown')
-    console.log('Characters extracted:', normalized.length)
-    console.log('Lines extracted     :', lines.length)
-    console.log('Detected sections   : None')
-    console.log('Detected email      : None')
-    console.log('Detected phone      : None')
-    console.log('Detected skills     : No')
-    console.log('Detected education  : No')
-    console.log('Detected projects   : No')
-    console.log('Detected experience : No')
-    console.log('Validation result   : REJECTED')
-    console.log('Reason for rejection:', reason)
-    console.log('====================================================')
-
+  // Guard: virtually empty or unreadable content (<25 chars)
+  if (normalized.length < 25) {
     return {
       isValid: false,
-      confidence: 5,
-      reason,
-      warnings: ['Insufficient text extracted'],
+      confidence: 0,
+      reason: 'The uploaded file does not contain readable text. Please upload a standard PDF, DOCX, or text resume.',
+      warnings: ['Insufficient readable text extracted.'],
       detectedType: 'unknown',
       missingPillars: ['Content Length', 'Contact Details', 'Core Sections', 'Skills'],
       detectedPillars: [],
@@ -177,7 +172,7 @@ export function validateIsResume(
     }
   }
 
-  // 2. Extract Contact Information
+  // 1. Contact Detection
   const emailMatch = normalized.match(EMAIL_REGEX)
   const phoneMatch = normalized.match(PHONE_REGEX)
   const linkedinMatch = normalized.match(LINKEDIN_REGEX)
@@ -197,7 +192,7 @@ export function validateIsResume(
     portfolio: portfolioMatch ? portfolioMatch[0] : undefined
   }
 
-  // 3. Detect Sections using tolerant regexes
+  // 2. Section Detection using tolerant regex variations
   const hasExperience = SECTION_VARIATIONS.experience.some(r => r.test(normalized))
   const hasEducation = SECTION_VARIATIONS.education.some(r => r.test(normalized))
   const hasProjects = SECTION_VARIATIONS.projects.some(r => r.test(normalized))
@@ -211,26 +206,16 @@ export function validateIsResume(
   if (hasSkills) detectedSectionsList.push('Skills')
   if (hasContactSection) detectedSectionsList.push('Contact Information')
 
-  const coreSectionsCount = [hasExperience, hasEducation, hasProjects, hasSkills].filter(Boolean).length
+  const majorSectionsCount = [hasExperience, hasEducation, hasProjects, hasSkills].filter(Boolean).length
 
-  // 4. Structural Obvious Cues
+  // 3. Structural Obvious Cues
   const hasBulletPoints = STRUCTURAL_INDICATORS.bulletPoints.test(normalized)
   const hasDates = STRUCTURAL_INDICATORS.dates.test(normalized)
   const hasDegree = STRUCTURAL_INDICATORS.degrees.test(normalized)
   const hasCompanyOrRole = STRUCTURAL_INDICATORS.companiesOrRoles.test(normalized)
   const hasTech = STRUCTURAL_INDICATORS.techKeywords.test(normalized)
 
-  const structuralHits = [
-    Boolean(detectedEmail),
-    Boolean(detectedPhone),
-    hasBulletPoints,
-    hasDates,
-    hasDegree,
-    hasCompanyOrRole,
-    hasTech
-  ].filter(Boolean).length
-
-  // 5. Check Definite False Indicators (Assignments / Invoices)
+  // 4. Definite False Document Indicators (only applied if 0 resume sections/contacts exist)
   let assignmentMatches = 0
   for (const pat of DEFINITE_ASSIGNMENT_INDICATORS) {
     if (pat.test(normalized) || pat.test(lowerName)) assignmentMatches++
@@ -241,33 +226,32 @@ export function validateIsResume(
     if (pat.test(normalized) || pat.test(lowerName)) nonResumeMatches++
   }
 
-  // 6. Multi-tiered Authenticity Evaluation
-  // Rule A: Candidate Name AND at least TWO of (Experience, Education, Projects, Skills)
-  const passesRuleA = Boolean(candidateName) && coreSectionsCount >= 2
+  // 5. Verification Rules
+  // Rule A: Candidate name + (Email OR Phone) + At least two major sections
+  const passesRuleA = Boolean(candidateName) && Boolean(detectedEmail || detectedPhone) && majorSectionsCount >= 2
 
-  // Rule B: Obvious Resume Structure with Email/Phone, bullets, dates, degrees, roles, technologies (at least 3 structural signals)
-  const passesRuleB = (Boolean(detectedEmail) || Boolean(detectedPhone)) && structuralHits >= 3
+  // Rule B: > 300 extracted characters + Email detected + Bullet points
+  const passesRuleB = normalized.length > 300 && Boolean(detectedEmail) && hasBulletPoints
 
-  // Rule C: At least 2 core sections regardless of candidate name
-  const passesRuleC = coreSectionsCount >= 2
+  // Rule C: Contains dates, technologies, degree, company, education, skills (at least 2 cues)
+  const structuralHits = [hasDates, hasTech, hasDegree, hasCompanyOrRole, hasEducation, hasSkills].filter(Boolean).length
+  const passesRuleC = structuralHits >= 2
 
-  // Rule D: Fallback Validation: > 300 characters + (Email OR Phone) + multiple paragraphs/lines
-  const passesFallback = normalized.length > 300 && (Boolean(detectedEmail) || Boolean(detectedPhone)) && (paragraphs.length >= 2 || lines.length >= 6)
+  // Rule D: Parser confidence / general resume cues
+  const passesRuleD = /(?:resume|cv|curriculum|vitae)/i.test(lowerName) || majorSectionsCount >= 1 || normalized.length >= 150
 
-  // Rule E: Name or Resume filename cue + at least 1 section + tech/education
-  const passesFileNameCue = /(?:resume|cv|curriculum|vitae)/i.test(lowerName) && (coreSectionsCount >= 1 || structuralHits >= 2)
+  // Any rule passing guarantees validity
+  const isRecognizedResume = passesRuleA || passesRuleB || passesRuleC || passesRuleD
 
-  // Calculate Base Confidence
-  let confidence = 30
+  // Compute confidence (30 to 100)
+  let confidence = 40
   if (detectedEmail || detectedPhone) confidence += 20
   if (hasExperience) confidence += 15
   if (hasEducation || hasDegree) confidence += 15
   if (hasSkills || hasTech) confidence += 10
   if (hasProjects) confidence += 10
   if (hasBulletPoints || hasDates) confidence += 10
-  if (/(?:resume|cv)/i.test(lowerName)) confidence += 10
-
-  confidence = Math.min(100, Math.max(10, confidence))
+  confidence = Math.min(100, Math.max(20, confidence))
 
   // Determine Missing and Detected Pillars
   const detectedPillars: string[] = []
@@ -301,70 +285,50 @@ export function validateIsResume(
     warnings.push('No projects detected.')
   }
 
-  // Final Acceptance Decision
-  // Only reject if it is DEFINITIVELY an assignment or invoice with virtually no resume structure
-  let isValid = false
-  let detectedType: ResumeValidationResult['detectedType'] = 'resume'
-  let reason: string | undefined = undefined
-
-  if (assignmentMatches >= 2 && coreSectionsCount === 0 && !hasExperience && !hasSkills) {
-    isValid = false
-    detectedType = 'assignment'
-    reason = 'The uploaded file appears to be a homework assignment or classroom document, not a resume or CV.'
-  } else if (nonResumeMatches >= 2 && coreSectionsCount === 0 && !detectedEmail && !hasSkills) {
-    isValid = false
-    detectedType = 'invoice'
-    reason = 'The uploaded file appears to be a financial receipt or general document, not a resume or CV.'
-  } else if (passesRuleA || passesRuleB || passesRuleC || passesFallback || passesFileNameCue) {
-    isValid = true
-    detectedType = 'resume'
-  } else if (normalized.length >= 150 && (structuralHits >= 2 || coreSectionsCount >= 1)) {
-    // Tolerant acceptance for unconventional resume formats
-    isValid = true
-    detectedType = 'resume'
-    warnings.push("We couldn't confidently identify every standard section, but your resume can still be analyzed.")
-  } else {
-    // Even if structural signals are light, if length > 250 with at least 1 contact or tech keyword, DO NOT BLOCK
-    if (normalized.length > 250 && (detectedEmail || detectedPhone || hasTech || hasDegree)) {
-      isValid = true
-      detectedType = 'resume'
-      warnings.push("We couldn't confidently identify every standard section, but your resume can still be analyzed.")
-    } else {
-      isValid = false
-      detectedType = 'unknown'
-      reason = "Could not verify resume structure in the uploaded document. Please upload an authentic resume containing experience, education, skills, or projects."
+  // Definite rejection ONLY if explicitly a homework sheet or receipt with ZERO resume signals
+  if (assignmentMatches >= 2 && majorSectionsCount === 0 && !detectedEmail && !hasSkills && !hasTech) {
+    return {
+      isValid: false,
+      confidence: 10,
+      detectedType: 'assignment',
+      reason: 'The uploaded file appears to be a homework assignment or classroom document, not a resume or CV.',
+      warnings: ['Document flagged as classroom assignment.'],
+      missingPillars,
+      detectedPillars,
+      detectedSections: detectedSectionsList,
+      detectedContact
     }
   }
 
-  // If approved with missing sections, add generic advisory warning
-  if (isValid && warnings.length > 0 && !warnings.some(w => w.includes('analyzed'))) {
-    warnings.unshift("We couldn't confidently identify every standard section, but your resume can still be analyzed.")
+  if (nonResumeMatches >= 2 && majorSectionsCount === 0 && !detectedEmail && !hasSkills && !hasTech) {
+    return {
+      isValid: false,
+      confidence: 10,
+      detectedType: 'invoice',
+      reason: 'The uploaded file appears to be an invoice or receipt, not a resume or CV.',
+      warnings: ['Document flagged as invoice or financial receipt.'],
+      missingPillars,
+      detectedPillars,
+      detectedSections: detectedSectionsList,
+      detectedContact
+    }
   }
 
-  // Debug Logging to Console as required
-  console.log('====== [AETHERCV AI RESUME VALIDATION DEBUG] ======')
-  console.log('Uploaded filename   :', fileName || 'unknown')
-  console.log('File type           :', fileType || 'unknown')
-  console.log('File size           :', fileSize ? `${fileSize} bytes` : 'unknown')
-  console.log('Characters extracted:', normalized.length)
-  console.log('Lines extracted     :', lines.length)
-  console.log('Detected sections   :', detectedSectionsList.length > 0 ? detectedSectionsList.join(', ') : 'None')
-  console.log('Detected email      :', detectedEmail || 'None')
-  console.log('Detected phone      :', detectedPhone || 'None')
-  console.log('Detected skills     :', hasSkills ? 'Yes' : 'No')
-  console.log('Detected education  :', hasEducation ? 'Yes' : 'No')
-  console.log('Detected projects   :', hasProjects ? 'Yes' : 'No')
-  console.log('Detected experience :', hasExperience ? 'Yes' : 'No')
-  console.log('Validation result   :', isValid ? 'PASSED (Valid Resume)' : 'REJECTED')
-  console.log('Reason for rejection:', isValid ? 'N/A' : (reason || 'Structure criteria not met'))
-  console.log('====================================================')
+  // Standard non-blocking message as requested in Step 9:
+  // "We couldn't confidently detect every standard resume section, but we'll continue analyzing your resume and highlight any missing areas."
+  const standardAdvisoryMessage = "We couldn't confidently detect every standard resume section, but we'll continue analyzing your resume and highlight any missing areas."
 
+  if (warnings.length > 0) {
+    warnings.unshift(standardAdvisoryMessage)
+  }
+
+  // In all cases where readable text exists, isValid is ALWAYS true!
   return {
-    isValid,
+    isValid: true,
     confidence,
-    reason,
+    reason: warnings.length > 0 ? standardAdvisoryMessage : undefined,
     warnings,
-    detectedType,
+    detectedType: 'resume',
     missingPillars,
     detectedPillars,
     detectedSections: detectedSectionsList,
