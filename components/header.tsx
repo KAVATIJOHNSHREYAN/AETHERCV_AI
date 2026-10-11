@@ -31,6 +31,7 @@ export default function Header() {
     { name: 'LTPS Calculator', href: '/ltps' },
     { name: 'Screenshot Calculator', href: '/screenshot' },
     { name: 'AI Resume Analyzer', href: '/resume-analyzer' },
+    { name: 'AI Cover Letter', href: '/cover-letter' },
     { name: 'ERP Login', href: '/login' },
   ]
 
