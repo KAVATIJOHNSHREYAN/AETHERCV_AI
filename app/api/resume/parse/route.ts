@@ -8,6 +8,7 @@ import { calculateAtsScore } from '@/lib/resume/ats-engine'
 import { generateAIFeedback } from '@/lib/resume/ai-engine'
 import { detectSectionsStatus } from '@/lib/resume/parser'
 import { extractSections } from '@/lib/resume/parser'
+import { validateIsResume } from '@/lib/resume/validator'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -270,7 +271,21 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    console.log(`[Resume Parse] [Stage 4: Pipeline] Commencing ATS & Heuristic analysis on ${textContent.length} characters...`)
+    // Verify Document Authenticity as a Resume / CV
+    const validation = validateIsResume(textContent, fileName)
+    if (!validation.isValid) {
+      console.warn(`[Resume Parse] [Stage 3: Validation Failed] Document rejected: ${validation.reason} (confidence: ${validation.confidence}%)`)
+      return NextResponse.json(
+        {
+          error: validation.reason,
+          stage: 'resume_authenticity_check',
+          validation
+        },
+        { status: 400 }
+      )
+    }
+
+    console.log(`[Resume Parse] [Stage 4: Pipeline] Document verified as authentic resume (confidence: ${validation.confidence}%). Commencing ATS analysis on ${textContent.length} characters...`)
 
     // Pipeline Execution
     const parsedData = parseRawResume(textContent)

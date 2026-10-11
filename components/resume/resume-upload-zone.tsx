@@ -162,10 +162,10 @@ export function ResumeUploadZone({ onAnalyze, isLoading }: ResumeUploadZoneProps
           </div>
 
           <h3 className="text-base sm:text-lg font-bold font-poppins text-foreground mb-1">
-            {isLoading ? 'Parsing and Auditing Resume...' : 'Drop your resume file here, or browse'}
+            {isLoading ? 'Verifying & Auditing Resume...' : 'Drop your resume file here, or browse'}
           </h3>
-          <p className="text-xs text-muted-foreground font-outfit max-w-sm mb-4">
-            Supports <strong className="text-foreground">PDF</strong> and <strong className="text-foreground">DOCX</strong> documents up to 10MB. 100% private, self-contained processing.
+          <p className="text-xs text-muted-foreground font-outfit max-w-md mb-4">
+            Supports <strong className="text-foreground">PDF</strong> and <strong className="text-foreground">DOCX</strong> resumes up to 10MB. Only authentic Resumes &amp; CVs are verified (homework assignments, class notes, and essays are automatically rejected).
           </p>
 
           <div className="flex items-center gap-2 text-xs font-medium text-primary">

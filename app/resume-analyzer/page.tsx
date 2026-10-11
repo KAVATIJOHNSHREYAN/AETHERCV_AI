@@ -19,6 +19,7 @@ import { analyzeKeywords } from '@/lib/resume/keyword-analyzer'
 import { calculateAtsScore } from '@/lib/resume/ats-engine'
 import { generateAIFeedback } from '@/lib/resume/ai-engine'
 import { extractTextFromPdfInBrowser, extractTextFromDocxInBrowser } from '@/lib/resume/client-pdf-extractor'
+import { validateIsResume } from '@/lib/resume/validator'
 import { SAMPLE_RESUMES } from '@/lib/resume/sample-resumes'
 
 // Components
@@ -166,7 +167,16 @@ export default function ResumeAnalyzerPage() {
         }
       }
 
-      // 2. Server API Route Call:
+      // 2. Authenticity Pre-Flight Validation
+      if (textContent) {
+        const validation = validateIsResume(textContent, fileName || file?.name || '')
+        if (!validation.isValid) {
+          console.warn('[Resume Analyzer] Document failed authenticity check:', validation.reason)
+          throw new Error(validation.reason)
+        }
+      }
+
+      // 3. Server API Route Call:
       // If we have textContent, send text! If not, send file.
       if (file || textContent) {
         try {
@@ -192,6 +202,10 @@ export default function ResumeAnalyzerPage() {
             const errData = await res.json().catch(() => null)
             const errorMsg = errData?.error || `Server responded with status ${res.status}`
             console.warn('[Resume Analyzer] Server error during parse:', errorMsg)
+            // If the document is specifically rejected as non-resume, throw immediately!
+            if (errData?.stage === 'resume_authenticity_check' || errData?.validation?.isValid === false) {
+              throw new Error(errorMsg)
+            }
             // If we already have textContent, do NOT throw, we will process it locally!
             if (!textContent) {
               throw new Error(errorMsg)
@@ -199,6 +213,10 @@ export default function ResumeAnalyzerPage() {
           }
         } catch (apiErr: any) {
           console.warn('[Resume Analyzer] API route call failed:', apiErr.message)
+          // If this is an authenticity rejection, always bubble up
+          if (apiErr.message.includes('not a resume') || apiErr.message.includes('assignment') || apiErr.message.includes('homework')) {
+            throw apiErr
+          }
           // If we have textContent, we fall through to the self-contained local pipeline below
           if (!textContent) {
             throw apiErr
@@ -206,8 +224,14 @@ export default function ResumeAnalyzerPage() {
         }
       }
 
+      // 4. Client-Side Self-Contained Engine Execution:
       // If API route was skipped or returned direct text, run self-contained local pipeline
       if (!resultData && textContent) {
+        const validation = validateIsResume(textContent, fileName || file?.name || '')
+        if (!validation.isValid) {
+          throw new Error(validation.reason)
+        }
+
         const parsedData = parseRawResume(textContent)
         const formatting = analyzeFormatting(textContent)
         const actionVerbs = analyzeActionVerbs(textContent)
