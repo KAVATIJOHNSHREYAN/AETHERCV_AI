@@ -46,21 +46,13 @@ export default function Header() {
             href="/"
             className="flex items-center gap-2.5 group"
           >
-            <div className="relative flex items-center gap-2">
+            <div className="relative flex items-center">
               <Image
                 src="/aethercv-logo.png"
                 alt="AETHERCV AI Logo"
-                width={40}
-                height={40}
-                className="h-9 sm:h-10 w-9 sm:w-10 rounded-xl object-contain shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform"
-                priority
-              />
-              <Image
-                src="/KL_University_logo.svg"
-                alt="KL Logo"
-                width={42}
-                height={42}
-                className="h-8 sm:h-9 w-auto opacity-85 group-hover:opacity-100 transition-opacity"
+                width={44}
+                height={44}
+                className="h-9 sm:h-10 w-auto rounded-xl object-contain shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform"
                 priority
               />
             </div>
