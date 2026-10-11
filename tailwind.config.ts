@@ -26,6 +26,24 @@ const config = {
         outfit: ["var(--font-outfit)"],
       },
       colors: {
+        // Unified Dark Blue Palette
+        'bg-primary': '#07101F',
+        'bg-secondary': '#0A1528',
+        'card-bg': '#111D34',
+        'secondary-card': '#162440',
+        'navbar-bg': '#0C162B',
+        'sidebar-bg': '#0B1628',
+
+        'primary-blue': '#2563EB',
+        'secondary-blue': '#3B82F6',
+        'accent-blue': '#60A5FA',
+        'highlight-blue': '#4F7DFF',
+        'hover-blue': '#5D8CFF',
+        'active-blue': '#2F6FFF',
+
+        'text-subheading': '#9CAEC9',
+
+        // Radix / Shadcn tokens
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -61,9 +79,12 @@ const config = {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "24px",
+        md: "14px",
+        sm: "10px",
+        'card': '24px',
+        'btn': '14px',
+        'input': '14px',
       },
     },
   },

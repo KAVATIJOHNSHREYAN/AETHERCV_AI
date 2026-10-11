@@ -270,23 +270,23 @@ export default function Home() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.65 }}
-          className="lg:col-span-3 p-6 sm:p-8 rounded-3xl border border-rose-500/20 bg-gradient-to-r from-red-600/10 via-rose-500/5 to-amber-500/5 backdrop-blur-md relative overflow-hidden shadow-xl"
+          className="lg:col-span-3 p-6 sm:p-8 rounded-[24px] border border-blue-500/25 bg-[#111D34] relative overflow-hidden shadow-[0_4px_30px_rgba(37,99,235,0.15)]"
         >
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-rose-500/20 bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-semibold">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-[#4F7DFF]/15 text-[#818cf8] text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
-                <span>New Module Extension</span>
+                <span>AI Career Suite</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold font-poppins text-foreground">
-                AI Resume Analyzer & ATS Scoring Engine
+              <h2 className="text-2xl sm:text-3xl font-bold font-poppins text-white">
+                AI Resume Analyzer &amp; ATS Scoring Engine
               </h2>
-              <p className="text-muted-foreground font-outfit text-sm sm:text-base max-w-2xl">
+              <p className="text-[#9CAEC9] font-outfit text-sm sm:text-base max-w-2xl">
                 Audit your resume against a custom 100-point ATS grading scale. Automatically extract 8-cluster tech skills, analyze action verbs, match job descriptions, and generate executive sentence rewrites.
               </p>
             </div>
             <Link href="/resume-analyzer" prefetch={false} className="shrink-0">
-              <Button size="lg" className="px-6 shadow-md hover:shadow-lg transition-all gap-2 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white">
+              <Button size="lg" className="px-6 shadow-md hover:shadow-lg transition-all gap-2 bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] hover:from-[#5D8CFF] hover:to-[#3B82F6] text-white">
                 <span>Analyze Resume Free</span>
                 <ArrowRight className="h-4 w-4" />
               </Button>

@@ -302,7 +302,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[#07101F]">
       <Script
         id="login-jsonld"
         type="application/ld+json"
@@ -314,29 +314,29 @@ export default function LoginPage() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-md"
       >
-        <div className="gradient-glow">
-          <Card className="w-full shadow-lg border-red-500/20 bg-card/80 backdrop-blur-sm">
+        <div className="always-glow">
+          <Card className="w-full shadow-2xl border-blue-500/25 bg-[#111D34] rounded-[24px]">
             <CardHeader className="space-y-1 text-center pt-6">
               <div className="relative inline-block mb-2 mx-auto">
-                <h1 className="text-2xl md:text-3xl font-bold font-poppins">
-                  KL ERP Attendance Calculator
+                <h1 className="text-2xl md:text-3xl font-bold font-poppins text-white">
+                  KL ERP Attendance Sync
                 </h1>
                 <motion.div 
-                  className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-red-600 rounded-full"
+                  className="absolute -bottom-1 left-0 right-0 h-1 bg-gradient-to-r from-[#4F7DFF] via-[#2563EB] to-[#1E50DA] rounded-full"
                   initial={{ width: "0%" }}
                   animate={{ width: "100%" }}
                   transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                 />
               </div>
-              <CardDescription className="font-outfit">
+              <CardDescription className="text-[#9CAEC9] font-outfit">
                 {step === 'login' 
-                  ? 'Enter your credentials to access attendance details' 
+                  ? 'Enter your credentials to securely sync attendance data' 
                   : 'Select Academic Year and Semester'}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {error && (
-                <Alert variant="destructive" className="mb-4">
+                <Alert variant="destructive" className="mb-4 bg-red-950/40 border-red-500/30 text-red-200">
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>Error</AlertTitle>
                   <AlertDescription>{error}</AlertDescription>
@@ -344,8 +344,8 @@ export default function LoginPage() {
               )}
 
               {status && !error && (
-                <Alert className="mb-4 border-red-500/30">
-                  <Info className="h-4 w-4" />
+                <Alert className="mb-4 border-blue-500/30 bg-blue-950/40 text-blue-200">
+                  <Info className="h-4 w-4 text-[#4F7DFF]" />
                   <AlertTitle>One-time setup</AlertTitle>
                   <AlertDescription>{status}</AlertDescription>
                 </Alert>
@@ -354,19 +354,19 @@ export default function LoginPage() {
               {step === 'login' ? (
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="username">Student ID</Label>
+                    <Label htmlFor="username" className="text-xs font-semibold text-slate-200">Student ID</Label>
                     <Input
                       id="username"
                       placeholder="Enter your ID Number"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       disabled={loading}
-                      className="border-red-500/20 focus:border-red-500/50"
+                      className="border-blue-500/25 bg-[#162440] text-white focus:border-[#3B82F6]"
                     />
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password" className="text-xs font-semibold text-slate-200">Password</Label>
                     <Input
                       id="password"
                       type="password"
@@ -374,7 +374,7 @@ export default function LoginPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       disabled={loading}
-                      className="border-red-500/20 focus:border-red-500/50"
+                      className="border-blue-500/25 bg-[#162440] text-white focus:border-[#3B82F6]"
                     />
                   </div>
                   
@@ -384,18 +384,18 @@ export default function LoginPage() {
                       id="rememberMe"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="h-4 w-4 rounded border-red-500/20 text-red-600 focus:ring-red-500/50 accent-red-600"
+                      className="h-4 w-4 rounded border-blue-500/30 text-[#2563EB] focus:ring-[#3B82F6] accent-[#2563EB]"
                     />
                     <Label 
                       htmlFor="rememberMe" 
-                      className="text-sm font-normal text-muted-foreground cursor-pointer select-none"
+                      className="text-xs font-normal text-[#9CAEC9] cursor-pointer select-none"
                     >
                       Remember me
                     </Label>
                   </div>
                   
                   <div className="space-y-2">
-                    <Label htmlFor="captcha">Captcha</Label>
+                    <Label htmlFor="captcha" className="text-xs font-semibold text-slate-200">Captcha</Label>
                     <div className="flex gap-2">
                       <Input
                         id="captcha"
@@ -403,11 +403,11 @@ export default function LoginPage() {
                         value={captcha}
                         onChange={(e) => setCaptcha(e.target.value)}
                         disabled={loading}
-                        className="flex-1 border-red-500/20 focus:border-red-500/50"
+                        className="flex-1 border-blue-500/25 bg-[#162440] text-white focus:border-[#3B82F6]"
                       />
-                      <div className="relative w-32 h-10 bg-muted rounded-md overflow-hidden flex items-center justify-center border border-red-500/20">
+                      <div className="relative w-32 h-11 bg-[#162440] rounded-[14px] overflow-hidden flex items-center justify-center border border-blue-500/25">
                         {captchaLoading ? (
-                          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                          <Loader2 className="h-5 w-5 animate-spin text-[#9CAEC9]" />
                         ) : captchaImage ? (
                           <img 
                             src={captchaImage} 
@@ -415,7 +415,7 @@ export default function LoginPage() {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <span className="text-xs text-muted-foreground">No Image</span>
+                          <span className="text-xs text-[#9CAEC9]">No Image</span>
                         )}
                       </div>
                       <Button
@@ -424,18 +424,18 @@ export default function LoginPage() {
                         size="icon"
                         onClick={() => fetchCaptcha()}
                         disabled={loading || captchaLoading}
-                        className="border-red-500/20 hover:bg-red-500/10 hover:text-red-500"
+                        className="border-blue-500/25 text-[#9CAEC9] hover:bg-blue-600/15 hover:text-white"
                       >
                         <RefreshCw className={`h-4 w-4 ${captchaLoading ? 'animate-spin' : ''}`} />
                       </Button>
                     </div>
-                    <p className="text-[10px] text-muted-foreground/60 text-center">
-                      Note: Auto-fill is experimental and may not work for all captchas. Please verify before logging in.
+                    <p className="text-[10px] text-[#9CAEC9]/70 text-center">
+                      Note: Auto-fill is experimental. Please verify characters before logging in.
                     </p>
                   </div>
                   
                   <Button 
-                    className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium" 
+                    className="w-full bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] hover:from-[#5D8CFF] hover:to-[#3B82F6] text-white font-semibold py-5 shadow-[0_0_20px_rgba(59,130,246,0.35)]" 
                     type="submit" 
                     disabled={loading}
                   >
@@ -447,7 +447,7 @@ export default function LoginPage() {
                     ) : (
                       <>
                         <LogIn className="mr-2 h-4 w-4" />
-                        Login
+                        Login to ERP
                       </>
                     )}
                   </Button>
@@ -455,47 +455,47 @@ export default function LoginPage() {
               ) : (
                 <form onSubmit={handleFetchAttendance} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="academicYear">Academic Year</Label>
+                    <Label htmlFor="academicYear" className="text-xs font-semibold text-slate-200">Academic Year</Label>
                     <div className="relative">
                       <select
                         id="academicYear"
                         value={selectedYear}
                         onChange={(e) => setSelectedYear(e.target.value)}
-                        className="w-full h-10 rounded-md border border-red-500/20 bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none"
+                        className="w-full h-11 rounded-[14px] border border-blue-500/25 bg-[#162440] px-3.5 py-2 text-sm text-white focus:border-[#3B82F6] appearance-none"
                         disabled={loading}
                       >
                         {academicYears.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
+                          <option key={opt.value} value={opt.value} className="bg-[#111D34] text-white">
                             {opt.label}
                           </option>
                         ))}
                       </select>
-                      <Calendar className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
+                      <Calendar className="absolute right-3 top-3 h-4 w-4 text-[#9CAEC9] pointer-events-none" />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="semester">Semester</Label>
+                    <Label htmlFor="semester" className="text-xs font-semibold text-slate-200">Semester</Label>
                     <div className="relative">
                       <select
                         id="semester"
                         value={selectedSem}
                         onChange={(e) => setSelectedSem(e.target.value)}
-                        className="w-full h-10 rounded-md border border-red-500/20 bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none"
+                        className="w-full h-11 rounded-[14px] border border-blue-500/25 bg-[#162440] px-3.5 py-2 text-sm text-white focus:border-[#3B82F6] appearance-none"
                         disabled={loading}
                       >
                         {semesters.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
+                          <option key={opt.value} value={opt.value} className="bg-[#111D34] text-white">
                             {opt.label}
                           </option>
                         ))}
                       </select>
-                      <BookOpen className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
+                      <BookOpen className="absolute right-3 top-3 h-4 w-4 text-[#9CAEC9] pointer-events-none" />
                     </div>
                   </div>
 
                   <Button 
-                    className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium mt-4" 
+                    className="w-full bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] hover:from-[#5D8CFF] hover:to-[#3B82F6] text-white font-semibold py-5 shadow-[0_0_20px_rgba(59,130,246,0.35)] mt-4" 
                     type="submit" 
                     disabled={loading}
                   >
@@ -514,7 +514,7 @@ export default function LoginPage() {
                   <Button
                     type="button"
                     variant="ghost"
-                    className="w-full text-muted-foreground hover:text-foreground"
+                    className="w-full text-[#9CAEC9] hover:text-white"
                     onClick={() => setStep('login')}
                     disabled={loading}
                   >
@@ -523,7 +523,7 @@ export default function LoginPage() {
                 </form>
               )}
             </CardContent>
-            <CardFooter className="flex justify-center text-xs text-muted-foreground text-center font-outfit">
+            <CardFooter className="flex justify-center text-xs text-[#9CAEC9] text-center font-outfit">
               Note: This connects to the university ERP system. Your credentials are processed securely.
             </CardFooter>
           </Card>

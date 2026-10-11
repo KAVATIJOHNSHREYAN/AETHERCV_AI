@@ -13,27 +13,20 @@ export default function AnimatedBackground() {
   }, [])
 
   if (!mounted) {
-    return <div className="fixed inset-0 -z-[50] bg-background pointer-events-none" />
+    return <div className="fixed inset-0 -z-[50] bg-[#07101F] pointer-events-none" />
   }
 
-  const isDark = resolvedTheme === "dark"
-
   return (
-    <div className="fixed inset-0 -z-[50] overflow-hidden bg-background pointer-events-none">
+    <div className="fixed inset-0 -z-[50] overflow-hidden bg-[#07101F] pointer-events-none">
+      {/* Unified Enterprise Blue Blobs */}
       <div 
-        className={`absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] max-w-[800px] max-h-[800px] rounded-full filter blur-[100px] animate-blob transition-colors duration-1000 ${
-          isDark ? "bg-blue-600/20" : "bg-blue-400/30"
-        }`} 
+        className="absolute -top-[20%] -left-[10%] w-[70vw] h-[70vw] max-w-[800px] max-h-[800px] rounded-full filter blur-[120px] animate-blob bg-[#2563EB]/15 pointer-events-none" 
       />
       <div 
-        className={`absolute top-[10%] -right-[10%] w-[60vw] h-[60vw] max-w-[600px] max-h-[600px] rounded-full filter blur-[100px] animate-blob animation-delay-2000 transition-colors duration-1000 ${
-          isDark ? "bg-indigo-600/20" : "bg-cyan-400/30"
-        }`} 
+        className="absolute top-[15%] -right-[10%] w-[60vw] h-[60vw] max-w-[650px] max-h-[650px] rounded-full filter blur-[120px] animate-blob animation-delay-2000 bg-[#4F7DFF]/12 pointer-events-none" 
       />
       <div 
-        className={`absolute -bottom-[20%] left-[20%] w-[80vw] h-[80vw] max-w-[900px] max-h-[900px] rounded-full filter blur-[100px] animate-blob animation-delay-4000 transition-colors duration-1000 ${
-          isDark ? "bg-cyan-700/20" : "bg-sky-400/30"
-        }`} 
+        className="absolute -bottom-[20%] left-[20%] w-[80vw] h-[80vw] max-w-[900px] max-h-[900px] rounded-full filter blur-[120px] animate-blob animation-delay-4000 bg-[#162440]/40 pointer-events-none" 
       />
     </div>
   )

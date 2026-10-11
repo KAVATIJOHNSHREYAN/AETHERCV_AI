@@ -144,8 +144,8 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
             <div className="space-y-4">
               
               <div className="flex items-start gap-3">
-                <div className="bg-red-500/10 p-2 rounded-full">
-                  <div className="h-2 w-2 rounded-full bg-red-500"></div>
+                <div className="bg-blue-500/10 p-2 rounded-full border border-blue-500/20">
+                  <div className="h-2 w-2 rounded-full bg-[#3B82F6]"></div>
                 </div>
                 <div>
                   <h3 className="font-medium">Classes you can miss</h3>
@@ -165,8 +165,8 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="bg-red-500/10 p-2 rounded-full">
-                  <div className="h-2 w-2 rounded-full bg-red-500"></div>
+                <div className="bg-blue-500/10 p-2 rounded-full border border-blue-500/20">
+                  <div className="h-2 w-2 rounded-full bg-[#3B82F6]"></div>
                 </div>
                 <div>
                   <h3 className="font-medium">Classes needed for 75%</h3>
@@ -186,8 +186,8 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <div className="bg-red-500/10 p-2 rounded-full">
-                  <div className="h-2 w-2 rounded-full bg-red-500"></div>
+                <div className="bg-blue-500/10 p-2 rounded-full border border-blue-500/20">
+                  <div className="h-2 w-2 rounded-full bg-[#3B82F6]"></div>
                 </div>
                 <div>
                   <h3 className="font-medium">Classes needed for 85%</h3>
@@ -365,8 +365,8 @@ export function LTPSCalculator({ components }: LTPSCalculatorProps) {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <div className="bg-red-500/10 p-2 rounded-full">
-                  <div className="h-2 w-2 rounded-full bg-red-500"></div>
+                <div className="bg-blue-500/10 p-2 rounded-full border border-blue-500/20">
+                  <div className="h-2 w-2 rounded-full bg-[#3B82F6]"></div>
                 </div>
                 <div>
                   <h3 className="font-medium">Attendance Analysis</h3>
