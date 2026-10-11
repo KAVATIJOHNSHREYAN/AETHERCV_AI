@@ -116,7 +116,7 @@ export function ResumeSourcePicker({
             type="file"
             ref={fileInputRef}
             onChange={handleFileChange}
-            accept=".pdf,.docx,.txt"
+            accept=".pdf,.docx,.doc,.txt,.md,.png,.jpg,.jpeg,.webp"
             className="hidden"
           />
           <div className="w-12 h-12 mx-auto rounded-2xl bg-blue-500/15 border border-blue-500/30 text-[#818cf8] flex items-center justify-center shadow-[0_0_15px_rgba(77,72,230,0.2)]">
@@ -131,7 +131,7 @@ export function ResumeSourcePicker({
               {isUploading ? 'Extracting Resume Data...' : 'Click to Upload Resume Document'}
             </h4>
             <p className="text-xs text-slate-400 font-outfit mt-1">
-              Supports .PDF, .DOCX, or .TXT up to 10MB
+              Supports .PDF, .DOCX, Images (.PNG/.JPG), or .TXT up to 10MB
             </p>
           </div>
         </div>

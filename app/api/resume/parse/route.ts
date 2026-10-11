@@ -393,6 +393,7 @@ export async function POST(req: NextRequest) {
       },
       validation,
       parsedData,
+      resume: parsedData,
       atsBreakdown,
       formatting,
       actionVerbs,

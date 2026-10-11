@@ -87,8 +87,12 @@ export default function CoverLetterGeneratorPage() {
       }
 
       const data = await res.json()
-      if (data.resume) {
-        setActiveResume(data.resume)
+      const resumeData = data.resume || data.parsedData
+      if (resumeData) {
+        setActiveResume(resumeData)
+        try {
+          localStorage.setItem('aethercv_parsed_resume_v1', JSON.stringify(resumeData))
+        } catch (_) {}
       } else {
         throw new Error('No resume data returned.')
       }

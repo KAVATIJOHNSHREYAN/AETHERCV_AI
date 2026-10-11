@@ -279,6 +279,11 @@ export default function ResumeAnalyzerPage() {
 
       setAnalysisData(newAnalysis)
 
+      // Sync parsed resume to localStorage for seamless cross-module use in Cover Letter Generator
+      try {
+        localStorage.setItem('aethercv_parsed_resume_v1', JSON.stringify(newAnalysis.parsedData))
+      } catch (_) {}
+
       // Save to History
       const historyItem: ResumeAnalysisHistoryItem = {
         id: `analysis-${Date.now()}`,
