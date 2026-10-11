@@ -50,11 +50,11 @@ export function ResumeUploadZone({ onAnalyze, isLoading }: ResumeUploadZoneProps
   }
 
   const processSelectedFile = async (file: File) => {
-    const validExtensions = ['.pdf', '.docx', '.doc', '.txt', '.md']
+    const validExtensions = ['.pdf', '.docx', '.doc', '.txt', '.md', '.png', '.jpg', '.jpeg', '.webp']
     const hasValidExt = validExtensions.some(ext => file.name.toLowerCase().endsWith(ext))
 
     if (!hasValidExt) {
-      setErrorMsg('Please upload a valid document (.pdf, .docx, .doc, .txt, .md)')
+      setErrorMsg('Please upload a valid resume document (.pdf, .docx, .png, .jpg, .txt)')
       return
     }
 
@@ -106,7 +106,7 @@ export function ResumeUploadZone({ onAnalyze, isLoading }: ResumeUploadZoneProps
           }`}
         >
           <Upload className="w-4 h-4 text-[#818cf8]" />
-          Upload Document (PDF / DOCX)
+          Upload Document (PDF / DOCX / Image)
         </button>
 
         <button
@@ -152,7 +152,7 @@ export function ResumeUploadZone({ onAnalyze, isLoading }: ResumeUploadZoneProps
           <input
             ref={fileInputRef}
             type="file"
-            accept=".pdf,.docx,.doc,.txt,.md"
+            accept=".pdf,.docx,.doc,.txt,.md,.png,.jpg,.jpeg,.webp"
             onChange={handleFileChange}
             className="hidden"
           />
@@ -176,7 +176,7 @@ export function ResumeUploadZone({ onAnalyze, isLoading }: ResumeUploadZoneProps
             {isLoading ? 'Verifying & Auditing Resume...' : 'Drop your resume file here, or browse'}
           </h3>
           <p className="text-xs text-slate-400 font-outfit max-w-md mb-4 leading-relaxed">
-            Supports <strong className="text-blue-300">PDF</strong> and <strong className="text-blue-300">DOCX</strong> resumes up to 10MB. Only authentic Resumes &amp; CVs are verified (homework assignments, class notes, and essays are automatically rejected).
+            Supports <strong className="text-blue-300">PDF</strong>, <strong className="text-blue-300">DOCX</strong>, and <strong className="text-blue-300">Images (PNG/JPG)</strong> up to 10MB. Genuine resumes and CVs are analyzed immediately.
           </p>
 
           <div className="flex items-center gap-2 text-xs font-semibold text-[#818cf8] group-hover:text-white transition-colors">

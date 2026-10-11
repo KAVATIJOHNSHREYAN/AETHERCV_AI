@@ -17,6 +17,47 @@ export const maxDuration = 60
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
 /**
+ * Performs OCR on images (PNG, JPG, WEBP) or scanned PDFs via OCR.space API.
+ */
+async function performOCRFromBuffer(buffer: Buffer, filetype: string = 'PNG'): Promise<string> {
+  const OCR_SPACE_API_KEY = process.env.OCR_SPACE_API_KEY || 'K87899142388957'
+  const base64Image = buffer.toString('base64')
+  const mimeType = filetype === 'PDF' ? 'application/pdf' : filetype === 'PNG' ? 'image/png' : 'image/jpeg'
+
+  const formData = new FormData()
+  formData.append('base64Image', `data:${mimeType};base64,${base64Image}`)
+  formData.append('language', 'eng')
+  formData.append('isOverlayRequired', 'false')
+  formData.append('detectOrientation', 'true')
+  formData.append('scale', 'true')
+  formData.append('OCREngine', '2')
+  formData.append('filetype', filetype)
+
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 25000)
+
+  try {
+    const response = await fetch('https://api.ocr.space/parse/image', {
+      method: 'POST',
+      headers: { apikey: OCR_SPACE_API_KEY },
+      body: formData,
+      signal: controller.signal
+    })
+    clearTimeout(timeoutId)
+    const result = await response.json()
+    if (result && result.ParsedResults && result.ParsedResults.length > 0) {
+      const fullText = result.ParsedResults.map((r: any) => r.ParsedText || '').join('\n').trim()
+      if (fullText.length > 20) {
+        return fullText
+      }
+    }
+  } catch (err) {
+    console.warn('[Resume Parse] OCR error:', err)
+  }
+  return ''
+}
+
+/**
  * Extracts plain text from a PDF buffer using multiple fallback strategies.
  */
 async function extractPdfText(buffer: Buffer): Promise<string> {
@@ -83,6 +124,18 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
     }
   } catch (err: any) {
     console.warn('[Resume Parse] [Stage 3: PDF] Strategy 4 failed:', err.message)
+  }
+
+  // Strategy 5: OCR Fallback for scanned / image-based PDFs
+  try {
+    console.log('[Resume Parse] [Stage 3: PDF] Running Strategy 5 (OCR.space scanned PDF fallback)...')
+    const ocrText = await performOCRFromBuffer(buffer, 'PDF')
+    if (ocrText && ocrText.trim().length > 20) {
+      console.log(`[Resume Parse] [Stage 3: PDF] Strategy 5 (OCR) success: extracted ${ocrText.length} chars.`)
+      return ocrText.trim()
+    }
+  } catch (err: any) {
+    console.warn('[Resume Parse] [Stage 3: PDF] Strategy 5 (OCR) failed:', err.message)
   }
 
   throw new Error('Could not extract text from PDF. The document may be an image scan, encrypted, or password-protected.')
@@ -220,23 +273,52 @@ export async function POST(req: NextRequest) {
         const lowerName = fileName.toLowerCase()
 
         if (lowerName.endsWith('.pdf')) {
-          textContent = await extractPdfText(buffer)
+          try {
+            textContent = await extractPdfText(buffer)
+          } catch (pdfErr) {
+            console.warn('[Resume Parse] PDF text extraction failed, falling back to OCR...', pdfErr)
+            textContent = await performOCRFromBuffer(buffer, 'PDF')
+          }
         } else if (lowerName.endsWith('.docx') || lowerName.endsWith('.doc')) {
           textContent = await extractDocxText(buffer)
         } else if (lowerName.endsWith('.txt') || lowerName.endsWith('.md')) {
           textContent = buffer.toString('utf-8')
+        } else if (
+          lowerName.endsWith('.png') ||
+          lowerName.endsWith('.jpg') ||
+          lowerName.endsWith('.jpeg') ||
+          lowerName.endsWith('.webp') ||
+          fileType.startsWith('image/')
+        ) {
+          console.log('[Resume Parse] Image resume uploaded. Running OCR extraction...')
+          textContent = await performOCRFromBuffer(buffer, lowerName.endsWith('.png') ? 'PNG' : 'JPG')
         } else {
           // Attempt PDF detection via magic numbers (%PDF-)
           if (buffer.length > 5 && buffer.toString('ascii', 0, 5) === '%PDF-') {
-            textContent = await extractPdfText(buffer)
+            try {
+              textContent = await extractPdfText(buffer)
+            } catch {
+              textContent = await performOCRFromBuffer(buffer, 'PDF')
+            }
+          } else if (buffer.length > 4 && (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47)) {
+            textContent = await performOCRFromBuffer(buffer, 'PNG')
+          } else if (buffer.length > 3 && (buffer[0] === 0xFF && buffer[1] === 0xD8 && buffer[2] === 0xFF)) {
+            textContent = await performOCRFromBuffer(buffer, 'JPG')
           } else {
-            return NextResponse.json(
-              {
-                error: `Unsupported format for "${fileName}". Please upload a PDF (.pdf) or Word (.docx) document.`,
-                stage: 'format_validation'
-              },
-              { status: 400 }
-            )
+            const candidateText = buffer.toString('utf-8')
+            if (candidateText && candidateText.length > 30) {
+              textContent = candidateText
+            } else {
+              textContent = await performOCRFromBuffer(buffer, 'PNG')
+            }
+          }
+        }
+
+        if (!textContent || textContent.trim().length < 25) {
+          console.log('[Resume Parse] Extracted text under 25 chars. Attempting OCR fallback...')
+          const ocrAttempt = await performOCRFromBuffer(buffer, lowerName.endsWith('.pdf') ? 'PDF' : 'PNG').catch(() => '')
+          if (ocrAttempt && ocrAttempt.trim().length >= 25) {
+            textContent = ocrAttempt.trim()
           }
         }
       } else {
