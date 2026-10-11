@@ -5,8 +5,9 @@ import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, CheckCircle2, XCircle, Download } from "lucide-react"
+import { AlertCircle, CheckCircle2, XCircle, Download, Sparkles, ArrowRight } from "lucide-react"
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { ExportSummaryModal, ExportSummaryModalProps } from "@/components/export-summary-modal"
 
 export default function DashboardPage() {
@@ -233,6 +234,36 @@ export default function DashboardPage() {
             router.push('/login')
           }} variant="outline" className="font-outfit hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-all">Logout</Button>
         </div>
+      </div>
+
+      {/* AI Resume Analyzer Integration Card */}
+      <div className="mb-8">
+        <Card className="border border-blue-500/20 bg-gradient-to-r from-blue-500/10 via-purple-500/5 to-transparent backdrop-blur-md shadow-md rounded-2xl overflow-hidden">
+          <CardContent className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md">
+                <Sparkles className="h-6 w-6" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-lg font-bold font-poppins text-foreground">AI Resume Analyzer & ATS Auditor</h3>
+                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                    New Extension
+                  </span>
+                </div>
+                <p className="text-xs text-muted-foreground font-outfit mt-0.5 max-w-xl">
+                  Benchmark your resume against top ATS filters, audit 8-cluster tech skills, check action verbs, match job postings, and generate AI sentence rewrites.
+                </p>
+              </div>
+            </div>
+            <Link href="/resume-analyzer" className="shrink-0 w-full md:w-auto">
+              <Button className="w-full md:w-auto font-outfit shadow-md gap-2 bg-blue-600 hover:bg-blue-700 text-white">
+                <span>Launch Resume Analyzer</span>
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Course-wise Calculated Attendance */}
