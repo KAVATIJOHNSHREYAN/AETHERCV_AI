@@ -52,25 +52,34 @@ export function extractContactInfo(text: string): ContactInfo {
   }
 
   // 6. Name extraction
-  // Usually the first prominent non-header line that isn't an email or URL
   let name = ''
   for (let i = 0; i < Math.min(lines.length, 6); i++) {
-    const line = lines[i]
+    const line = lines[i].trim()
+    const candidate = line.split(/[|,\t•@:\/]/)[0].trim()
     if (
-      line.length > 2 &&
-      line.length < 50 &&
-      !line.includes('@') &&
-      !line.includes('http') &&
-      !line.includes('www.') &&
-      !/curriculum\s+vitae|resume|portfolio|contact/i.test(line) &&
-      /^[A-Za-z\s.'-]+$/.test(line)
+      candidate.length >= 2 &&
+      candidate.length <= 35 &&
+      !/curriculum|vitae|resume|portfolio|contact|summary|objective|education|experience|engineer|developer|skills/i.test(candidate) &&
+      /^[A-Za-z\s.'-]+$/.test(candidate)
     ) {
-      name = line
-      break
+      const words = candidate.split(/\s+/).filter(Boolean)
+      if (words.length >= 1 && words.length <= 4) {
+        name = words.join(' ')
+        break
+      }
     }
   }
-  if (!name && lines.length > 0) {
-    name = lines[0].replace(/[^A-Za-z\s.'-]/g, '').trim()
+
+  // Fallback: match capitalized name at top before email or phone
+  if (!name) {
+    const topText = text.slice(0, 300)
+    const nameMatch = topText.match(/^\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,3}|[A-Z\s]{3,30})/m)
+    if (nameMatch) {
+      const candidate = nameMatch[1].trim()
+      if (!/curriculum|vitae|resume/i.test(candidate)) {
+        name = candidate
+      }
+    }
   }
 
   // 7. Address / Location extraction

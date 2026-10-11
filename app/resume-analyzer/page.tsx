@@ -148,9 +148,27 @@ export default function ResumeAnalyzerPage() {
             if (json.success) {
               resultData = json
             }
+          } else {
+            const errData = await res.json().catch(() => null)
+            const errorMsg = errData?.error || `Server responded with status ${res.status}`
+            console.error('[Resume Analyzer] Server error during parse:', errData)
+            throw new Error(errorMsg)
           }
-        } catch (apiErr) {
-          console.warn('API route call fallback to client-side pipeline:', apiErr)
+        } catch (apiErr: any) {
+          console.warn('[Resume Analyzer] API route call failed:', apiErr.message)
+          // If direct text is provided, we can still fall back to client-side pipeline below
+          if (!textContent && !file?.name?.endsWith('.txt') && !file?.name?.endsWith('.md')) {
+            throw apiErr
+          }
+        }
+      }
+
+      // If API route had a network error but file is plain text, read via FileReader
+      if (!resultData && file && (file.name.endsWith('.txt') || file.name.endsWith('.md'))) {
+        try {
+          textContent = await file.text()
+        } catch (readErr) {
+          console.warn('Failed to read text file on client:', readErr)
         }
       }
 
@@ -183,7 +201,7 @@ export default function ResumeAnalyzerPage() {
       }
 
       if (!resultData) {
-        throw new Error('Failed to parse document text. Please try uploading another file or pasting plain text.')
+        throw new Error('Unable to extract text from document. Please ensure the document contains readable text.')
       }
 
       const newAnalysis = {
@@ -222,36 +240,7 @@ export default function ResumeAnalyzerPage() {
     }
   }
 
-  // Pre-load a sample on initial mount if desired (or let user upload)
-  useEffect(() => {
-    if (!analysisData && SAMPLE_RESUMES.length > 0) {
-      // Initialize with first sample for immediate wow factor
-      const sample = SAMPLE_RESUMES[0]
-      const text = sample.content
-      const parsedData = parseRawResume(text)
-      const formatting = analyzeFormatting(text)
-      const actionVerbs = analyzeActionVerbs(text)
-      const keywords = analyzeKeywords(text, parsedData.rawSkillsList)
-      const atsBreakdown = calculateAtsScore(parsedData, formatting, actionVerbs, keywords)
-      const aiFeedback = generateAIFeedback(parsedData, atsBreakdown)
-      const sectionsRaw = extractSections(text)
-      const sectionsDetection = detectSectionsStatus(sectionsRaw)
-
-      setAnalysisData({
-        fileName: `${sample.title}.pdf`,
-        fileSize: 42000,
-        fileType: 'application/pdf',
-        timestamp: new Date().toISOString(),
-        parsedData,
-        atsBreakdown,
-        formatting,
-        actionVerbs,
-        keywords,
-        sectionsDetection,
-        aiFeedback
-      })
-    }
-  }, [])
+  // Allow clean start for real user resume uploads
 
   const navTabs = [
     { id: 'overview' as const, label: 'ATS Overview', icon: BarChart3 },
@@ -367,8 +356,17 @@ export default function ResumeAnalyzerPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsExportOpen(true)}
+                  onClick={() => setAnalysisData(null)}
                   className="gap-1.5 text-xs font-outfit"
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  Analyze Another Resume
+                </Button>
+
+                <Button
+                  size="sm"
+                  onClick={() => setIsExportOpen(true)}
+                  className="gap-1.5 text-xs font-outfit shadow-sm"
                 >
                   <Download className="w-3.5 h-3.5" />
                   Download Package

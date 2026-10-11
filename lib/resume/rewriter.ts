@@ -51,11 +51,18 @@ export function generateRewrittenResume(resume: ParsedResume): RewrittenResumeCo
     const company = exp.company || 'Enterprise Solutions'
     const dates = exp.startDate && exp.endDate ? `${exp.startDate} - ${exp.endDate}` : '2023 - Present'
 
-    const bullets: string[] = [
-      `• Architected and maintained mission-critical application modules, boosting endpoint throughput by 35% and reducing p99 latency to under 120ms.`,
-      `• Spearheaded integration of robust CI/CD deployment pipelines using automated testing frameworks, cutting build failure rates by 40%.`,
-      `• Collaborated with cross-functional engineering and design leads to ship high-priority user-facing features on schedule with 99.8% crash-free sessions.`
-    ]
+    const bullets: string[] = exp.responsibilities.length > 0
+      ? exp.responsibilities.map(r => {
+          const clean = r.replace(/^[•\-\*\d.]+\s*/, '').trim()
+          if (/^worked\s+on/i.test(clean)) return `• Architected and delivered ${clean.slice(10)}, achieving 35% performance gain.`
+          if (/^responsible\s+for/i.test(clean)) return `• Spearheaded and oversaw ${clean.slice(16)}, maintaining 99.9% availability.`
+          if (/^helped/i.test(clean)) return `• Partnered with engineering teams to execute ${clean.slice(7)}, reducing turnaround time by 30%.`
+          return `• Spearheaded ${clean.charAt(0).toLowerCase() + clean.slice(1)}.`
+        })
+      : [
+          `• Architected and maintained critical application modules at ${company}, improving endpoint throughput by 35%.`,
+          `• Spearheaded automated CI/CD deployment pipelines, cutting build regression rates by 40%.`
+        ]
 
     return {
       company,
@@ -66,12 +73,16 @@ export function generateRewrittenResume(resume: ParsedResume): RewrittenResumeCo
 
   // 4. Rewrite Projects
   const rewrittenProjects = resume.projects.map(proj => {
-    const techStack = proj.technologies.length > 0 ? proj.technologies.join(', ') : 'Next.js, TypeScript, Tailwind CSS, PostgreSQL'
-    const bullets: string[] = [
-      `• Engineered an end-to-end full stack platform featuring modular component design and secure state management.`,
-      `• Implemented high-performance database querying and caching layers, decreasing page load duration by 45%.`,
-      `• Deployed production application on cloud infrastructure with automated monitoring and responsive mobile-first UI.`
-    ]
+    const techStack = proj.technologies.length > 0 ? proj.technologies.join(', ') : 'Modern Full Stack Technologies'
+    const bullets: string[] = proj.responsibilities.length > 0
+      ? proj.responsibilities.map(r => {
+          const clean = r.replace(/^[•\-\*\d.]+\s*/, '').trim()
+          return `• Engineered and deployed ${clean.charAt(0).toLowerCase() + clean.slice(1)}.`
+        })
+      : [
+          `• Engineered and deployed ${proj.name} utilizing ${techStack}.`,
+          `• Optimized architectural data flow, reducing latency by 45% and ensuring seamless cross-device responsiveness.`
+        ]
 
     return {
       name: proj.name,

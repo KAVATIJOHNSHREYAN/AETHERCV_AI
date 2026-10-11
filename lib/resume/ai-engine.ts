@@ -115,33 +115,99 @@ export function generateAIFeedback(
   // 10. Overall Feedback
   const overallFeedback = `With an overall ATS score of ${score}/100 (${atsBreakdown.overallGrade} Grade), your resume is positioned well. Focusing on the suggested sentence rewrites and adding quantified deliverables will significantly increase your callback rate for software engineering and technology roles.`
 
-  // 11. Sentence Rewrites (Identifies weak lines and offers high-impact alternatives)
-  const sentenceRewrites: SentenceRewriteSuggestion[] = [
-    {
-      original: 'Worked on a web application using React and Node.js for managing student data.',
-      improved: 'Architected and deployed a full-stack student management portal using React and Node.js, improving administrative data entry speed by 40%.',
-      improvementType: 'quantified_metrics',
-      explanation: 'Replaced passive "worked on" with "Architected and deployed", and added a 40% measurable speedup metric.'
-    },
-    {
-      original: 'Responsible for fixing bugs and improving website performance.',
-      improved: 'Diagnosed and resolved 25+ critical front-end bottlenecks, optimizing core Web Vitals and reducing page load latency by 35%.',
-      improvementType: 'impact_focus',
-      explanation: 'Changed generic "fixing bugs" to quantified bug count and measurable 35% latency reduction.'
-    },
-    {
-      original: 'Created a machine learning model to predict student attendance outcomes.',
-      improved: 'Engineered an end-to-end predictive classification pipeline using Python and Scikit-Learn, achieving 92% accuracy across 10,000+ historical records.',
-      improvementType: 'stronger_action_verb',
-      explanation: 'Replaced "created" with "Engineered", and specified model accuracy (92%) and dataset scale (10,000+ records).'
-    },
-    {
-      original: 'Helped the team design database tables in MongoDB.',
-      improved: 'Designed and indexed scalable MongoDB document schemas, decreasing query execution times by 50% for high-frequency endpoints.',
-      improvementType: 'conciseness',
-      explanation: 'Eliminated timid "helped the team" and framed as an assertive technical optimization.'
+  // 11. Sentence Rewrites (Analyzes candidate's ACTUAL sentences and transforms them)
+  const candidateBullets: string[] = []
+
+  // Extract candidate's real sentences
+  resume.experience.forEach(e => {
+    e.responsibilities.forEach(r => {
+      const clean = r.replace(/^[•\-\*\d.]+\s*/, '').trim()
+      if (clean.length > 15) candidateBullets.push(clean)
+    })
+  })
+
+  resume.projects.forEach(p => {
+    p.responsibilities.forEach(r => {
+      const clean = r.replace(/^[•\-\*\d.]+\s*/, '').trim()
+      if (clean.length > 15) candidateBullets.push(clean)
+    })
+    if (p.description && p.description.length > 25) {
+      candidateBullets.push(p.description)
     }
-  ]
+  })
+
+  // If no structured bullets, split raw text by punctuation
+  if (candidateBullets.length === 0) {
+    const rawLines = resume.rawText.split(/[\r\n]+/).map(l => l.replace(/^[•\-\*\d.]+\s*/, '').trim())
+    rawLines.forEach(l => {
+      if (l.length > 25 && l.length < 180 && !l.includes('@') && !l.includes('http') && !/summary|education|skills/i.test(l)) {
+        candidateBullets.push(l)
+      }
+    })
+  }
+
+  const sentenceRewrites: SentenceRewriteSuggestion[] = []
+
+  // Transform actual candidate lines
+  candidateBullets.slice(0, 4).forEach((original) => {
+    let improved = original
+    let improvementType: SentenceRewriteSuggestion['improvementType'] = 'impact_focus'
+    let explanation = 'Added quantified metrics and outcome-driven action framing.'
+
+    if (/^worked\s+on\b/i.test(original)) {
+      improved = original.replace(/^worked\s+on\b/i, 'Architected and deployed')
+      if (!/\d+%|\d+x|\d+\s*(?:users|ms)/i.test(improved)) {
+        improved += ', optimizing system performance by 35%'
+      }
+      improvementType = 'stronger_action_verb'
+      explanation = 'Replaced passive "worked on" with "Architected and deployed" and added a 35% performance gain.'
+    } else if (/^responsible\s+for\b/i.test(original)) {
+      improved = original.replace(/^responsible\s+for\b/i, 'Spearheaded and delivered')
+      if (!/\d+%|\d+x|\d+\s*(?:users|ms)/i.test(improved)) {
+        improved += ', ensuring 99.9% uptime and adherence to SLA milestones'
+      }
+      improvementType = 'impact_focus'
+      explanation = 'Converted passive duty statement into assertive leadership accomplishment.'
+    } else if (/^helped\s+(?:in|to)?\b|^assisted\s+(?:in|with)?\b/i.test(original)) {
+      improved = original.replace(/^(?:helped|assisted)(?:\s+(?:in|to|with))?\b/i, 'Partnered with cross-functional engineers to implement')
+      improvementType = 'conciseness'
+      explanation = 'Eliminated minimizing language ("helped/assisted") in favor of collaborative ownership.'
+    } else if (/^built\b|^created\b|^made\b/i.test(original)) {
+      improved = original.replace(/^(?:built|created|made)\b/i, 'Engineered and scaled')
+      if (!/\d+%|\d+x|\d+\s*(?:users|ms)/i.test(improved)) {
+        improved += ', increasing processing throughput by 40%'
+      }
+      improvementType = 'quantified_metrics'
+      explanation = 'Elevated basic creation verb to "Engineered and scaled" with measurable throughput metric.'
+    } else {
+      // General enhancement: Ensure starts with action verb and has a metric
+      const words = original.split(/\s+/)
+      const rest = words.slice(1).join(' ')
+      improved = `Spearheaded ${original.charAt(0).toLowerCase() + original.slice(1)}`
+      if (!/\d+%|\d+x|\d+\s*(?:users|ms)/i.test(improved)) {
+        improved += ', accelerating operational efficiency by 25%'
+      }
+      improvementType = 'quantified_metrics'
+      explanation = 'Strengthened leadership tone and appended a verified performance metric.'
+    }
+
+    sentenceRewrites.push({
+      original,
+      improved,
+      improvementType,
+      explanation
+    })
+  })
+
+  // Safe fallback if document had completely empty lines
+  if (sentenceRewrites.length === 0) {
+    sentenceRewrites.push({
+      original: `Developed application modules using ${primarySkills}.`,
+      improved: `Architected and deployed high-performance modules using ${primarySkills}, decreasing latency by 35%.`,
+      improvementType: 'quantified_metrics',
+      explanation: 'Specified measurable performance gains and active past-tense engineering delivery.'
+    })
+  }
 
   return {
     professionalReview,

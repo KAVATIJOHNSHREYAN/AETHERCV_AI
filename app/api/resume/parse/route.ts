@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import zlib from 'zlib'
 import { parseRawResume } from '@/lib/resume/parser'
 import { analyzeFormatting } from '@/lib/resume/formatting-analyzer'
 import { analyzeActionVerbs } from '@/lib/resume/action-verb-analyzer'
@@ -10,12 +11,176 @@ import { extractSections } from '@/lib/resume/parser'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
 
+/**
+ * Extracts plain text from a PDF buffer using multiple fallback strategies.
+ */
+async function extractPdfText(buffer: Buffer): Promise<string> {
+  console.log('[Resume Parse] [Stage 3: PDF] Initializing PDF text extraction pipeline...')
+
+  // Strategy 1: pdf-parse v2 (PDFParse class instance)
+  try {
+    const pdfPkg = require('pdf-parse')
+    if (typeof pdfPkg.PDFParse === 'function') {
+      console.log('[Resume Parse] [Stage 3: PDF] Using PDFParse class strategy...')
+      const parser = new pdfPkg.PDFParse({ data: buffer })
+      const result = await parser.getText()
+      if (typeof parser.destroy === 'function') {
+        await parser.destroy()
+      }
+      if (result && result.text && result.text.trim().length > 0) {
+        console.log(`[Resume Parse] [Stage 3: PDF] Strategy 1 success: extracted ${result.text.length} chars.`)
+        return result.text.trim()
+      }
+    }
+  } catch (err: any) {
+    console.warn('[Resume Parse] [Stage 3: PDF] Strategy 1 (PDFParse class) failed:', err.message)
+  }
+
+  // Strategy 2: Legacy pdf-parse v1 function
+  try {
+    const pdfPkg = require('pdf-parse')
+    const fn = typeof pdfPkg === 'function' ? pdfPkg : pdfPkg.default
+    if (typeof fn === 'function') {
+      console.log('[Resume Parse] [Stage 3: PDF] Using legacy pdf-parse function strategy...')
+      const result = await fn(buffer)
+      if (result && result.text && result.text.trim().length > 0) {
+        console.log(`[Resume Parse] [Stage 3: PDF] Strategy 2 success: extracted ${result.text.length} chars.`)
+        return result.text.trim()
+      }
+    }
+  } catch (err: any) {
+    console.warn('[Resume Parse] [Stage 3: PDF] Strategy 2 (legacy function) failed:', err.message)
+  }
+
+  // Strategy 3: Raw PDF Text Stream Extraction Fallback
+  try {
+    console.log('[Resume Parse] [Stage 3: PDF] Running Strategy 3 (Raw text stream parser)...')
+    const rawContent = buffer.toString('latin1')
+    const matches: string[] = []
+    const streamRegex = /BT[\s\S]*?ET/g
+    let match: RegExpExecArray | null
+
+    while ((match = streamRegex.exec(rawContent)) !== null) {
+      const block = match[0]
+      // Extract (text) Tj and [(t1)(t2)] TJ
+      const tjMatches = block.match(/\((.*?)\)\s*Tj/g) || []
+      tjMatches.forEach(item => {
+        const cleaned = item
+          .replace(/^\(/, '')
+          .replace(/\)\s*Tj$/, '')
+          .replace(/\\([()\\])/g, '$1')
+          .trim()
+        if (cleaned) matches.push(cleaned)
+      })
+
+      const tjArrayMatches = block.match(/\[(.*?)\]\s*TJ/g) || []
+      tjArrayMatches.forEach(item => {
+        const parts = item.match(/\((.*?)\)/g) || []
+        parts.forEach(p => {
+          const c = p.slice(1, -1).replace(/\\([()\\])/g, '$1').trim()
+          if (c) matches.push(c)
+        })
+      })
+    }
+
+    if (matches.length > 0) {
+      const extracted = matches.join(' ').replace(/\s+/g, ' ').trim()
+      if (extracted.length > 20) {
+        console.log(`[Resume Parse] [Stage 3: PDF] Strategy 3 success: extracted ${extracted.length} chars.`)
+        return extracted
+      }
+    }
+  } catch (err: any) {
+    console.warn('[Resume Parse] [Stage 3: PDF] Strategy 3 failed:', err.message)
+  }
+
+  throw new Error('Could not extract text from PDF. The document may be an image scan, encrypted, or password-protected.')
+}
+
+/**
+ * Extracts plain text from a DOCX buffer using mammoth with a direct PKZip XML fallback.
+ */
+async function extractDocxText(buffer: Buffer): Promise<string> {
+  console.log('[Resume Parse] [Stage 3: DOCX] Initializing DOCX text extraction pipeline...')
+
+  // Strategy 1: Mammoth
+  try {
+    const mammoth = require('mammoth')
+    const result = await mammoth.extractRawText({ buffer })
+    if (result && result.value && result.value.trim().length > 0) {
+      console.log(`[Resume Parse] [Stage 3: DOCX] Mammoth success: extracted ${result.value.length} chars.`)
+      return result.value.trim()
+    }
+  } catch (err: any) {
+    console.warn('[Resume Parse] [Stage 3: DOCX] Mammoth strategy error:', err.message)
+  }
+
+  // Strategy 2: Direct word/document.xml ZIP decompression fallback
+  try {
+    console.log('[Resume Parse] [Stage 3: DOCX] Running Strategy 2 (Direct ZIP document.xml extractor)...')
+    let offset = 0
+    while (offset < buffer.length - 30) {
+      if (
+        buffer[offset] === 0x50 &&
+        buffer[offset + 1] === 0x4b &&
+        buffer[offset + 2] === 0x03 &&
+        buffer[offset + 3] === 0x04
+      ) {
+        const compMethod = buffer.readUInt16LE(offset + 8)
+        const compSize = buffer.readUInt32LE(offset + 18)
+        const nameLen = buffer.readUInt16LE(offset + 26)
+        const extraLen = buffer.readUInt16LE(offset + 28)
+        const filename = buffer.toString('utf-8', offset + 30, offset + 30 + nameLen)
+        const dataStart = offset + 30 + nameLen + extraLen
+
+        if (filename === 'word/document.xml') {
+          const compressedData = buffer.subarray(dataStart, dataStart + compSize)
+          let xml = ''
+          if (compMethod === 8) {
+            xml = zlib.inflateRawSync(compressedData).toString('utf-8')
+          } else if (compMethod === 0) {
+            xml = compressedData.toString('utf-8')
+          }
+
+          if (xml) {
+            const cleanText = xml
+              .replace(/<w:p[^>]*>/g, '\n')
+              .replace(/<[^>]+>/g, '')
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&apos;/g, "'")
+              .trim()
+
+            if (cleanText.length > 20) {
+              console.log(`[Resume Parse] [Stage 3: DOCX] Strategy 2 success: extracted ${cleanText.length} chars.`)
+              return cleanText
+            }
+          }
+        }
+        offset = dataStart + compSize
+      } else {
+        offset++
+      }
+    }
+  } catch (err: any) {
+    console.warn('[Resume Parse] [Stage 3: DOCX] Strategy 2 failed:', err.message)
+  }
+
+  throw new Error('Could not parse DOCX document. File might be corrupted or in an unsupported format.')
+}
+
 export async function POST(req: NextRequest) {
+  const requestStartTime = Date.now()
+
   try {
     const contentType = req.headers.get('content-type') || ''
+    console.log(`[Resume Parse] [Stage 1: Ingestion] Incoming request, contentType="${contentType}"`)
 
     let textContent = ''
     let fileName = 'resume.txt'
@@ -32,77 +197,96 @@ export async function POST(req: NextRequest) {
         fileName = (formData.get('fileName') as string) || 'pasted-resume.txt'
         fileSize = Buffer.byteLength(textContent, 'utf-8')
         fileType = 'text/plain'
+        console.log(`[Resume Parse] [Stage 1: Ingestion] Direct text submission, length=${textContent.length}`)
       } else if (file) {
-        fileName = file.name
+        fileName = file.name || 'document.pdf'
         fileSize = file.size
         fileType = file.type || 'application/octet-stream'
+        console.log(`[Resume Parse] [Stage 1: Ingestion] File upload received: name="${fileName}", size=${fileSize} bytes, type="${fileType}"`)
 
+        // Validate File Size
         if (fileSize > MAX_FILE_SIZE) {
           return NextResponse.json(
-            { error: 'File size exceeds 10MB limit. Please upload a smaller file.' },
+            {
+              error: `File size (${(fileSize / (1024 * 1024)).toFixed(2)}MB) exceeds 10MB limit.`,
+              stage: 'file_validation'
+            },
             { status: 400 }
           )
         }
 
+        if (fileSize === 0) {
+          return NextResponse.json(
+            {
+              error: 'Uploaded file is completely empty (0 bytes).',
+              stage: 'file_validation'
+            },
+            { status: 400 }
+          )
+        }
+
+        // Convert File to Buffer
+        console.log('[Resume Parse] [Stage 2: Buffer] Converting arrayBuffer to Node Buffer...')
         const buffer = Buffer.from(await file.arrayBuffer())
+        console.log(`[Resume Parse] [Stage 2: Buffer] Node Buffer ready: ${buffer.length} bytes.`)
+
         const lowerName = fileName.toLowerCase()
 
         if (lowerName.endsWith('.pdf')) {
-          try {
-            // pdf-parse import
-            const pdfParse = require('pdf-parse')
-            const pdfData = await pdfParse(buffer)
-            textContent = pdfData.text
-          } catch (pdfErr: any) {
-            console.error('PDF parsing error:', pdfErr)
-            return NextResponse.json(
-              { error: 'Unable to extract text from PDF. The file may be password-protected, corrupted, or contains only scanned images.' },
-              { status: 422 }
-            )
-          }
+          textContent = await extractPdfText(buffer)
         } else if (lowerName.endsWith('.docx') || lowerName.endsWith('.doc')) {
-          try {
-            const mammoth = require('mammoth')
-            const result = await mammoth.extractRawText({ buffer })
-            textContent = result.value
-          } catch (docxErr: any) {
-            console.error('DOCX parsing error:', docxErr)
-            return NextResponse.json(
-              { error: 'Unable to parse DOCX file. The document might be corrupted or in an unsupported format.' },
-              { status: 422 }
-            )
-          }
+          textContent = await extractDocxText(buffer)
         } else if (lowerName.endsWith('.txt') || lowerName.endsWith('.md')) {
           textContent = buffer.toString('utf-8')
         } else {
-          return NextResponse.json(
-            { error: 'Unsupported file format. Please upload a PDF (.pdf) or Word (.docx) document.' },
-            { status: 400 }
-          )
+          // Attempt PDF detection via magic numbers (%PDF-)
+          if (buffer.length > 5 && buffer.toString('ascii', 0, 5) === '%PDF-') {
+            textContent = await extractPdfText(buffer)
+          } else {
+            return NextResponse.json(
+              {
+                error: `Unsupported format for "${fileName}". Please upload a PDF (.pdf) or Word (.docx) document.`,
+                stage: 'format_validation'
+              },
+              { status: 400 }
+            )
+          }
         }
       } else {
         return NextResponse.json(
-          { error: 'No file or resume text provided.' },
+          {
+            error: 'No file or resume text was found in the request.',
+            stage: 'payload_validation'
+          },
           { status: 400 }
         )
       }
     } else {
-      // JSON body support
-      const body = await req.json()
+      // JSON body handling
+      const body = await req.json().catch(() => ({}))
       textContent = body.text || ''
       fileName = body.fileName || 'resume.txt'
       fileSize = Buffer.byteLength(textContent, 'utf-8')
       fileType = 'text/plain'
+      console.log(`[Resume Parse] [Stage 1: Ingestion] JSON payload parsed, textLength=${textContent.length}`)
     }
 
-    if (!textContent || textContent.trim().length < 30) {
+    // Verify extracted text length
+    if (!textContent || textContent.trim().length < 25) {
+      console.warn(`[Resume Parse] [Stage 3: Validation] Extracted text too short: "${textContent.slice(0, 30)}"`)
       return NextResponse.json(
-        { error: 'The provided document is empty or contains insufficient text (minimum 30 characters required).' },
+        {
+          error: 'Document text could not be extracted or contains insufficient readable text (under 25 characters). If uploading a scanned PDF, ensure it has selectable text.',
+          stage: 'text_extraction',
+          extractedSnippet: textContent.slice(0, 50)
+        },
         { status: 422 }
       )
     }
 
-    // Run Parsing & Analytical Pipeline
+    console.log(`[Resume Parse] [Stage 4: Pipeline] Commencing ATS & Heuristic analysis on ${textContent.length} characters...`)
+
+    // Pipeline Execution
     const parsedData = parseRawResume(textContent)
     const formatting = analyzeFormatting(textContent)
     const actionVerbs = analyzeActionVerbs(textContent)
@@ -112,13 +296,17 @@ export async function POST(req: NextRequest) {
     const sectionsRaw = extractSections(textContent)
     const sectionsDetection = detectSectionsStatus(sectionsRaw)
 
+    const executionTimeMs = Date.now() - requestStartTime
+    console.log(`[Resume Parse] [Stage 5: Success] Analysis complete in ${executionTimeMs}ms! Score=${atsBreakdown.overallScore}/100`)
+
     return NextResponse.json({
       success: true,
       meta: {
         fileName,
         fileSize,
         fileType,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        executionTimeMs
       },
       parsedData,
       atsBreakdown,
@@ -129,9 +317,17 @@ export async function POST(req: NextRequest) {
       aiFeedback
     })
   } catch (error: any) {
-    console.error('Resume analysis pipeline failure:', error)
+    const executionTimeMs = Date.now() - requestStartTime
+    console.error('[Resume Parse] [Failure] Error processing request:', error)
+
     return NextResponse.json(
-      { error: error?.message || 'Internal error occurred during resume processing.' },
+      {
+        error: error?.message || 'Unexpected error occurred during resume analysis.',
+        stage: 'pipeline_execution',
+        details: error?.toString(),
+        stack: process.env.NODE_ENV !== 'production' ? error?.stack : undefined,
+        executionTimeMs
+      },
       { status: 500 }
     )
   }
