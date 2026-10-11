@@ -31,7 +31,7 @@ export function SectionAuditView({ sectionsDetection }: SectionAuditViewProps) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-2 border-b border-blue-500/20 gap-2">
         <div>
           <h3 className="text-lg font-bold font-poppins text-white flex items-center gap-2">
-            <FileCheck2 className="w-5 h-5 text-cyan-400" />
+            <FileCheck2 className="w-5 h-5 text-[#818cf8]" />
             Section Presence Detection
           </h3>
           <p className="text-xs text-slate-400 font-outfit">
@@ -39,11 +39,11 @@ export function SectionAuditView({ sectionsDetection }: SectionAuditViewProps) {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 shadow-[0_0_8px_rgba(34,211,238,0.2)]">
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#4D48E6]/15 text-[#818cf8] border border-[#4D48E6]/40 shadow-[0_0_8px_rgba(77,72,230,0.25)]">
             {presentCount} Detected
           </span>
           {missingCount > 0 && (
-            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-600/20 text-sky-200 border border-blue-400/30">
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-600/20 text-blue-200 border border-blue-500/30">
               {missingCount} Recommended
             </span>
           )}
@@ -63,8 +63,8 @@ export function SectionAuditView({ sectionsDetection }: SectionAuditViewProps) {
               transition={{ duration: 0.25, delay: idx * 0.03 }}
               className={`p-4 rounded-2xl border transition-all flex flex-col justify-between ${
                 isPresent
-                  ? 'bg-[#0F172A]/85 backdrop-blur-xl border-blue-500/25 hover:border-cyan-400/50 hover:shadow-[0_0_20px_-3px_rgba(34,211,238,0.25)]'
-                  : 'bg-[#0B132B]/70 border-blue-500/15 hover:border-sky-400/30'
+                  ? 'bg-[#0F172A]/85 backdrop-blur-xl border-blue-500/25 hover:border-[#4D48E6]/50 hover:shadow-[0_0_20px_-3px_rgba(77,72,230,0.3)]'
+                  : 'bg-[#0B132B]/70 border-blue-500/15 hover:border-blue-500/30'
               }`}
             >
               <div>
@@ -73,9 +73,9 @@ export function SectionAuditView({ sectionsDetection }: SectionAuditViewProps) {
                     {info.label}
                   </h4>
                   {isPresent ? (
-                    <CheckCircle2 className="w-4 h-4 text-cyan-400 shrink-0 drop-shadow-[0_0_6px_rgba(34,211,238,0.5)]" />
+                    <CheckCircle2 className="w-4 h-4 text-[#818cf8] shrink-0 drop-shadow-[0_0_6px_rgba(77,72,230,0.6)]" />
                   ) : (
-                    <HelpCircle className="w-4 h-4 text-sky-400/70 shrink-0" />
+                    <HelpCircle className="w-4 h-4 text-slate-400 shrink-0" />
                   )}
                 </div>
                 <p className="text-[11px] text-slate-400 font-outfit leading-relaxed">
@@ -85,14 +85,14 @@ export function SectionAuditView({ sectionsDetection }: SectionAuditViewProps) {
 
               <div className="mt-3 pt-2.5 border-t border-blue-500/20">
                 {isPresent ? (
-                  <span className="text-[11px] font-semibold text-cyan-300 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
+                  <span className="text-[11px] font-semibold text-blue-200 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#4D48E6] shadow-[0_0_6px_rgba(77,72,230,0.8)]" />
                     Detected &amp; Verified
                   </span>
                 ) : (
-                  <div className="text-[11px] text-sky-300 font-outfit flex flex-col gap-1">
-                    <span className="font-semibold flex items-center gap-1 text-sky-400">
-                      <AlertCircle className="w-3 h-3 text-sky-400" />
+                  <div className="text-[11px] text-slate-300 font-outfit flex flex-col gap-1">
+                    <span className="font-semibold flex items-center gap-1 text-blue-300">
+                      <AlertCircle className="w-3.5 h-3.5 text-blue-400" />
                       Section Recommended
                     </span>
                     <span className="text-[10px] text-slate-400">

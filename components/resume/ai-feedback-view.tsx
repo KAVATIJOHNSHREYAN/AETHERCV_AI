@@ -30,9 +30,9 @@ export function AIFeedbackView({ aiFeedback }: AIFeedbackViewProps) {
       {/* 1. Recruiter Perspective & Executive Review */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Recruiter 6-Sec Scan */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-blue-600/15 via-[#0F172A]/90 to-[#0F172A]/80 backdrop-blur-xl border border-blue-500/25 shadow-[0_4px_25px_rgba(37,99,235,0.12)] relative overflow-hidden">
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-[#4D48E6]/15 via-[#0E1729]/90 to-[#0E1729]/80 backdrop-blur-xl border border-[#4D48E6]/25 shadow-[0_4px_25px_rgba(77,72,230,0.12)] relative overflow-hidden">
           <div className="flex items-center gap-3 mb-3.5">
-            <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-blue-600 to-sky-500 text-white shadow-md shadow-blue-500/30">
+            <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-[#4D48E6] via-[#2662EB] to-[#1E50DA] text-white shadow-md shadow-[#4D48E6]/30">
               <Eye className="w-4 h-4" />
             </div>
             <div>
@@ -46,10 +46,10 @@ export function AIFeedbackView({ aiFeedback }: AIFeedbackViewProps) {
         </div>
 
         {/* Professional Review */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-indigo-600/15 via-[#0F172A]/90 to-[#0F172A]/80 backdrop-blur-xl border border-indigo-500/25 shadow-[0_4px_25px_rgba(99,102,241,0.12)] relative overflow-hidden">
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-[#1E50DA]/15 via-[#0E1729]/90 to-[#0E1729]/80 backdrop-blur-xl border border-[#1E50DA]/25 shadow-[0_4px_25px_rgba(30,80,218,0.12)] relative overflow-hidden">
           <div className="flex items-center gap-3 mb-3.5">
-            <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-indigo-600 to-blue-500 text-white shadow-md shadow-indigo-500/30">
-              <Sparkles className="w-4 h-4 text-cyan-300" />
+            <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-[#1E50DA] via-[#2662EB] to-[#4D48E6] text-white shadow-md shadow-[#1E50DA]/30">
+              <Sparkles className="w-4 h-4 text-white" />
             </div>
             <div>
               <h4 className="text-sm font-bold font-poppins text-white">AI Profile Evaluation</h4>

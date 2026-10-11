@@ -91,7 +91,7 @@ export function AiRewriterView({ resume }: AiRewriterViewProps) {
           <Button
             size="sm"
             onClick={handleDownload}
-            className="gap-1.5 text-xs font-outfit bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.35)] transition-all hover:scale-[1.02]"
+            className="gap-1.5 text-xs font-outfit bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] hover:opacity-95 text-white shadow-[0_0_20px_rgba(77,72,230,0.35)] transition-all hover:scale-[1.02]"
           >
             <Download className="w-3.5 h-3.5" />
             Export Markdown
@@ -110,7 +110,7 @@ export function AiRewriterView({ resume }: AiRewriterViewProps) {
               onClick={() => setActiveTab(t.id)}
               className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium transition-all ${
                 isActive
-                  ? 'bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] border border-sky-400/40'
+                  ? 'bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] text-white shadow-[0_0_15px_rgba(77,72,230,0.4)] border border-indigo-400/40'
                   : 'bg-[#0F172A]/70 hover:bg-[#1E293B] text-slate-300 hover:text-white border border-blue-500/20'
               }`}
             >

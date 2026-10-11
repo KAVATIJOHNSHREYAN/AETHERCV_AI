@@ -128,8 +128,8 @@ export function AiScanningOverlay({ isLoading }: AiScanningOverlayProps) {
             </motion.p>
           </div>
 
-          {/* Progress Shimmer Bar */}
-          <div className="w-full max-w-xs h-1.5 bg-blue-950/80 rounded-full mt-6 overflow-hidden border border-blue-500/30 relative">
+          {/* Progress Shimmer Bar with Exact Dual-Color Gradient */}
+          <div className="w-full max-w-xs h-2.5 bg-[#0E1729] rounded-full mt-6 overflow-hidden border border-[#4D48E6]/30 relative shadow-inner">
             <motion.div
               animate={{
                 x: ['-100%', '100%']
@@ -139,7 +139,7 @@ export function AiScanningOverlay({ isLoading }: AiScanningOverlayProps) {
                 duration: 1.5,
                 ease: 'easeInOut'
               }}
-              className="w-1/2 h-full bg-gradient-to-r from-blue-600 via-sky-400 to-cyan-300 rounded-full shadow-[0_0_15px_#38bdf8]"
+              className="w-1/2 h-full bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] rounded-full shadow-[0_0_15px_rgba(77,72,230,0.6)]"
             />
           </div>
 

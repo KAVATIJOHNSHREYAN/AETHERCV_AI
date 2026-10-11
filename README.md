@@ -1,131 +1,173 @@
-# KLU Attendance Calculator
+# AETHERCV AI & Attendance Platform
 
-A modern, responsive web application for KLU students to calculate their attendance percentages, track eligibility, and manage saved calculations.
+> **Next-Generation Academic Attendance Analytics & Enterprise-Grade AI Resume Evaluation Suite**
 
-![KLU Attendance Calculator](public/KL_University_logo.svg)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-aethercv--ai.vercel.app-2662EB?style=for-the-badge&logo=vercel&logoColor=white)](https://aethercv-ai.vercel.app/)
+[![Next.js](https://img.shields.io/badge/Next.js%2015-App%20Router-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS%203-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-## Features
+---
 
-- **Simple Attendance Calculator**: Calculate attendance percentage based on total classes and classes attended
-- **LTPS Calculator**: Advanced calculator for Lecture, Tutorial, Practical, and Skilling components
-- **Screenshot Calculator**: Upload a screenshot of your attendance table for automatic extraction and calculation
-- **Attendance Analysis**: Check eligibility status based on university attendance requirements (75% and 85%)
-- **Save Calculations**: Save your calculations as drafts with subject names
-- **Draft Management**: View, load, and delete saved drafts
-- **Responsive Design**: Works on all devices from mobile to desktop
-- **Dark/Light Mode**: Toggle between color themes
+## 🌟 Overview
 
-## Technologies Used
+**AETHERCV AI** is an all-in-one productivity and career intelligence ecosystem built with Next.js 15, TypeScript, and modern UI engineering. It seamlessly combines:
 
-### Core & Framework
-- **Next.js 15 (App Router)**: React framework for production with server-side rendering and API routes
-- **React 18**: Component-based UI library
-- **TypeScript**: Static type definitions for enhanced code quality and developer experience
+1. **AI Resume Analyzer & ATS Score Checker** — Comprehensive ATS compliance evaluation, 8-pillar scoring breakdown, STAR-method bullet rewriting, job description matching, and keyword audit tailored with a sleek enterprise dual-color UI (`#4D48E6` &rarr; `#1E50DA`).
+2. **KLU Attendance Calculator & Analytics** — Real-time academic tracking, LTPS component calculation, ERP attendance extraction via OCR, eligibility alerts (75% / 85%), and draft persistence.
 
-### UI & Styling
-- **Tailwind CSS**: Utility-first CSS framework for rapid UI development
-- **Shadcn UI**: Reusable components built with Radix UI and Tailwind CSS
-- **Radix UI**: Unstyled, accessible component primitives
-- **Framer Motion**: Production-ready motion library for React
-- **Lucide React**: Beautiful & consistent icon set
-- **Next/Font**: Optimized font loading (Poppins & Outfit)
+---
 
-### Backend & Functionality
-- **Cheerio**: Fast, flexible, and lean implementation of core jQuery for server-side HTML parsing (Web Scraping)
-- **Native Fetch API**: For handling HTTP requests
-- **OCR.space API**: Optical Character Recognition for extracting attendance data from screenshots
-- **js-cookie**: Simple, lightweight JavaScript API for handling cookies
-- **Next.js API Routes**: Serverless functions for handling backend logic (Authentication, Scraping, OCR)
+## 🚀 Key Modules & Capabilities
 
-## Getting Started
+### 1. 🤖 AI Resume Analyzer & ATS Score Suite (`/resume-analyzer`)
+
+- **Multi-Format Document Ingestion**: Upload native `.pdf`, `.docx`, or `.txt` resumes, or paste plain text directly. Powered by an OCR and regex parser with zero cloud leakage.
+- **Precision Dual-Color Theme**: Styled in an enterprise violet-to-electric-blue gradient (`#4D48E6` &rarr; `#2662EB` &rarr; `#1E50DA`) against a deep dark navy container (`#0E1729`).
+- **Circular Neon ATS Gauge**: Dynamic SVG circular gauge calculating an overall qualification score (0–100) with grade classification (`Elite`, `Strong`, `Competitive`, `Needs Improvement`).
+- **Comprehensive 8-Category Audit**:
+  - Section Completeness (Header, Summary, Experience, Education, Projects, Skills)
+  - Keyword & Hard Skills Density
+  - Action Verbs & Power Phrasing
+  - Quantifiable Metrics & STAR Results
+  - Formatting & Structural Health (Flesch Reading Ease, paragraph density, page estimates)
+  - Work Experience Impact
+  - Technical & Soft Skills Balance
+  - Education & Credentials Verification
+- **STAR-Method Bullet Rewriter**: Generates before/after sentence optimizations transforming passive tasks into high-impact quantified achievements.
+- **Interactive Job Description Matcher**: Paste any job description to instantly compute ATS Match %, identify matched competencies, and pinpoint missing requirements.
+- **Export & Report Downloads**: One-click download of the optimized resume (`.md`), detailed ATS audit (`.txt`), or recruiter feedback memo.
+
+---
+
+### 2. 📊 Academic Attendance Platform
+
+- **Simple Calculator (`/simple`)**: Rapid attendance tracking based on conducted vs. attended classes.
+- **LTPS Calculator (`/ltps`)**: Advanced weighted calculation for Lecture, Tutorial, Practical, and Skilling course components.
+- **Screenshot / OCR Calculator (`/screenshot`)**: Upload ERP portal screenshots for automated tabular data extraction via OCR.space API.
+- **Eligibility Alerts**: Instant warnings and skippable class calculations to maintain 75% university eligibility or 85% distinction thresholds.
+- **Draft Management**: Save, view, reload, or delete semester subject records locally in browser storage.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+| Layer | Technologies |
+|---|---|
+| **Framework** | [Next.js 15 (App Router)](https://nextjs.org/) |
+| **Language** | [TypeScript 5](https://www.typescriptlang.org/) |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/), Custom Dual-Color CSS Variables (`#4D48E6` &rarr; `#1E50DA`), Glassmorphism |
+| **UI Components** | [Radix UI](https://www.radix-ui.com/), [Shadcn UI](https://ui.shadcn.com/), Lucide Icons |
+| **Animations** | [Framer Motion](https://www.framer.com/motion/) |
+| **Parsing & OCR** | PDF parsing engine, Docx text extraction, OCR.space API, Cheerio |
+| **Fonts** | Google Fonts (`Poppins`, `Outfit`) |
+| **Deployment** | [Vercel](https://vercel.com/) |
+
+---
+
+## 🎨 Dual-Color Design System
+
+The AI Resume Analyzer features a custom dual-color palette extracted directly from high-end SaaS designs:
+
+| Element | Color Value | Representation |
+|---|---|---|
+| **Left Gradient Stop** | `#4D48E6` | Electric Violet / Deep Indigo |
+| **Middle Accent** | `#2662EB` | Vibrant Enterprise Blue |
+| **Right Gradient Stop** | `#1E50DA` | Deep Royal Blue |
+| **Container Background**| `#0E1729` / `#08111F` | Obsidian Blue / Dark Navy |
+| **Border Highlights** | `rgba(77, 72, 230, 0.35)` | Glowing Ambient Outline |
+
+---
+
+## 💻 Getting Started Locally
 
 ### Prerequisites
+- **Node.js**: `v18.17.0` or later
+- **Package Manager**: `npm`, `pnpm`, or `yarn`
 
-- Node.js 18.17 or later
-- npm or yarn or pnpm
+### Setup Steps
 
-### Installation
-
-1. Clone the repository:
+1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-username/klu-attendance-calculator.git
-   cd klu-attendance-calculator
+   git clone https://github.com/KAVATIJOHNSHREYAN/AETHERCV_AI.git
+   cd AETHERCV_AI
    ```
 
-2. Install dependencies:
+2. **Install dependencies**:
    ```bash
    npm install
-   # or
-   yarn install
-   # or
-   pnpm install
    ```
 
-3. Run the development server:
+3. **Configure Environment Variables**:
+   Create a `.env.local` file in the root directory:
+   ```env
+   # Optional: OCR Space API key for screenshot attendance extraction
+   OCR_API_KEY=your_ocr_api_key_here
+   ```
+
+4. **Launch development server**:
    ```bash
    npm run dev
-   # or
-   yarn dev
-   # or
-   pnpm dev
    ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
-
-## Usage
-
-### Simple Calculator
-
-1. Navigate to the Simple Calculator page
-2. Enter the total number of classes
-3. Enter the number of classes attended
-4. Enter subject name (optional, for saving)
-5. Click "Calculate" to see your attendance percentage and eligibility status
-
-### LTPS Calculator
-
-1. Navigate to the LTPS Calculator page
-2. Enter attendance percentages for each component (Lecture, Tutorial, Practical, Skilling)
-3. Enter subject name (optional, for saving)
-4. Click "Calculate" to see your weighted attendance percentage and eligibility status
-
-### Screenshot Calculator
-
-1. Navigate to the Screenshot Calculator page
-2. Upload a screenshot of your attendance table
-3. The app will automatically extract course details and attendance numbers
-4. View detailed analysis including skippable classes and required attendance
-5. Save the results for future reference
-
-### Managing Saved Drafts
-
-- Saved drafts appear below the calculator
-- Click on a draft to load its values into the calculator
-- Click the "X" button to delete a draft
-
-## Deployment
-
-The project is configured for static export and can be deployed to any static hosting platform:
-
-1. Build the project:
+5. **Build for production**:
    ```bash
    npm run build
+   npm run start
    ```
 
-2. The `out` directory will contain the static files for deployment
+---
 
-3. Upload the contents of the `out` directory to your hosting provider
+## 📁 Project Structure
 
-## Contributing
+```text
+├── app/
+│   ├── layout.tsx                 # Root layout, favicon & metadata
+│   ├── page.tsx                   # Landing page
+│   ├── resume-analyzer/           # AI Resume Analyzer & ATS suite
+│   ├── simple/                    # Simple attendance calculator
+│   ├── ltps/                      # LTPS component calculator
+│   ├── screenshot/                # Screenshot OCR calculator
+│   ├── dashboard/                 # Student analytics dashboard
+│   └── api/
+│       ├── resume/parse/          # Resume upload & parsing endpoint
+│       ├── parse-ocr/             # OCR screenshot parser
+│       └── login/                 # ERP authentication helper
+├── components/
+│   ├── header.tsx                 # Global header with logo & route links
+│   ├── footer.tsx                 # Global footer
+│   ├── resume/                    # Resume Analyzer sub-components
+│   │   ├── ats-circular-score.tsx # Circular SVG score gauge
+│   │   ├── category-breakdown.tsx # 8-category dual-color progress bars
+│   │   ├── section-audit-view.tsx # Section detection & health check
+│   │   ├── skills-radar-view.tsx  # Skill distribution breakdown
+│   │   ├── keywords-actions-view.tsx # Action verbs & keyword audit
+│   │   ├── jd-matcher-view.tsx    # Job Description matching tool
+│   │   ├── ai-feedback-view.tsx   # STAR rewrites & recruiter review
+│   │   ├── ai-rewriter-view.tsx   # Full resume rewriter & markdown export
+│   │   ├── export-report-modal.tsx# Report & analysis download modal
+│   │   └── resume-upload-zone.tsx # File dropzone & text input
+├── lib/
+│   ├── resume/                    # Core ATS & Resume analysis engines
+│   │   ├── ats-calculator.ts      # Multi-dimensional ATS scoring logic
+│   │   ├── parser.ts              # Document text normalization & regex
+│   │   ├── keywords-db.ts         # Industry keywords & power verbs database
+│   │   ├── rewriter.ts            # Markdown resume builder
+│   │   └── jd-matcher.ts          # TF-IDF & keyword matcher
+├── public/                        # Static assets, logos & favicons
+└── README.md                      # Project documentation
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+---
 
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 🔒 Privacy & Security
 
-## License
+- **Client-Side First**: Resume texts and sensitive academic data are processed securely in memory without persistent storage.
+- **Zero Third-Party Model Selling**: Analysis engines evaluate documents on-demand without feeding personal career details into external generative model datasets.
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+---
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE). Built with ❤️ for students and professionals by [KAVATI JOHN SHREYAN](https://github.com/KAVATIJOHNSHREYAN).

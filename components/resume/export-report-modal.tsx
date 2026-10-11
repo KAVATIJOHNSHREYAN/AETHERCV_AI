@@ -227,7 +227,7 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
                   <Button
                     size="sm"
                     onClick={opt.action}
-                    className="w-full text-xs font-outfit gap-1.5 bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all"
+                    className="w-full text-xs font-outfit gap-1.5 bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] hover:opacity-95 text-white shadow-[0_0_15px_rgba(77,72,230,0.35)] transition-all"
                   >
                     <Download className="w-3.5 h-3.5" />
                     {opt.btnLabel}

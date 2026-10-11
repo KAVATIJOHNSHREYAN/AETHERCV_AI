@@ -112,9 +112,9 @@ export function JdMatcherView({ resume }: JdMatcherViewProps) {
           <Button
             onClick={() => handleMatch()}
             disabled={!jdText.trim() || isMatching}
-            className="gap-2 font-outfit text-xs bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.35)] transition-all hover:scale-[1.02]"
+            className="gap-2 font-outfit text-xs bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] hover:opacity-95 text-white shadow-[0_0_20px_rgba(77,72,230,0.35)] transition-all hover:scale-[1.02]"
           >
-            <Sparkles className="w-4 h-4 text-cyan-300" />
+            <Sparkles className="w-4 h-4 text-white" />
             {isMatching ? 'Analyzing Alignment...' : 'Calculate ATS Match %'}
           </Button>
         </div>
@@ -136,9 +136,9 @@ export function JdMatcherView({ resume }: JdMatcherViewProps) {
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                   <defs>
                     <linearGradient id="jdMatchGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#38BDF8" />
-                      <stop offset="50%" stopColor="#3B82F6" />
-                      <stop offset="100%" stopColor="#22D3EE" />
+                      <stop offset="0%" stopColor="#4D48E6" />
+                      <stop offset="50%" stopColor="#2662EB" />
+                      <stop offset="100%" stopColor="#1E50DA" />
                     </linearGradient>
                   </defs>
                   <circle
@@ -200,9 +200,9 @@ export function JdMatcherView({ resume }: JdMatcherViewProps) {
           {/* Matched vs Missing Skills Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Matched Skills */}
-            <div className="p-5 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-cyan-500/25 shadow-[0_4px_20px_rgba(34,211,238,0.06)]">
-              <h4 className="text-sm font-semibold text-cyan-300 font-poppins mb-3 flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+            <div className="p-5 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-[#4D48E6]/30 shadow-[0_4px_20px_rgba(77,72,230,0.1)]">
+              <h4 className="text-sm font-semibold text-[#818cf8] font-poppins mb-3 flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-[#818cf8]" />
                 Matched Skills &amp; Tech ({matchResult.matchedSkills.length})
               </h4>
               <div className="flex flex-wrap gap-2">
@@ -210,7 +210,7 @@ export function JdMatcherView({ resume }: JdMatcherViewProps) {
                   matchResult.matchedSkills.map((s, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 rounded-xl text-xs bg-cyan-500/10 text-cyan-200 border border-cyan-500/25 font-medium shadow-[0_0_10px_rgba(34,211,238,0.1)]"
+                      className="px-3 py-1 rounded-xl text-xs bg-gradient-to-r from-[#4D48E6]/20 to-[#1E50DA]/20 text-white border border-[#4D48E6]/35 font-medium shadow-[0_0_10px_rgba(77,72,230,0.2)]"
                     >
                       ✓ {s}
                     </span>
@@ -222,9 +222,9 @@ export function JdMatcherView({ resume }: JdMatcherViewProps) {
             </div>
 
             {/* Missing Skills */}
-            <div className="p-5 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/25 shadow-[0_4px_20px_rgba(59,130,246,0.06)]">
-              <h4 className="text-sm font-semibold text-sky-300 font-poppins mb-3 flex items-center gap-1.5">
-                <PlusCircle className="w-4 h-4 text-sky-400" />
+            <div className="p-5 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/25 shadow-[0_4px_20px_rgba(30,80,218,0.1)]">
+              <h4 className="text-sm font-semibold text-blue-300 font-poppins mb-3 flex items-center gap-1.5">
+                <PlusCircle className="w-4 h-4 text-blue-400" />
                 Missing Required Skills ({matchResult.missingSkills.length})
               </h4>
               <div className="flex flex-wrap gap-2">
@@ -232,13 +232,13 @@ export function JdMatcherView({ resume }: JdMatcherViewProps) {
                   matchResult.missingSkills.map((s, idx) => (
                     <span
                       key={idx}
-                      className="px-3 py-1 rounded-xl text-xs bg-blue-500/10 text-sky-200 border border-blue-500/25 font-medium shadow-[0_0_10px_rgba(59,130,246,0.1)]"
+                      className="px-3 py-1 rounded-xl text-xs bg-[#0E1729] text-blue-200 border border-blue-500/30 font-medium shadow-sm"
                     >
                       + {s}
                     </span>
                   ))
                 ) : (
-                  <span className="text-xs text-cyan-300 font-medium">
+                  <span className="text-xs text-blue-300 font-medium">
                     100% of requested skills matched!
                   </span>
                 )}

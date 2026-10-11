@@ -389,7 +389,7 @@ export default function ResumeAnalyzerPage() {
               <Button
                 size="sm"
                 onClick={() => setIsExportOpen(true)}
-                className="gap-2 font-outfit text-xs bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all hover:scale-[1.02]"
+                className="gap-2 font-outfit text-xs bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] hover:from-[#3b37b3] hover:to-[#1e50da] text-white shadow-[0_0_20px_rgba(77,72,230,0.5)] transition-all hover:scale-[1.02]"
               >
                 <Download className="w-4 h-4" />
                 <span>Export Reports</span>
@@ -405,15 +405,15 @@ export default function ResumeAnalyzerPage() {
         {analysisData && (
           <div className="space-y-8 pt-4">
             {/* Candidate Quick Info Card */}
-            <div className="p-6 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_30px_-5px_rgba(37,99,235,0.2)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="p-6 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_30px_-5px_rgba(30,80,218,0.2)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 text-white flex items-center justify-center font-bold text-xl font-poppins shadow-[0_0_20px_-3px_rgba(14,165,233,0.5)]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#4D48E6] via-[#2662EB] to-[#1E50DA] text-white flex items-center justify-center font-bold text-xl font-poppins shadow-[0_0_20px_-3px_rgba(77,72,230,0.6)]">
                   {(analysisData.parsedData.contact.name || 'C').charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <h2 className="text-xl font-bold font-poppins text-white flex items-center gap-2">
                     {analysisData.parsedData.contact.name || 'Candidate Profile'}
-                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 shadow-[0_0_10px_rgba(34,211,238,0.2)]">
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#4D48E6]/15 text-[#818cf8] border border-[#4D48E6]/40 shadow-[0_0_10px_rgba(77,72,230,0.25)]">
                       Verified Scan
                     </span>
                   </h2>
@@ -428,7 +428,7 @@ export default function ResumeAnalyzerPage() {
                       </>
                     )}
                     <span className="text-blue-500">•</span>
-                    <span className="font-mono text-sky-400">{analysisData.fileName}</span>
+                    <span className="font-mono text-blue-300">{analysisData.fileName}</span>
                   </div>
                 </div>
               </div>
@@ -438,16 +438,16 @@ export default function ResumeAnalyzerPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => setAnalysisData(null)}
-                  className="gap-1.5 text-xs font-outfit bg-[#0F172A] border-blue-500/30 text-sky-200 hover:bg-blue-600/20 hover:border-sky-400/50 hover:text-white"
+                  className="gap-1.5 text-xs font-outfit bg-[#0F172A] border-blue-500/30 text-blue-200 hover:bg-[#4D48E6]/20 hover:border-[#4D48E6]/50 hover:text-white"
                 >
-                  <RefreshCw className="w-3.5 h-3.5 text-sky-400" />
+                  <RefreshCw className="w-3.5 h-3.5 text-[#818cf8]" />
                   Analyze Another Resume
                 </Button>
 
                 <Button
                   size="sm"
                   onClick={() => setIsExportOpen(true)}
-                  className="gap-1.5 text-xs font-outfit bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.35)]"
+                  className="gap-1.5 text-xs font-outfit bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] hover:from-[#3b37b3] hover:to-[#1e50da] text-white shadow-[0_0_15px_rgba(77,72,230,0.45)]"
                 >
                   <Download className="w-3.5 h-3.5" />
                   Download Package
@@ -466,11 +466,11 @@ export default function ResumeAnalyzerPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                       isActive
-                        ? 'bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] border border-sky-400/40'
+                        ? 'bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] text-white shadow-[0_0_15px_rgba(77,72,230,0.5)] border border-[#818cf8]/50'
                         : 'bg-[#0F172A]/70 hover:bg-[#1E293B] text-slate-300 hover:text-white border border-blue-500/20'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-sky-400'}`} />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#818cf8]'}`} />
                     <span>{tab.label}</span>
                   </button>
                 )

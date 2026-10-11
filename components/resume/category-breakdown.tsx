@@ -34,17 +34,21 @@ export function CategoryBreakdown({ breakdown }: CategoryBreakdownProps) {
     setExpandedCategory(expandedCategory === name ? null : name)
   }
 
-  // Dual-Blue Progress Gradients
+  // Exact Dual-Color Gradient (#4D48E6 -> #1E50DA) matching uploaded design
   const getStatusBarGradient = (percentage: number) => {
-    if (percentage >= 80) return 'bg-gradient-to-r from-cyan-400 via-sky-400 to-blue-500 shadow-[0_0_10px_rgba(34,211,238,0.4)]'
-    if (percentage >= 50) return 'bg-gradient-to-r from-blue-500 to-indigo-500 shadow-[0_0_10px_rgba(59,130,246,0.3)]'
-    return 'bg-gradient-to-r from-indigo-600 via-blue-600 to-blue-700'
+    if (percentage >= 80) {
+      return 'bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] shadow-[0_0_12px_rgba(77,72,230,0.5)]'
+    }
+    if (percentage >= 50) {
+      return 'bg-gradient-to-r from-[#4D48E6] to-[#1E50DA] shadow-[0_0_10px_rgba(38,98,235,0.4)]'
+    }
+    return 'bg-gradient-to-r from-[#3b37b3] to-[#1e50da]/70'
   }
 
   const getStatusBadge = (percentage: number) => {
-    if (percentage >= 80) return 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30 shadow-[0_0_8px_rgba(34,211,238,0.2)]'
-    if (percentage >= 50) return 'text-sky-300 bg-sky-500/10 border-sky-500/30'
-    return 'text-blue-300 bg-blue-600/15 border-blue-500/25'
+    if (percentage >= 80) return 'text-[#818cf8] bg-[#4D48E6]/15 border-[#4D48E6]/40 shadow-[0_0_8px_rgba(77,72,230,0.25)]'
+    if (percentage >= 50) return 'text-blue-300 bg-blue-600/15 border-blue-500/30'
+    return 'text-slate-300 bg-slate-800/60 border-slate-700/40'
   }
 
   return (
@@ -58,13 +62,13 @@ export function CategoryBreakdown({ breakdown }: CategoryBreakdownProps) {
             Evaluated across 10 core dimensions totaling 100 points
           </p>
         </div>
-        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-600/20 text-sky-200 border border-blue-400/30">
+        <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-600/15 text-blue-200 border border-blue-500/30">
           10 Dimensions
         </span>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-        {categories.map((cat, index) => {
+        {categories.map((cat, idx) => {
           const Icon = CATEGORY_ICONS[cat.name] || FileText
           const isExpanded = expandedCategory === cat.name
           const barGradient = getStatusBarGradient(cat.percentage)
@@ -75,17 +79,17 @@ export function CategoryBreakdown({ breakdown }: CategoryBreakdownProps) {
               key={cat.name}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.04 }}
-              className="p-4 rounded-2xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 hover:border-sky-400/40 hover:shadow-[0_0_20px_-3px_rgba(59,130,246,0.25)] transition-all"
+              transition={{ duration: 0.3, delay: idx * 0.04 }}
+              className="p-4 rounded-2xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 hover:border-[#4D48E6]/50 shadow-[0_4px_20px_rgba(30,80,218,0.08)] hover:shadow-[0_4px_25px_rgba(77,72,230,0.18)] transition-all"
             >
               <div
-                className="cursor-pointer select-none"
+                className="cursor-pointer"
                 onClick={() => toggleExpand(cat.name)}
               >
-                <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center justify-between gap-3 mb-2">
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="p-2 rounded-xl bg-blue-500/15 text-cyan-400 border border-blue-500/30 shrink-0">
-                      <Icon className="w-4 h-4" />
+                    <div className="p-2 rounded-xl bg-gradient-to-tr from-[#4D48E6]/25 to-[#1E50DA]/25 border border-blue-500/30 text-blue-300 shrink-0 shadow-sm">
+                      <Icon className="w-4 h-4 text-[#818cf8]" />
                     </div>
                     <div className="truncate">
                       <h4 className="text-sm font-semibold text-white font-poppins truncate">
@@ -106,13 +110,13 @@ export function CategoryBreakdown({ breakdown }: CategoryBreakdownProps) {
                       aria-label="Toggle details"
                       className="text-slate-400 hover:text-white transition-colors p-1"
                     >
-                      {isExpanded ? <ChevronUp className="w-4 h-4 text-cyan-400" /> : <ChevronDown className="w-4 h-4 text-sky-400" />}
+                      {isExpanded ? <ChevronUp className="w-4 h-4 text-[#818cf8]" /> : <ChevronDown className="w-4 h-4 text-blue-400" />}
                     </button>
                   </div>
                 </div>
 
-                {/* Progress Bar with Dual-Blue Gradient */}
-                <div className="w-full bg-[#1E293B] rounded-full h-2 overflow-hidden my-2">
+                {/* Progress Bar with Exact Dual-Color Gradient */}
+                <div className="w-full bg-[#0E1729] rounded-full h-2.5 overflow-hidden my-2 border border-blue-500/15">
                   <motion.div
                     className={`h-full rounded-full ${barGradient}`}
                     initial={{ width: 0 }}
@@ -138,22 +142,20 @@ export function CategoryBreakdown({ breakdown }: CategoryBreakdownProps) {
                     className="mt-3 pt-3 border-t border-blue-500/20 space-y-2 text-xs"
                   >
                     <div className="font-semibold text-white flex items-center gap-1.5">
-                      <AlertCircle className="w-3.5 h-3.5 text-cyan-400" />
+                      <AlertCircle className="w-3.5 h-3.5 text-[#818cf8]" />
                       Actionable Recommendations:
                     </div>
                     {cat.suggestions.length > 0 ? (
                       <ul className="space-y-1.5 pl-2">
                         {cat.suggestions.map((sug, sIdx) => (
                           <li key={sIdx} className="text-slate-300 font-outfit flex items-start gap-1.5">
-                            <span className="text-cyan-400 font-bold">•</span>
+                            <span className="text-[#818cf8] font-bold mt-0.5">•</span>
                             <span>{sug}</span>
                           </li>
                         ))}
                       </ul>
                     ) : (
-                      <p className="text-cyan-300 font-outfit">
-                        Outstanding score! This section meets top recruiter standards.
-                      </p>
+                      <p className="text-slate-400 italic">No specific improvement required.</p>
                     )}
                   </motion.div>
                 )}
