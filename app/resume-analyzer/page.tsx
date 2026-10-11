@@ -18,6 +18,7 @@ import { analyzeActionVerbs } from '@/lib/resume/action-verb-analyzer'
 import { analyzeKeywords } from '@/lib/resume/keyword-analyzer'
 import { calculateAtsScore } from '@/lib/resume/ats-engine'
 import { generateAIFeedback } from '@/lib/resume/ai-engine'
+import { extractTextFromPdfInBrowser, extractTextFromDocxInBrowser } from '@/lib/resume/client-pdf-extractor'
 import { SAMPLE_RESUMES } from '@/lib/resume/sample-resumes'
 
 // Components
@@ -127,15 +128,54 @@ export default function ResumeAnalyzerPage() {
     try {
       let resultData: any = null
 
-      // Attempt API Route first
+      // 1. Client-Side Document Extraction Pre-Flight:
+      // If a PDF file was uploaded and textContent is empty, extract text in browser via PDF.js!
+      if (file && (file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf') && !textContent) {
+        try {
+          console.log('[Resume Analyzer] Extracting PDF text in browser via PDF.js...')
+          const extractedPdf = await extractTextFromPdfInBrowser(file)
+          if (extractedPdf && extractedPdf.trim().length > 20) {
+            textContent = extractedPdf.trim()
+            console.log(`[Resume Analyzer] Browser extracted ${textContent.length} characters from PDF.`)
+          }
+        } catch (pdfErr) {
+          console.warn('[Resume Analyzer] Browser PDF extraction note:', pdfErr)
+        }
+      }
+
+      // If a DOCX file was uploaded and textContent is empty, attempt client-side DOCX extraction
+      if (file && (file.name.toLowerCase().endsWith('.docx') || file.name.toLowerCase().endsWith('.doc')) && !textContent) {
+        try {
+          console.log('[Resume Analyzer] Extracting DOCX text in browser...')
+          const extractedDocx = await extractTextFromDocxInBrowser(file)
+          if (extractedDocx && extractedDocx.trim().length > 20) {
+            textContent = extractedDocx.trim()
+            console.log(`[Resume Analyzer] Browser extracted ${textContent.length} characters from DOCX.`)
+          }
+        } catch (docxErr) {
+          console.warn('[Resume Analyzer] Browser DOCX extraction note:', docxErr)
+        }
+      }
+
+      // If plain text file (.txt, .md)
+      if (file && (file.name.endsWith('.txt') || file.name.endsWith('.md')) && !textContent) {
+        try {
+          textContent = await file.text()
+        } catch (readErr) {
+          console.warn('Failed to read text file on client:', readErr)
+        }
+      }
+
+      // 2. Server API Route Call:
+      // If we have textContent, send text! If not, send file.
       if (file || textContent) {
         try {
           const formData = new FormData()
-          if (file) {
-            formData.append('file', file)
-          } else {
+          if (textContent) {
             formData.append('text', textContent)
-            formData.append('fileName', fileName)
+            formData.append('fileName', fileName || file?.name || 'resume.pdf')
+          } else if (file) {
+            formData.append('file', file)
           }
 
           const res = await fetch('/api/resume/parse', {
@@ -151,24 +191,18 @@ export default function ResumeAnalyzerPage() {
           } else {
             const errData = await res.json().catch(() => null)
             const errorMsg = errData?.error || `Server responded with status ${res.status}`
-            console.error('[Resume Analyzer] Server error during parse:', errData)
-            throw new Error(errorMsg)
+            console.warn('[Resume Analyzer] Server error during parse:', errorMsg)
+            // If we already have textContent, do NOT throw, we will process it locally!
+            if (!textContent) {
+              throw new Error(errorMsg)
+            }
           }
         } catch (apiErr: any) {
           console.warn('[Resume Analyzer] API route call failed:', apiErr.message)
-          // If direct text is provided, we can still fall back to client-side pipeline below
-          if (!textContent && !file?.name?.endsWith('.txt') && !file?.name?.endsWith('.md')) {
+          // If we have textContent, we fall through to the self-contained local pipeline below
+          if (!textContent) {
             throw apiErr
           }
-        }
-      }
-
-      // If API route had a network error but file is plain text, read via FileReader
-      if (!resultData && file && (file.name.endsWith('.txt') || file.name.endsWith('.md'))) {
-        try {
-          textContent = await file.text()
-        } catch (readErr) {
-          console.warn('Failed to read text file on client:', readErr)
         }
       }
 

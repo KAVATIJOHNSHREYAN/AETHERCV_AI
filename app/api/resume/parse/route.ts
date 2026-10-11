@@ -56,46 +56,32 @@ async function extractPdfText(buffer: Buffer): Promise<string> {
     console.warn('[Resume Parse] [Stage 3: PDF] Strategy 2 (legacy function) failed:', err.message)
   }
 
-  // Strategy 3: Raw PDF Text Stream Extraction Fallback
+  // Strategy 3: FlateDecode Stream Decompressor
   try {
-    console.log('[Resume Parse] [Stage 3: PDF] Running Strategy 3 (Raw text stream parser)...')
-    const rawContent = buffer.toString('latin1')
-    const matches: string[] = []
-    const streamRegex = /BT[\s\S]*?ET/g
-    let match: RegExpExecArray | null
-
-    while ((match = streamRegex.exec(rawContent)) !== null) {
-      const block = match[0]
-      // Extract (text) Tj and [(t1)(t2)] TJ
-      const tjMatches = block.match(/\((.*?)\)\s*Tj/g) || []
-      tjMatches.forEach(item => {
-        const cleaned = item
-          .replace(/^\(/, '')
-          .replace(/\)\s*Tj$/, '')
-          .replace(/\\([()\\])/g, '$1')
-          .trim()
-        if (cleaned) matches.push(cleaned)
-      })
-
-      const tjArrayMatches = block.match(/\[(.*?)\]\s*TJ/g) || []
-      tjArrayMatches.forEach(item => {
-        const parts = item.match(/\((.*?)\)/g) || []
-        parts.forEach(p => {
-          const c = p.slice(1, -1).replace(/\\([()\\])/g, '$1').trim()
-          if (c) matches.push(c)
-        })
-      })
-    }
-
-    if (matches.length > 0) {
-      const extracted = matches.join(' ').replace(/\s+/g, ' ').trim()
-      if (extracted.length > 20) {
-        console.log(`[Resume Parse] [Stage 3: PDF] Strategy 3 success: extracted ${extracted.length} chars.`)
-        return extracted
-      }
+    console.log('[Resume Parse] [Stage 3: PDF] Running Strategy 3 (FlateDecode Stream Decompressor)...')
+    const { decodePdfFlateStreams } = require('@/lib/resume/pdf-stream-decoder')
+    const extracted = decodePdfFlateStreams(buffer)
+    if (extracted && extracted.length > 20) {
+      console.log(`[Resume Parse] [Stage 3: PDF] Strategy 3 success: extracted ${extracted.length} chars.`)
+      return extracted
     }
   } catch (err: any) {
     console.warn('[Resume Parse] [Stage 3: PDF] Strategy 3 failed:', err.message)
+  }
+
+  // Strategy 4: Direct printable string extractor
+  try {
+    const raw = buffer.toString('latin1')
+    const words = raw.match(/[A-Za-z0-9@.+#/-]{3,}/g) || []
+    if (words.length > 30) {
+      const candidateText = words.join(' ')
+      if (candidateText.length > 80) {
+        console.log(`[Resume Parse] [Stage 3: PDF] Strategy 4 (Printable strings) success: extracted ${candidateText.length} chars.`)
+        return candidateText
+      }
+    }
+  } catch (err: any) {
+    console.warn('[Resume Parse] [Stage 3: PDF] Strategy 4 failed:', err.message)
   }
 
   throw new Error('Could not extract text from PDF. The document may be an image scan, encrypted, or password-protected.')
