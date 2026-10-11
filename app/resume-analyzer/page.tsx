@@ -35,6 +35,7 @@ import { JdMatcherView } from '@/components/resume/jd-matcher-view'
 import { AiRewriterView } from '@/components/resume/ai-rewriter-view'
 import { ResumeHistoryDrawer } from '@/components/resume/resume-history-drawer'
 import { ExportReportModal } from '@/components/resume/export-report-modal'
+import { AiScanningOverlay } from '@/components/resume/ai-scanning-overlay'
 import { Button } from '@/components/ui/button'
 
 import {
@@ -311,7 +312,13 @@ export default function ResumeAnalyzerPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#08111F] text-slate-100 py-4 sm:py-8 px-2 sm:px-6 lg:px-8 relative overflow-hidden">
+      {/* Premium AI Glowing Ambient Background */}
+      <div className="absolute top-[-100px] left-1/4 w-[600px] h-[600px] bg-blue-600/15 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-[30%] right-[-100px] w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[130px] pointer-events-none -z-10" />
+      <div className="absolute bottom-[10%] left-[-100px] w-[550px] h-[550px] bg-indigo-600/15 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none -z-10" />
+
       {/* History Drawer */}
       <ResumeHistoryDrawer
         isOpen={isHistoryOpen}
@@ -334,18 +341,21 @@ export default function ResumeAnalyzerPage() {
         />
       )}
 
-      <div className="max-w-7xl mx-auto space-y-10">
+      {/* AI Scanning Animation Overlay */}
+      <AiScanningOverlay isLoading={isLoading} />
+
+      <div className="max-w-7xl mx-auto space-y-10 relative z-10">
         {/* Top Header Banner */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-border/40">
-          <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/20 backdrop-blur-sm">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Self-Contained AI Resume Analyzer</span>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-blue-500/20">
+          <div className="space-y-2.5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/10 text-cyan-300 border border-blue-500/30 backdrop-blur-md shadow-[0_0_15px_-3px_rgba(59,130,246,0.25)]">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Enterprise AI Resume Intelligence</span>
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-poppins tracking-tight text-foreground">
-              AI Resume <span className="bg-clip-text text-transparent bg-gradient-to-r from-red-600 via-rose-500 to-amber-500">Analyzer</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold font-poppins tracking-tight text-white">
+              AI Resume <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-300">Analyzer</span>
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground font-outfit max-w-2xl">
+            <p className="text-sm sm:text-base text-slate-400 font-outfit max-w-2xl leading-relaxed">
               Upload your resume for instant rule-based ATS scoring (100 pts), 8-cluster skill taxonomy categorization, action verb audits, recruiter simulation, and job description alignment.
             </p>
           </div>
@@ -356,9 +366,9 @@ export default function ResumeAnalyzerPage() {
               variant="outline"
               size="sm"
               onClick={() => setIsHistoryOpen(true)}
-              className="gap-2 font-outfit text-xs"
+              className="gap-2 font-outfit text-xs bg-[#0F172A]/80 border-blue-500/30 text-sky-200 hover:bg-blue-600/20 hover:border-blue-400/50 hover:text-white transition-all shadow-[0_0_15px_-3px_rgba(59,130,246,0.2)]"
             >
-              <History className="w-4 h-4 text-muted-foreground" />
+              <History className="w-4 h-4 text-sky-400" />
               <span>History ({history.length})</span>
             </Button>
 
@@ -366,7 +376,7 @@ export default function ResumeAnalyzerPage() {
               <Button
                 size="sm"
                 onClick={() => setIsExportOpen(true)}
-                className="gap-2 font-outfit text-xs shadow-md"
+                className="gap-2 font-outfit text-xs bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.4)] transition-all hover:scale-[1.02]"
               >
                 <Download className="w-4 h-4" />
                 <span>Export Reports</span>
@@ -382,30 +392,30 @@ export default function ResumeAnalyzerPage() {
         {analysisData && (
           <div className="space-y-8 pt-4">
             {/* Candidate Quick Info Card */}
-            <div className="p-6 rounded-3xl bg-card/60 backdrop-blur-md border border-border/50 shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="p-6 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_30px_-5px_rgba(37,99,235,0.2)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-primary to-rose-500 text-white flex items-center justify-center font-bold text-xl font-poppins shadow-md">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 text-white flex items-center justify-center font-bold text-xl font-poppins shadow-[0_0_20px_-3px_rgba(14,165,233,0.5)]">
                   {(analysisData.parsedData.contact.name || 'C').charAt(0).toUpperCase()}
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold font-poppins text-foreground flex items-center gap-2">
+                  <h2 className="text-xl font-bold font-poppins text-white flex items-center gap-2">
                     {analysisData.parsedData.contact.name || 'Candidate Profile'}
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 shadow-[0_0_10px_rgba(34,211,238,0.2)]">
                       Verified Scan
                     </span>
                   </h2>
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground font-outfit mt-1">
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-slate-400 font-outfit mt-1">
                     {analysisData.parsedData.contact.email && (
-                      <span>{analysisData.parsedData.contact.email}</span>
+                      <span className="text-slate-300">{analysisData.parsedData.contact.email}</span>
                     )}
                     {analysisData.parsedData.contact.phone && (
                       <>
-                        <span>•</span>
-                        <span>{analysisData.parsedData.contact.phone}</span>
+                        <span className="text-blue-500">•</span>
+                        <span className="text-slate-300">{analysisData.parsedData.contact.phone}</span>
                       </>
                     )}
-                    <span>•</span>
-                    <span className="font-mono">{analysisData.fileName}</span>
+                    <span className="text-blue-500">•</span>
+                    <span className="font-mono text-sky-400">{analysisData.fileName}</span>
                   </div>
                 </div>
               </div>
@@ -415,16 +425,16 @@ export default function ResumeAnalyzerPage() {
                   variant="outline"
                   size="sm"
                   onClick={() => setAnalysisData(null)}
-                  className="gap-1.5 text-xs font-outfit"
+                  className="gap-1.5 text-xs font-outfit bg-[#0F172A] border-blue-500/30 text-sky-200 hover:bg-blue-600/20 hover:border-sky-400/50 hover:text-white"
                 >
-                  <RefreshCw className="w-3.5 h-3.5" />
+                  <RefreshCw className="w-3.5 h-3.5 text-sky-400" />
                   Analyze Another Resume
                 </Button>
 
                 <Button
                   size="sm"
                   onClick={() => setIsExportOpen(true)}
-                  className="gap-1.5 text-xs font-outfit shadow-sm"
+                  className="gap-1.5 text-xs font-outfit bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.35)]"
                 >
                   <Download className="w-3.5 h-3.5" />
                   Download Package
@@ -433,7 +443,7 @@ export default function ResumeAnalyzerPage() {
             </div>
 
             {/* Dashboard Tabs */}
-            <div className="flex flex-wrap gap-2 border-b border-border/40 pb-3">
+            <div className="flex flex-wrap gap-2 border-b border-blue-500/20 pb-3">
               {navTabs.map((tab) => {
                 const Icon = tab.icon
                 const isActive = activeTab === tab.id
@@ -443,11 +453,11 @@ export default function ResumeAnalyzerPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
                       isActive
-                        ? 'bg-primary text-primary-foreground shadow-sm'
-                        : 'bg-secondary/40 hover:bg-secondary text-muted-foreground hover:text-foreground'
+                        ? 'bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] border border-sky-400/40'
+                        : 'bg-[#0F172A]/70 hover:bg-[#1E293B] text-slate-300 hover:text-white border border-blue-500/20'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-sky-400'}`} />
                     <span>{tab.label}</span>
                   </button>
                 )
@@ -469,34 +479,34 @@ export default function ResumeAnalyzerPage() {
                     <AtsCircularScore breakdown={analysisData.atsBreakdown} />
 
                     {/* Quick Formatting Health Card */}
-                    <div className="p-5 rounded-3xl bg-card/60 backdrop-blur-md border border-border/50 space-y-3">
-                      <h4 className="text-sm font-bold font-poppins text-foreground flex items-center gap-2">
-                        <Award className="w-4 h-4 text-primary" />
-                        Formatting & Readability Index
+                    <div className="p-5 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_25px_-5px_rgba(37,99,235,0.15)] space-y-3">
+                      <h4 className="text-sm font-bold font-poppins text-white flex items-center gap-2">
+                        <Award className="w-4 h-4 text-sky-400" />
+                        Formatting &amp; Readability Index
                       </h4>
                       <div className="grid grid-cols-2 gap-2 text-xs">
-                        <div className="p-2.5 rounded-xl bg-secondary/30">
-                          <span className="text-muted-foreground block text-[11px]">Word Count</span>
-                          <span className="font-bold text-foreground">{analysisData.formatting.wordCount} words</span>
+                        <div className="p-2.5 rounded-xl bg-[#0B132B]/80 border border-blue-500/15">
+                          <span className="text-slate-400 block text-[11px]">Word Count</span>
+                          <span className="font-bold text-white">{analysisData.formatting.wordCount} words</span>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-secondary/30">
-                          <span className="text-muted-foreground block text-[11px]">Length</span>
-                          <span className="font-bold text-foreground">~{analysisData.formatting.estimatedPages} pages</span>
+                        <div className="p-2.5 rounded-xl bg-[#0B132B]/80 border border-blue-500/15">
+                          <span className="text-slate-400 block text-[11px]">Length</span>
+                          <span className="font-bold text-white">~{analysisData.formatting.estimatedPages} pages</span>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-secondary/30">
-                          <span className="text-muted-foreground block text-[11px]">Reading Ease</span>
-                          <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                        <div className="p-2.5 rounded-xl bg-[#0B132B]/80 border border-blue-500/15">
+                          <span className="text-slate-400 block text-[11px]">Reading Ease</span>
+                          <span className="font-bold text-cyan-400">
                             {analysisData.formatting.fleschReadingEase}/100
                           </span>
                         </div>
-                        <div className="p-2.5 rounded-xl bg-secondary/30">
-                          <span className="text-muted-foreground block text-[11px]">Bullet Points</span>
-                          <span className="font-bold text-foreground">{analysisData.formatting.bulletPointCount}</span>
+                        <div className="p-2.5 rounded-xl bg-[#0B132B]/80 border border-blue-500/15">
+                          <span className="text-slate-400 block text-[11px]">Bullet Points</span>
+                          <span className="font-bold text-white">{analysisData.formatting.bulletPointCount}</span>
                         </div>
                       </div>
                       {analysisData.formatting.warnings.length > 0 && (
-                        <div className="pt-2 text-[11px] text-amber-600 dark:text-amber-400 font-outfit">
-                          ⚠️ {analysisData.formatting.warnings[0]}
+                        <div className="pt-2 text-[11px] text-sky-300 font-outfit flex items-center gap-1.5">
+                          <span className="text-sky-400">ℹ</span> {analysisData.formatting.warnings[0]}
                         </div>
                       )}
                     </div>
@@ -585,11 +595,11 @@ export default function ResumeAnalyzerPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.25 }}
-                  className="p-5 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50 space-y-3"
+                  className="p-5 rounded-2xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_25px_-5px_rgba(37,99,235,0.15)] space-y-3"
                 >
-                  <div className="flex items-center justify-between pb-2 border-b border-border/40">
-                    <h3 className="text-sm font-bold font-poppins text-foreground flex items-center gap-2">
-                      <Code2 className="w-4 h-4 text-primary" />
+                  <div className="flex items-center justify-between pb-2 border-b border-blue-500/20">
+                    <h3 className="text-sm font-bold font-poppins text-white flex items-center gap-2">
+                      <Code2 className="w-4 h-4 text-cyan-400" />
                       Structured Parsed Resume JSON
                     </h3>
                     <Button
@@ -598,12 +608,12 @@ export default function ResumeAnalyzerPage() {
                       onClick={() => {
                         navigator.clipboard.writeText(JSON.stringify(analysisData.parsedData, null, 2))
                       }}
-                      className="text-xs font-outfit"
+                      className="text-xs font-outfit bg-[#0B132B] border-blue-500/30 text-sky-200 hover:bg-blue-600/20 hover:text-white"
                     >
                       Copy JSON
                     </Button>
                   </div>
-                  <pre className="p-4 rounded-xl bg-background border border-border/50 text-xs font-mono text-muted-foreground overflow-x-auto max-h-[500px] leading-relaxed">
+                  <pre className="p-4 rounded-xl bg-[#08111F] border border-blue-500/20 text-xs font-mono text-slate-300 overflow-x-auto max-h-[500px] leading-relaxed shadow-inner">
                     {JSON.stringify(analysisData.parsedData, null, 2)}
                   </pre>
                 </motion.div>

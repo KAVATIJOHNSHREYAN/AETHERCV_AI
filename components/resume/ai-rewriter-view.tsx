@@ -64,15 +64,15 @@ export function AiRewriterView({ resume }: AiRewriterViewProps) {
   ]
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-border/40 gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-blue-500/20 gap-3">
         <div>
-          <h3 className="text-base font-bold font-poppins text-foreground flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-primary" />
+          <h3 className="text-base font-bold font-poppins text-white flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-sky-400" />
             AI Professional Resume Rewriter
           </h3>
-          <p className="text-xs text-muted-foreground font-outfit">
+          <p className="text-xs text-slate-400 font-outfit">
             Generates polished executive wording with measurable metrics, active voice, and clean structure
           </p>
         </div>
@@ -82,16 +82,16 @@ export function AiRewriterView({ resume }: AiRewriterViewProps) {
             variant="outline"
             size="sm"
             onClick={handleCopy}
-            className="gap-1.5 text-xs font-outfit"
+            className="gap-1.5 text-xs font-outfit bg-[#0F172A]/80 border-blue-500/30 text-sky-200 hover:bg-blue-600/20 hover:border-blue-400/50 hover:text-white transition-all shadow-[0_0_12px_rgba(59,130,246,0.2)]"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? <Check className="w-3.5 h-3.5 text-cyan-400" /> : <Copy className="w-3.5 h-3.5 text-sky-400" />}
             {copied ? 'Copied!' : 'Copy Section'}
           </Button>
 
           <Button
             size="sm"
             onClick={handleDownload}
-            className="gap-1.5 text-xs font-outfit shadow-sm"
+            className="gap-1.5 text-xs font-outfit bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_20px_rgba(59,130,246,0.35)] transition-all hover:scale-[1.02]"
           >
             <Download className="w-3.5 h-3.5" />
             Export Markdown
@@ -108,10 +108,10 @@ export function AiRewriterView({ resume }: AiRewriterViewProps) {
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium transition-all ${
                 isActive
-                  ? 'bg-primary text-primary-foreground shadow-sm'
-                  : 'bg-secondary/60 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/40'
+                  ? 'bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] border border-sky-400/40'
+                  : 'bg-[#0F172A]/70 hover:bg-[#1E293B] text-slate-300 hover:text-white border border-blue-500/20'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -122,16 +122,16 @@ export function AiRewriterView({ resume }: AiRewriterViewProps) {
       </div>
 
       {/* Editor / Markdown Preview Area */}
-      <div className="p-5 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50">
+      <div className="p-6 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_30px_rgba(37,99,235,0.08)]">
         <textarea
           readOnly
           value={getActiveContent()}
           rows={16}
-          className="w-full bg-background/80 rounded-xl p-4 font-mono text-xs text-foreground border border-border/50 focus:outline-none leading-relaxed resize-y select-text"
+          className="w-full bg-[#08111F] rounded-2xl p-4 font-mono text-xs text-slate-200 border border-blue-500/25 focus:outline-none leading-relaxed resize-y select-text"
         />
-        <div className="flex items-center justify-between text-[11px] text-muted-foreground mt-2 font-outfit">
-          <span>✓ Ready to paste directly into your resume builder or Google Docs</span>
-          <span>Formatted with standard Markdown headers & bullet hierarchies</span>
+        <div className="flex items-center justify-between text-[11px] text-slate-400 mt-3 font-outfit">
+          <span className="text-cyan-300">✓ Ready to paste directly into your resume builder or Google Docs</span>
+          <span>Formatted with standard Markdown headers &amp; bullet hierarchies</span>
         </div>
       </div>
     </div>

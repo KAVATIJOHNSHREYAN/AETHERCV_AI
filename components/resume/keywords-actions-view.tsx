@@ -4,8 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { KeywordAnalysisResult, ActionVerbAnalysisResult } from '@/lib/resume/types'
 import {
-  TrendingUp, AlertTriangle, ArrowRight, Sparkles, Zap, Hash,
-  Repeat, CheckCircle, ShieldAlert
+  TrendingUp, ArrowRight, Zap, Hash, CheckCircle, ShieldAlert
 } from 'lucide-react'
 
 interface KeywordsActionsViewProps {
@@ -17,27 +16,27 @@ export function KeywordsActionsView({ keywords, actionVerbs }: KeywordsActionsVi
   return (
     <div className="space-y-6">
       {/* Action Verbs Spotlight */}
-      <div className="p-5 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-border/40 gap-3">
+      <div className="p-5 rounded-2xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_25px_-5px_rgba(37,99,235,0.15)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-blue-500/20 gap-3">
           <div>
-            <h3 className="text-base font-bold font-poppins text-foreground flex items-center gap-2">
-              <Zap className="w-5 h-5 text-amber-500" />
+            <h3 className="text-base font-bold font-poppins text-white flex items-center gap-2">
+              <Zap className="w-5 h-5 text-cyan-400" />
               Action Verb Dynamic Analysis
             </h3>
-            <p className="text-xs text-muted-foreground font-outfit">
+            <p className="text-xs text-slate-400 font-outfit">
               Measurable power verbs that drive assertive, high-impact bullet points
             </p>
           </div>
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <span className="text-xs text-muted-foreground block">Verb Density</span>
-              <span className="text-sm font-bold text-foreground font-poppins">
+              <span className="text-xs text-slate-400 block">Verb Density</span>
+              <span className="text-sm font-bold text-white font-poppins">
                 {actionVerbs.densityScore}%
               </span>
             </div>
-            <div className="text-right border-l border-border/40 pl-3">
-              <span className="text-xs text-muted-foreground block">Unique Verbs</span>
-              <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400 font-poppins">
+            <div className="text-right border-l border-blue-500/20 pl-3">
+              <span className="text-xs text-slate-400 block">Unique Verbs</span>
+              <span className="text-sm font-bold text-cyan-400 font-poppins">
                 {actionVerbs.uniqueVerbsFound.length}
               </span>
             </div>
@@ -46,8 +45,8 @@ export function KeywordsActionsView({ keywords, actionVerbs }: KeywordsActionsVi
 
         {/* Found Verbs Chips */}
         <div className="mt-4">
-          <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-1.5">
-            <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+          <h4 className="text-xs font-semibold text-white mb-2 flex items-center gap-1.5">
+            <CheckCircle className="w-3.5 h-3.5 text-cyan-400" />
             Detected Power Verbs:
           </h4>
           <div className="flex flex-wrap gap-2">
@@ -55,13 +54,13 @@ export function KeywordsActionsView({ keywords, actionVerbs }: KeywordsActionsVi
               actionVerbs.uniqueVerbsFound.map((verb, idx) => (
                 <span
                   key={idx}
-                  className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20 capitalize"
+                  className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-blue-600/15 text-sky-200 border border-blue-400/30 capitalize shadow-sm"
                 >
                   {verb} <span className="opacity-60 text-[10px]">({actionVerbs.frequencyMap[verb]}x)</span>
                 </span>
               ))
             ) : (
-              <span className="text-xs text-muted-foreground italic">
+              <span className="text-xs text-slate-400 italic">
                 No strong action verbs detected. Begin sentences with verbs like Spearheaded, Engineered, or Automated.
               </span>
             )}
@@ -70,20 +69,20 @@ export function KeywordsActionsView({ keywords, actionVerbs }: KeywordsActionsVi
 
         {/* Weak Verbs Replacement Table */}
         {actionVerbs.weakVerbsUsed.length > 0 && (
-          <div className="mt-4 pt-3 border-t border-border/30">
-            <h4 className="text-xs font-semibold text-foreground mb-2 flex items-center gap-1.5">
-              <ShieldAlert className="w-3.5 h-3.5 text-amber-500" />
+          <div className="mt-4 pt-3 border-t border-blue-500/20">
+            <h4 className="text-xs font-semibold text-white mb-2 flex items-center gap-1.5">
+              <ShieldAlert className="w-3.5 h-3.5 text-sky-400" />
               Suggested High-Impact Replacements:
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {actionVerbs.weakVerbsUsed.map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded-xl bg-amber-500/5 border border-amber-500/20 flex items-center justify-between text-xs"
+                  className="p-2.5 rounded-xl bg-[#0B132B]/80 border border-blue-500/20 flex items-center justify-between text-xs"
                 >
-                  <span className="text-red-500 font-semibold line-through">{item.verb}</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-muted-foreground mx-2" />
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">{item.suggestedReplacement}</span>
+                  <span className="text-sky-300/80 font-semibold line-through">{item.verb}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-cyan-400 mx-2" />
+                  <span className="text-cyan-300 font-bold px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30">{item.suggestedReplacement}</span>
                 </div>
               ))}
             </div>
@@ -94,21 +93,21 @@ export function KeywordsActionsView({ keywords, actionVerbs }: KeywordsActionsVi
       {/* Keywords Breakdown Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Most Frequent Keywords */}
-        <div className="p-4 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50">
+        <div className="p-4 rounded-2xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_25px_-5px_rgba(37,99,235,0.15)]">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-500">
+            <div className="p-1.5 rounded-lg bg-blue-500/10 text-sky-400 border border-blue-500/25">
               <Hash className="w-4 h-4" />
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-foreground font-poppins">Most Frequent Terms</h4>
-              <p className="text-[11px] text-muted-foreground">Dominant vocabulary found in your resume</p>
+              <h4 className="text-sm font-semibold text-white font-poppins">Most Frequent Terms</h4>
+              <p className="text-[11px] text-slate-400">Dominant vocabulary found in your resume</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-1.5">
             {keywords.mostFrequent.slice(0, 10).map((item, idx) => (
               <span
                 key={idx}
-                className="px-2.5 py-1 rounded-lg text-xs bg-secondary text-secondary-foreground border border-border/40 font-mono"
+                className="px-2.5 py-1 rounded-lg text-xs bg-[#0B132B] text-sky-200 border border-blue-500/20 font-mono"
               >
                 {item.word} <span className="text-[10px] opacity-60">({item.count})</span>
               </span>
@@ -117,21 +116,21 @@ export function KeywordsActionsView({ keywords, actionVerbs }: KeywordsActionsVi
         </div>
 
         {/* Missing Important Benchmark Keywords */}
-        <div className="p-4 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50">
+        <div className="p-4 rounded-2xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_25px_-5px_rgba(37,99,235,0.15)]">
           <div className="flex items-center gap-2 mb-3">
-            <div className="p-1.5 rounded-lg bg-purple-500/10 text-purple-500">
+            <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/25">
               <TrendingUp className="w-4 h-4" />
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-foreground font-poppins">Missing High-Value Keywords</h4>
-              <p className="text-[11px] text-muted-foreground">Modern industry terms recruiters search for</p>
+              <h4 className="text-sm font-semibold text-white font-poppins">Missing High-Value Keywords</h4>
+              <p className="text-[11px] text-slate-400">Modern industry terms recruiters search for</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-1.5">
             {keywords.missingImportant.slice(0, 8).map((kw, idx) => (
               <span
                 key={idx}
-                className="px-2.5 py-1 rounded-lg text-xs bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 font-medium"
+                className="px-2.5 py-1 rounded-lg text-xs bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 font-medium shadow-sm"
               >
                 + {kw}
               </span>
@@ -141,25 +140,25 @@ export function KeywordsActionsView({ keywords, actionVerbs }: KeywordsActionsVi
 
         {/* Weak Keywords Detected */}
         {keywords.weakKeywords.length > 0 && (
-          <div className="p-4 rounded-2xl bg-card/60 backdrop-blur-sm border border-border/50 md:col-span-2">
+          <div className="p-4 rounded-2xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 md:col-span-2 shadow-[0_4px_25px_-5px_rgba(37,99,235,0.15)]">
             <div className="flex items-center gap-2 mb-3">
-              <div className="p-1.5 rounded-lg bg-red-500/10 text-red-500">
-                <AlertTriangle className="w-4 h-4" />
+              <div className="p-1.5 rounded-lg bg-blue-500/15 text-sky-400 border border-blue-500/25">
+                <ShieldAlert className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="text-sm font-semibold text-foreground font-poppins">Passive / Vague Phrasing Detected</h4>
-                <p className="text-[11px] text-muted-foreground">Terms that weaken candidate authority</p>
+                <h4 className="text-sm font-semibold text-white font-poppins">Passive / Vague Phrasing Detected</h4>
+                <p className="text-[11px] text-slate-400">Terms that weaken candidate authority</p>
               </div>
             </div>
             <div className="space-y-2">
               {keywords.weakKeywords.map((wk, idx) => (
-                <div key={idx} className="p-3 rounded-xl bg-secondary/40 border border-border/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                <div key={idx} className="p-3 rounded-xl bg-[#0B132B]/80 border border-blue-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
                   <div>
-                    <span className="font-bold text-red-500">"{wk.word}"</span>: <span className="text-muted-foreground font-outfit">{wk.reason}</span>
+                    <span className="font-bold text-sky-300">"{wk.word}"</span>: <span className="text-slate-400 font-outfit">{wk.reason}</span>
                   </div>
-                  <div className="shrink-0 flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold">
+                  <div className="shrink-0 flex items-center gap-1.5 text-cyan-300 font-semibold">
                     <span>Use:</span>
-                    <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">{wk.replacement}</span>
+                    <span className="px-2 py-0.5 rounded bg-cyan-500/10 border border-cyan-500/30">{wk.replacement}</span>
                   </div>
                 </div>
               ))}

@@ -135,7 +135,7 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
       title: 'Optimized Resume (.md)',
       description: 'Clean executive Markdown with enhanced bullet points, active verbs, and quantified outcomes.',
       icon: Sparkles,
-      color: 'text-purple-500 bg-purple-500/10 border-purple-500/20',
+      color: 'text-sky-300 bg-sky-500/10 border-sky-500/30',
       action: handleDownloadResume,
       btnLabel: 'Download Resume'
     },
@@ -143,7 +143,7 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
       title: 'Comprehensive Analysis Report (.txt)',
       description: '10-category scoring audit, formatting benchmarks, and recruiter scan simulation notes.',
       icon: Award,
-      color: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
+      color: 'text-blue-300 bg-blue-500/10 border-blue-500/30',
       action: handleDownloadAnalysisReport,
       btnLabel: 'Download Audit'
     },
@@ -151,7 +151,7 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
       title: 'Actionable Feedback Report (.txt)',
       description: 'Sentence-by-sentence before/after rewrites, grammar notes, and targeted career advice.',
       icon: CheckCircle2,
-      color: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
+      color: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/30',
       action: handleDownloadFeedbackReport,
       btnLabel: 'Download Feedback'
     },
@@ -159,7 +159,7 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
       title: 'Full ATS Machine Data (.json)',
       description: 'Structured JSON containing parsed skills, contact links, experience items, and raw metrics.',
       icon: Code2,
-      color: 'text-amber-500 bg-amber-500/10 border-amber-500/20',
+      color: 'text-indigo-300 bg-indigo-500/10 border-indigo-500/30',
       action: handleDownloadJson,
       btnLabel: 'Export JSON'
     }
@@ -174,7 +174,7 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-background/80 backdrop-blur-sm"
+          className="fixed inset-0 bg-[#08111F]/80 backdrop-blur-md"
         />
 
         {/* Modal Dialog */}
@@ -183,23 +183,23 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ duration: 0.2 }}
-          className="relative w-full max-w-xl bg-card border border-border shadow-2xl rounded-3xl p-6 z-10 space-y-5"
+          className="relative w-full max-w-xl bg-[#0F172A] border border-blue-500/25 shadow-[0_0_50px_rgba(37,99,235,0.25)] rounded-3xl p-6 sm:p-7 z-10 space-y-6"
         >
-          <div className="flex items-center justify-between pb-3 border-b border-border/50">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
+          <div className="flex items-center justify-between pb-3.5 border-b border-blue-500/20">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-blue-500/15 border border-blue-500/30 text-sky-400 shadow-[0_0_15px_rgba(59,130,246,0.25)]">
                 <Download className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-lg font-bold font-poppins text-foreground">Export Resume & Audit Reports</h3>
-                <p className="text-xs text-muted-foreground font-outfit">Select the desired report format</p>
+                <h3 className="text-lg font-bold font-poppins text-white">Export Resume &amp; Audit Reports</h3>
+                <p className="text-xs text-slate-400 font-outfit">Select the desired report format</p>
               </div>
             </div>
             <button
               type="button"
               onClick={onClose}
               aria-label="Close modal"
-              className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-blue-600/20 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -211,24 +211,23 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
               return (
                 <div
                   key={idx}
-                  className="p-4 rounded-2xl bg-secondary/30 border border-border/40 flex flex-col justify-between space-y-3 hover:border-border transition-all"
+                  className="p-4 sm:p-5 rounded-2xl bg-[#08111F]/90 border border-blue-500/20 flex flex-col justify-between space-y-3.5 hover:border-sky-400/40 transition-all shadow-[0_4px_15px_rgba(0,0,0,0.2)]"
                 >
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <div className={`p-1.5 rounded-lg border ${opt.color}`}>
                         <Icon className="w-4 h-4" />
                       </div>
-                      <h4 className="text-xs font-bold font-poppins text-foreground">{opt.title}</h4>
+                      <h4 className="text-xs font-bold font-poppins text-white">{opt.title}</h4>
                     </div>
-                    <p className="text-[11px] text-muted-foreground font-outfit leading-relaxed">
+                    <p className="text-[11px] text-slate-400 font-outfit leading-relaxed">
                       {opt.description}
                     </p>
                   </div>
                   <Button
                     size="sm"
-                    variant="outline"
                     onClick={opt.action}
-                    className="w-full text-xs font-outfit gap-1.5 hover:bg-primary hover:text-primary-foreground transition-all"
+                    className="w-full text-xs font-outfit gap-1.5 bg-gradient-to-r from-blue-600 via-sky-600 to-indigo-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.3)] transition-all"
                   >
                     <Download className="w-3.5 h-3.5" />
                     {opt.btnLabel}
@@ -238,8 +237,8 @@ ${aiFeedback.skillsSuggestions.map(s => `• ${s}`).join('\n')}
             })}
           </div>
 
-          <div className="pt-2 border-t border-border/40 text-center">
-            <p className="text-[11px] text-muted-foreground font-outfit">
+          <div className="pt-2 border-t border-blue-500/20 text-center">
+            <p className="text-[11px] text-slate-400 font-outfit">
               All files are processed and generated entirely within your browser for complete data privacy.
             </p>
           </div>
