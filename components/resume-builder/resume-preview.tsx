@@ -3,11 +3,12 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { ResumeBuilderData, SectionKey } from '@/types/resume-builder'
 import {
-  ZoomIn, ZoomOut, Printer, Eye, FileText, Sparkles,
-  AlertTriangle, CheckCircle2, Zap, ShieldCheck
+  ZoomIn, ZoomOut, Printer, Download, Eye, FileText, Sparkles,
+  AlertTriangle, CheckCircle2, Zap, ShieldCheck, RefreshCw
 } from 'lucide-react'
 import { exportToPlainText } from '@/lib/resume-builder/import-export'
 import { ATS_SAFE_FONTS, getTemplateConfig } from '@/lib/resume-builder/templates'
+import { downloadSinglePageA4Pdf, printIsolatedA4Sheet } from '@/lib/resume-builder/pdf-exporter'
 
 interface ResumePreviewProps {
   data: ResumeBuilderData
@@ -22,6 +23,7 @@ export function ResumePreview({ data, onOptimizeToOnePage }: ResumePreviewProps)
   const [viewMode, setViewMode] = useState<'ats-visual' | 'ats-raw'>('ats-visual')
   const [isOverflowing, setIsOverflowing] = useState<boolean>(false)
   const [contentHeight, setContentHeight] = useState<number>(0)
+  const [isExportingPdf, setIsExportingPdf] = useState<boolean>(false)
 
   const printRef = useRef<HTMLDivElement>(null)
   const sheetRef = useRef<HTMLDivElement>(null)
@@ -514,11 +516,46 @@ export function ResumePreview({ data, onOptimizeToOnePage }: ResumePreviewProps)
 
           <button
             type="button"
-            onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] hover:brightness-110 text-white text-xs font-bold shadow-sm"
+            disabled={isExportingPdf}
+            onClick={async () => {
+              if (!sheetRef.current) return
+              setIsExportingPdf(true)
+              try {
+                if (isOverflowing && onOptimizeToOnePage) {
+                  onOptimizeToOnePage()
+                  await new Promise((r) => setTimeout(r, 150))
+                }
+                const name = `${personalInfo.firstName || 'Resume'}_${personalInfo.lastName || ''}`.trim()
+                await downloadSinglePageA4Pdf(sheetRef.current, name)
+              } catch (err) {
+                console.error('Failed to export single page PDF:', err)
+              } finally {
+                setIsExportingPdf(false)
+              }
+            }}
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-[#2563EB] to-[#1E50DA] hover:brightness-110 text-white text-xs font-bold shadow-sm disabled:opacity-50 transition-all cursor-pointer"
+            title="Download directly as a strictly 1-page A4 PDF file"
+          >
+            {isExportingPdf ? (
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
+            ) : (
+              <Download className="w-3.5 h-3.5" />
+            )}
+            <span>{isExportingPdf ? 'Exporting PDF...' : 'Download A4 PDF'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              if (!sheetRef.current) return
+              const name = `${personalInfo.firstName || 'Resume'} ${personalInfo.lastName || ''}`.trim()
+              printIsolatedA4Sheet(sheetRef.current, name, fontConfig.cssStack)
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#07101F] border border-blue-500/25 hover:border-blue-500/50 text-slate-200 hover:text-white text-xs font-semibold transition-all cursor-pointer"
+            title="Print isolated 1-page A4 sheet via browser dialog"
           >
             <Printer className="w-3.5 h-3.5" />
-            <span>Export A4 PDF</span>
+            <span>Print</span>
           </button>
         </div>
       </div>
@@ -534,7 +571,7 @@ export function ResumePreview({ data, onOptimizeToOnePage }: ResumePreviewProps)
             <button
               type="button"
               onClick={onOptimizeToOnePage}
-              className="font-bold underline text-white hover:text-amber-300 ml-2 shrink-0"
+              className="font-bold underline text-white hover:text-amber-300 ml-2 shrink-0 cursor-pointer"
             >
               Click Optimize
             </button>
@@ -568,6 +605,7 @@ export function ResumePreview({ data, onOptimizeToOnePage }: ResumePreviewProps)
                 transition: 'transform 0.12s ease-out',
                 width: '210mm',
                 minHeight: '297mm',
+                maxHeight: isOverflowing ? undefined : '297mm',
                 boxSizing: 'border-box'
               }}
               className={`bg-white text-slate-900 shadow-2xl rounded-sm ${getPaddingClass()} ${getFontSizeClass()} ${getLineHeightClass()}`}
@@ -630,27 +668,42 @@ export function ResumePreview({ data, onOptimizeToOnePage }: ResumePreviewProps)
       <style jsx global>{`
         @media print {
           @page {
-            size: A4 portrait;
-            margin: 10mm;
+            size: 210mm 297mm;
+            margin: 0;
           }
-          body * {
-            visibility: hidden;
+          html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            max-height: 297mm !important;
+            overflow: hidden !important;
+            background: #ffffff !important;
           }
-          #resume-printable-sheet,
-          #resume-printable-sheet * {
-            visibility: visible;
+          header, nav, footer, .sticky, button, input, select, textarea, [role="dialog"], [role="banner"], div:has(> #resume-printable-sheet) ~ * {
+            display: none !important;
           }
           #resume-printable-sheet {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100% !important;
+            display: block !important;
+            visibility: visible !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            max-height: 297mm !important;
             margin: 0 !important;
-            padding: 8mm !important;
+            padding: 24px !important;
             box-shadow: none !important;
             transform: none !important;
-            page-break-after: avoid;
-            page-break-inside: avoid;
+            overflow: hidden !important;
+            page-break-after: avoid !important;
+            page-break-before: avoid !important;
+            page-break-inside: avoid !important;
+            z-index: 99999999 !important;
+          }
+          #resume-printable-sheet * {
+            visibility: visible !important;
           }
         }
       `}</style>

@@ -14,6 +14,7 @@ import {
   downloadFile
 } from '@/lib/resume-builder/import-export'
 import { getTemplateConfig } from '@/lib/resume-builder/templates'
+import { downloadSinglePageA4Pdf } from '@/lib/resume-builder/pdf-exporter'
 
 interface BuilderHeaderProps {
   data: ResumeBuilderData
@@ -81,9 +82,15 @@ export function BuilderHeader({
     setIsExportOpen(false)
   }
 
-  const handlePrintPdf = () => {
+  const handlePrintPdf = async () => {
     setIsExportOpen(false)
-    window.print()
+    const sheetEl = document.getElementById('resume-printable-sheet')
+    const candidateName = `${data.personalInfo.firstName || 'Resume'} ${data.personalInfo.lastName || ''}`.trim()
+    if (sheetEl) {
+      await downloadSinglePageA4Pdf(sheetEl, candidateName)
+    } else {
+      window.print()
+    }
   }
 
   const handleCreateNewVersion = () => {

@@ -6,12 +6,14 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
-import { Menu, X } from "lucide-react"
+import { Menu, X, Laptop, Smartphone } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
+import { DeviceCompatibilityModal } from "@/components/device-compatibility-modal"
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -93,16 +95,43 @@ export default function Header() {
               })}
             </ul>
           </nav>
+          <button
+            type="button"
+            onClick={() => setIsDeviceModalOpen(true)}
+            className="relative p-2 rounded-xl text-[#9CAEC9] hover:text-white hover:bg-blue-600/15 transition-all border border-blue-500/20"
+            title="Device & Screen Compatibility (Laptops, Tablets, Phones)"
+          >
+            <div className="relative flex items-center justify-center">
+              <Laptop className="w-4 h-4 text-sky-400" />
+              <Smartphone className="w-2.5 h-2.5 text-blue-300 absolute -bottom-1 -right-1.5 bg-[#0C162B] rounded-full p-0.5 border border-blue-400/40" />
+            </div>
+          </button>
           <ModeToggle />
         </div>
 
-        <div className="md:hidden flex items-center gap-2">
+        <div className="md:hidden flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setIsDeviceModalOpen(true)}
+            className="relative p-1.5 rounded-xl text-[#9CAEC9] hover:text-white hover:bg-blue-600/15 transition-all border border-blue-500/20"
+            title="Device & Screen Compatibility"
+          >
+            <div className="relative flex items-center justify-center">
+              <Laptop className="w-3.5 h-3.5 text-sky-400" />
+              <Smartphone className="w-2.5 h-2.5 text-blue-300 absolute -bottom-1 -right-1 bg-[#0C162B] rounded-full p-0.5 border border-blue-400/40" />
+            </div>
+          </button>
           <ModeToggle />
           <Button variant="ghost" size="icon" className="h-8 w-8 text-[#9CAEC9] hover:text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
         </div>
       </div>
+
+      <DeviceCompatibilityModal
+        isOpen={isDeviceModalOpen}
+        onClose={() => setIsDeviceModalOpen(false)}
+      />
 
       <AnimatePresence>
         {mobileMenuOpen && (

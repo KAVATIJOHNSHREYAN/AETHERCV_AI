@@ -55,14 +55,29 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
   - `Student / Fresher ATS`
 - **ATS Safe Typography & Color Controls**: 11 certified machine-readable fonts (Inter, Calibri, Arial, Helvetica, Lato, Roboto, Source Sans Pro, Open Sans, Georgia, Cambria, Times New Roman) and 10 ATS-safe accent palettes.
 - **Section Order & Custom Visibility**: Drag/reorder section hierarchy and toggle visibility ON/OFF for optional sections (Summary, Projects, Certifications, Achievements, Internships, Research, Languages, Volunteer, References).
-- **Strict One-Page A4 Guarantee**: Live page indicator (`1 / 1` vs `2 / 1`), overflow alerts, and 1-click AI optimizer to automatically eliminate page overflow.
+- **Strict One-Page A4 Guarantee & Direct PDF Download**:
+  - Direct 1-Click single-page A4 `.pdf` file download using client-side vector-scale rasterization (`jsPDF` + `html-to-image`).
+  - Isolated iframe print pipeline that eliminates multi-page spill, browser URL headers, and 7-page print errors.
+  - Live page indicator (`1 / 1` vs `2 / 1`), overflow boundary guides, and 1-click AI optimizer.
   - Auto-generate professional summaries for 10 roles (*Fresher, Software Engineer, AI Engineer, Full Stack, Data Scientist, DevOps, etc.*) across 8 tones.
   - Transform responsibility bullets with *STAR Format*, *Add Metrics*, *Improve Action Verbs*, and *Technical Polish*.
   - Enhance project descriptions, suggest system architecture, and generate impact metrics.
 - **Multi-Source Import & Multi-Format Export**:
   - One-click import from AI Resume Analyzer (`localStorage`), document file upload (PDF/DOCX/TXT/OCR), GitHub public portfolio repos, and JSON backups.
-  - Export as print-ready A4 PDF (`@media print`), Word document (`.doc`), Markdown (`.md`), ATS Plain Text (`.txt`), and JSON.
+  - Export as strictly 1-page A4 PDF (`.pdf`), Word document (`.doc`), Markdown (`.md`), ATS Plain Text (`.txt`), and JSON.
 - **Version Manager & Comparison**: Auto-save to browser storage, create custom versions (*e.g. Google SWE, Amazon SDE, Placement*), and compare versions side-by-side.
+
+---
+
+### 2. 📱 Cross-Platform Device Compatibility Suite (All Modules)
+
+- **Mixed Device Icon**: Universal Monitor + Smartphone launcher in the global header for immediate screen testing.
+- **Live Viewport Detector**: Real-time measurement of screen dimensions (Width × Height), Device Pixel Ratio (DPR), and orientation.
+- **Tested Screen Matrix**:
+  - **Laptops & Desktops**: 16" MacBook Pro (2560×1600), 15.6" Full HD (1920×1080), 14" Business (1600×900), 13.3" Ultrabook (1366×768), 13" MacBook Air (1440×900), 2K External Monitors (2560×1440).
+  - **Tablets & iPads**: iPad Pro 12.9" (1024×1366), iPad Air 11" (820×1180), iPad 10th Gen (810×1080), Galaxy Tab S9 (800×1280), Surface Pro 9 (912×1368), iPad Mini (744×1133).
+  - **Smartphones**: iPhone 16/15 Pro Max (430×932), iPhone 16/15/14 (390×844), Samsung S24 Ultra (412×915), Pixel 9/8 (412×892), OnePlus/Xiaomi (360×800), iPhone SE (375×667).
+- **All-Module Responsive Architecture**: Complete touch and desktop optimization across Home, Simple, LTPS, Screenshot OCR, ERP Login, Dashboard, Resume Analyzer, Cover Letter, and Resume Builder.
 
 ---
 
