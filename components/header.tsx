@@ -38,6 +38,7 @@ export default function Header() {
     { name: 'AI Resume Analyzer', href: '/resume-analyzer' },
     { name: 'AI Cover Letter', href: '/cover-letter' },
     { name: 'AI Resume Builder', href: '/resume-builder' },
+    { name: 'LinkedIn Optimizer', href: '/linkedin' },
   ]
 
   return (

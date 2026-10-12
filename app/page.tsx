@@ -279,17 +279,22 @@ export default function Home() {
                 <span>Enterprise AI Career Suite</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-poppins text-white">
-                AI Resume Builder, Analyzer &amp; Cover Letter Suite
+                AI Resume Builder, Analyzer, Cover Letter &amp; LinkedIn Suite
               </h2>
               <p className="text-[#9CAEC9] font-outfit text-sm sm:text-base max-w-2xl">
-                Create recruiter-ready resumes from scratch with 13 templates, real-time 100-point ATS scoring, AI STAR rewriters, instant document imports, and customized cover letters.
+                Create recruiter-ready resumes from scratch with 13 templates, real-time 100-point ATS scoring, AI STAR rewriters, instant document imports, and optimize your LinkedIn profile for top recruiter search ranking.
               </p>
             </div>
             <div className="flex items-center gap-3 flex-wrap shrink-0">
-              <Link href="/resume-builder" prefetch={false}>
-                <Button size="lg" className="px-6 shadow-md hover:shadow-lg transition-all gap-2 bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] hover:brightness-110 text-white">
-                  <span>Open Resume Builder</span>
+              <Link href="/linkedin" prefetch={false}>
+                <Button size="lg" className="px-6 shadow-md hover:shadow-lg transition-all gap-2 bg-gradient-to-r from-[#2563EB] to-[#0077B5] hover:brightness-110 text-white font-semibold">
+                  <span>LinkedIn Optimizer</span>
                   <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/resume-builder" prefetch={false}>
+                <Button size="lg" variant="outline" className="px-5 border-blue-500/30 hover:bg-blue-600/15 text-white">
+                  <span>Resume Builder</span>
                 </Button>
               </Link>
               <Link href="/resume-analyzer" prefetch={false}>

@@ -121,7 +121,18 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 ---
 
-### 3. 📊 Academic Attendance Platform & ERP Suite
+### 3. 💼 LinkedIn Profile Optimizer (`/linkedin`)
+
+- **Multi-Method Ingestion**: 1-click sync from AI Resume Builder, paste raw profile text/bio, client-side PDF/DOCX resume upload, or manual starter template.
+- **LinkedIn Recruiter Score Engine (0–100)**: Evaluates profile across 10 category scores (Headline, About, Experience, Projects, Skills, SEO Keywords, Recruiter Appeal, Completeness, Networking Strength, Personal Branding) with All-Star status indicator.
+- **Headline Studio (6 Recruiter Styles)**: Generates high-impact headlines across Professional, Corporate, Startup, FAANG Style, Student/Fresher, and Experienced formats with real-time 220-character limit enforcement.
+- **About Section Generator (6 Tones)**: Crafts storytelling summaries across Professional, Executive, Startup, Corporate, Recruiter-First, and Student styles within LinkedIn's 2,600-character boundary.
+- **Experience STAR Rewriter & Project Matrix**: Converts passive roles into metric-driven Situation-Task-Action-Result bullets with leadership action verbs and structured Problem &rarr; Solution &rarr; Impact projects.
+- **Recruiter Search SEO Scanner**: Target role keyword matching across 10 domains with missing keyword identification and 1-click inclusion.
+- **Live Authentic LinkedIn Preview**: Real-time visual mockup featuring banner, avatar, `#OpenToWork` emerald frame, experience timeline, and 1-click copy buttons for each section.
+- **Multi-Format Exports**: 1-click downloads for PDF specification documents, Markdown (`.md`), and plaintext (`.txt`).
+
+### 4. 📊 Academic Attendance Platform & ERP Suite
 
 - **Simple Attendance Calculator (`/simple`)**: Fast attendance calculation based on conducted vs. attended classes, displaying skippable or required recovery classes.
 - **LTPS Calculator (`/ltps`)**: Weighted academic calculations across Lecture (L), Tutorial (T), Practical (P), and Skilling (S) components.

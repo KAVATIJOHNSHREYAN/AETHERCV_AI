@@ -225,7 +225,54 @@ Supports 5 tailored writing styles:
 
 ---
 
-### MODULE 5: GLOBAL DESIGN SYSTEM & ZERO-RED ARCHITECTURE
+### MODULE 6: LINKEDIN PROFILE OPTIMIZER (`/linkedin`)
+
+#### 1. Multi-Channel Profile Ingestion
+- **1-Click Sync from AI Resume Builder**: Detects local resume draft and populates headline, about, experiences, projects, and skills with a single click.
+- **Paste LinkedIn Profile Text**: Parses bio, about text, past titles, and experiences directly from user pasteboard.
+- **Upload Resume (PDF / DOCX)**: Client-side parsing without data upload, converting bullet points and responsibilities into LinkedIn structure.
+- **Manual Starter Mode**: Pre-populates starter profile for quick editing and personalization.
+
+#### 2. LinkedIn Recruiter Score Engine (0–100)
+- **10 Evaluation Pillars**:
+  1. *Headline Score*: Audits value proposition, title clarity, character length, and industry buzzwords.
+  2. *About Section*: Checks storytelling depth, hook strength, STAR summaries, and contact availability.
+  3. *Experience Optimization*: Measures bullet points, quantifiable metrics, and leadership verbs.
+  4. *Featured Projects*: Inspects Problem $\rightarrow$ Solution $\rightarrow$ Impact structure.
+  5. *Core Skills*: Assesses quantity ($\ge 5$ skills), role relevance, and breadth.
+  6. *Recruiter Search SEO*: Scans targeted keywords for 10 roles (Software Engineer, AI Engineer, Full Stack, Data Scientist, Cloud, Product Manager, Cyber Security, DevOps, etc.).
+  7. *Recruiter Appeal*: Evaluates readability, achievement focus, and absence of generic buzzwords.
+  8. *Profile Completeness*: 10-point checklist (Photo, Banner, Custom URL, Headline, About, Experience, Education, Projects, Skills, OpenToWork).
+  9. *Networking Strength*: Evaluates recommendation readiness and community engagement signals.
+  10. *Personal Branding*: Checks unique differentiator, mission clarity, and domain authority.
+- **All-Star Status Badge**: Awards All-Star status when profile completeness meets or exceeds 80%.
+
+#### 3. Headline Studio (6 Recruiter Styles)
+- Generates 6 distinct styles: *Professional*, *Corporate*, *Startup*, *FAANG Style*, *Student / Fresher*, *Experienced*.
+- Real-time character counter enforcing LinkedIn's 220-character limit.
+- 1-click apply and copy to clipboard.
+
+#### 4. About Section Generator (6 Tones)
+- Produces *Professional Summary*, *Executive Summary*, *Startup Style*, *Corporate Style*, *Recruiter-First Style*, and *Student / Entry-Level*.
+- Live character counter enforcing LinkedIn's 2,600-character limit.
+- 1-click apply and copy to clipboard.
+
+#### 5. Experience STAR Optimizer & Project Matrix
+- Rewrites past roles with Situation, Task, Action, and quantifiable Results using strong leadership action verbs.
+- Enhances projects with Problem, Solution, Technology stack, and Business Impact.
+
+#### 6. Authentic Live LinkedIn Preview
+- Real-time visual replica of LinkedIn desktop profile with custom banner gradient, avatar, emerald `#OpenToWork` photo ring, experience timeline, featured projects grid, endorsed skills cloud, and education cards.
+- Individual 1-click clipboard copy buttons for every profile section.
+
+#### 7. Multi-Format Exports
+- **Print-Ready PDF**: Clean multi-section PDF document export using jsPDF.
+- **Markdown (.md)**: Recruiter-ready Markdown plan for documentation and portfolio repos.
+- **Plain Text (.txt)**: Clean plaintext formatted for fast copying into LinkedIn fields.
+
+---
+
+### MODULE 7: GLOBAL DESIGN SYSTEM & ZERO-RED ARCHITECTURE
 
 - **Unified Color Palette**:
   - Primary Background: `#07101F`
@@ -247,6 +294,7 @@ Supports 5 tailored writing styles:
 
 | Feature Area | Module | Core Capabilities | Primary Deliverables |
 |---|---|---|---|
+| **LinkedIn Profile Optimizer** | `/linkedin` | Recruiter score (0-100), 10 pillars, 6-style headlines, STAR rewriter, live preview | Live authentic preview, PDF, Markdown, TXT, 1-click copy |
 | **AI Resume Builder** | `/resume-builder` | Split-screen editor, 13 templates, AI assistant, version manager | Live A4 preview, PDF, Word, Markdown, TXT, JSON |
 | **Resume Authenticity Validator** | `/resume-analyzer` | Multi-synonym matching, PDF normalization, fallback tolerance | Non-blocking verification & console logs |
 | **ATS Score Engine** | `/resume-analyzer` | 0–100 score, grade classification, 8-pillar audit | Circular neon gauge & category bars |
