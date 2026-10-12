@@ -28,6 +28,7 @@ import {
   WritingTone
 } from '@/lib/resume-builder/ai-assistant'
 import { Button } from '@/components/ui/button'
+import { ProfessionalTitleSelector } from './professional-title-selector'
 
 interface FormEditorProps {
   data: ResumeBuilderData
@@ -430,13 +431,14 @@ export function FormEditor({ data, onChange }: FormEditorProps) {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">Professional Title *</label>
-              <input
-                type="text"
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-semibold text-slate-300">Professional Title *</label>
+                <span className="text-[10px] text-blue-400 font-medium">25 presets + custom</span>
+              </div>
+              <ProfessionalTitleSelector
                 value={data.personalInfo.professionalTitle}
-                onChange={(e) => handlePersonalInfo('professionalTitle', e.target.value)}
-                placeholder="e.g. AI & Full Stack Software Engineer"
-                className="w-full bg-[#07101F] border border-blue-500/20 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-blue-500"
+                onChange={(title) => handlePersonalInfo('professionalTitle', title)}
+                placeholder="Search or pick professional title..."
               />
             </div>
 
