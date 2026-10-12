@@ -431,14 +431,13 @@ export function FormEditor({ data, onChange }: FormEditorProps) {
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="text-xs font-semibold text-slate-300">Professional Title *</label>
-                <span className="text-[10px] text-blue-400 font-medium">25 presets + custom</span>
-              </div>
+              <label className="text-xs font-semibold text-slate-300 block mb-1">
+                Professional Title *
+              </label>
               <ProfessionalTitleSelector
                 value={data.personalInfo.professionalTitle}
                 onChange={(title) => handlePersonalInfo('professionalTitle', title)}
-                placeholder="Search or pick professional title..."
+                placeholder="Select or search 50+ titles, or choose Others to type custom..."
               />
             </div>
 
