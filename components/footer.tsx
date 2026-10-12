@@ -61,7 +61,7 @@ export function Footer() {
               <Globe className="h-5 w-5" />
             </a>
             <a 
-              href="mailto:2400033326cse2@gmail.com" 
+              href="mailto:johnshreyan83@gmail.com" 
               className="text-[#9CAEC9] hover:text-[#4F7DFF] transition-colors p-2 rounded-xl hover:bg-blue-600/15"
               aria-label="Email"
             >
