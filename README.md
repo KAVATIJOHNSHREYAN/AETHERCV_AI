@@ -14,9 +14,10 @@
 
 **AETHERCV AI** is a comprehensive, production-ready career intelligence and academic productivity ecosystem engineered with Next.js 15, TypeScript, and modern UI architectures. The platform integrates three core pillars into a unified enterprise SaaS experience:
 
-1. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching.
-2. **AI Cover Letter Generator** (`/cover-letter`) — Tailored, recruiter-ready cover letter generator based on resume content, job description, company name, target role, and tone selection with `.docx` export and draft history.
-3. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
+1. **AI Resume Builder** (`/resume-builder`) — Full-featured commercial split-screen builder with 13 recruiter templates, live 100-point ATS scoring on every keystroke, AI summary/STAR bullet rewriters, multi-channel import (Analyzed Resume, PDF/DOCX, GitHub portfolio), version manager, and multi-format exports.
+2. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching.
+3. **AI Cover Letter Generator** (`/cover-letter`) — Tailored, recruiter-ready cover letter generator based on resume content, job description, company name, target role, and tone selection with `.docx` export and draft history.
+4. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
 
 ---
 
@@ -32,7 +33,23 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 ## 🚀 Key Modules & Capabilities
 
-### 1. 🤖 AI Resume Analyzer & ATS Score Suite (`/resume-analyzer`)
+### 1. 📄 AI Resume Builder (`/resume-builder`)
+
+- **Interactive Split-Screen Workspace**: Instant live preview rendering alongside a comprehensive 10-step form editor with zero re-rendering delays.
+- **Real-Time Continuous ATS Scoring**: Pinned live audit widget computing a 100-point ATS compliance score on every keystroke with categorized grade badges and AI recommendations.
+- **13 Recruiter-Tested Templates**: Modern ATS, Classic ATS, Harvard, Stanford, Google, Microsoft, Amazon, Minimalist, Elegant, Executive, Academic CV, Sidebar Two-Column, and Modern Professional.
+- **AI Summary & Bullet Rewriter Suite**:
+  - Auto-generate professional summaries for 10 roles (*Fresher, Software Engineer, AI Engineer, Full Stack, Data Scientist, DevOps, etc.*) across 8 tones.
+  - Transform responsibility bullets with *STAR Format*, *Add Metrics*, *Improve Action Verbs*, and *Technical Polish*.
+  - Enhance project descriptions, suggest system architecture, and generate impact metrics.
+- **Multi-Source Import & Multi-Format Export**:
+  - One-click import from AI Resume Analyzer (`localStorage`), document file upload (PDF/DOCX/TXT/OCR), GitHub public portfolio repos, and JSON backups.
+  - Export as print-ready A4 PDF (`@media print`), Word document (`.doc`), Markdown (`.md`), ATS Plain Text (`.txt`), and JSON.
+- **Version Manager & Comparison**: Auto-save to browser storage, create custom versions (*e.g. Google SWE, Amazon SDE, Placement*), and compare versions side-by-side.
+
+---
+
+### 2. 🤖 AI Resume Analyzer & ATS Score Suite (`/resume-analyzer`)
 
 - **Multi-Format Document Ingestion**: Upload native `.pdf`, `.docx`, or `.txt` resumes, or paste plain text directly. Handled in-browser and server-side with zero cloud leakage.
 - **Intelligent Non-Blocking Validation Engine**:

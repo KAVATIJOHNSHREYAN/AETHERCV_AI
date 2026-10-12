@@ -170,7 +170,44 @@ Supports 5 tailored writing styles:
 
 ---
 
-### MODULE 4: GLOBAL DESIGN SYSTEM & ZERO-RED ARCHITECTURE
+### MODULE 4: AI RESUME BUILDER (`/resume-builder`)
+
+#### 1. Split-Screen Interactive Architecture
+- **Dual Panel Workflow**: High-speed Form Editor on the left and Live Resume Preview on the right with instant updates and zero page refresh.
+- **Responsive Workspace**: Seamless adaptation across Desktop, Tablet, and Mobile with quick tab switching between Editor, Preview, and ATS Audit.
+
+#### 2. Comprehensive 10-Step Builder Engine
+1. **Personal Information**: First/Last Name, Professional Title, Email, Phone, Location, LinkedIn, GitHub, Portfolio, Profile Photo.
+2. **Professional Summary**: Manual editor + AI Generator with 10 target roles (*Fresher, Software Engineer, AI Engineer, Data Scientist, Frontend, Backend, Full Stack, Cloud, DevOps, Cyber Security*) and 8 writing tones.
+3. **Work Experience**: Unlimited entries, company, role, dates, location, employment types, responsibilities, and impact points.
+4. **Technical Projects**: Project name, technologies, GitHub link, live demo URL, architecture overview, and metric bullets.
+5. **Education**: Degrees, universities, specializations, CGPA, graduation dates, and coursework.
+6. **Skills & Competencies**: Auto-Categorize into Programming Languages, Frameworks, AI/ML, Databases, Cloud & DevOps, with popular tech tag picker and custom inputs.
+7. **Certifications**: Certificate title, issuing organization, issue date, credential URL.
+8. **Achievements**: Sprint, hackathon, and academic honors with AI Impact Wording suggestions.
+9. **Languages**: Multiple languages with proficiency scales (*Beginner, Intermediate, Professional, Native*).
+10. **Interests**: Personal passions and technical focus areas.
+
+#### 3. Real-Time Continuous ATS Scoring (100-Point Scale)
+- Scores contact completeness, summary strength, action verbs, quantified metrics, education, projects, skills diversity, and readability on every keystroke.
+- Emits real-time suggestions and grade classification (*A+, A, B, C, D, F*).
+
+#### 4. 13 Recruiter-Tested ATS Templates
+- **Template Library**: *Modern ATS, Classic ATS, Harvard, Stanford, Google, Microsoft, Amazon, Minimalist, Elegant, Executive, Academic CV, Sidebar Two-Column, Modern Professional*.
+- **Customization Engine**: Accent color picker, font selector (*Outfit, Inter, Poppins, Roboto, Merriweather, JetBrains Mono*), font sizing, line height, margins, and reorderable sections.
+
+#### 5. Multi-Channel Import & Multi-Format Export
+- **Import Channels**: Direct import from AI Resume Analyzer (`localStorage`), document upload (PDF, DOCX, TXT, OCR images), GitHub portfolio repos, and JSON backups.
+- **Export Options**: Print-Ready A4 PDF (`@media print`), Word document (`.doc`), Markdown (`.md`), ATS Plain Text (`.txt`), and JSON backup.
+
+#### 6. Version Manager & Side-by-Side Comparison
+- Auto-saves changes every few seconds to prevent data loss.
+- Create, duplicate, rename, delete, and restore named versions (*Google Resume, Placement Master, Amazon SDE*).
+- Side-by-side version comparison inspecting score deltas, skills count, and word density.
+
+---
+
+### MODULE 5: GLOBAL DESIGN SYSTEM & ZERO-RED ARCHITECTURE
 
 - **Unified Color Palette**:
   - Primary Background: `#07101F`
@@ -192,6 +229,7 @@ Supports 5 tailored writing styles:
 
 | Feature Area | Module | Core Capabilities | Primary Deliverables |
 |---|---|---|---|
+| **AI Resume Builder** | `/resume-builder` | Split-screen editor, 13 templates, AI assistant, version manager | Live A4 preview, PDF, Word, Markdown, TXT, JSON |
 | **Resume Authenticity Validator** | `/resume-analyzer` | Multi-synonym matching, PDF normalization, fallback tolerance | Non-blocking verification & console logs |
 | **ATS Score Engine** | `/resume-analyzer` | 0–100 score, grade classification, 8-pillar audit | Circular neon gauge & category bars |
 | **STAR Bullet Rewriter** | `/resume-analyzer` | Converts passive bullets to metric-driven STAR format | Before/After comparisons |

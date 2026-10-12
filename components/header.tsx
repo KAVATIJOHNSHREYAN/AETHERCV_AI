@@ -35,6 +35,7 @@ export default function Header() {
     { name: 'ERP Login', href: '/login' },
     { name: 'AI Resume Analyzer', href: '/resume-analyzer' },
     { name: 'AI Cover Letter', href: '/cover-letter' },
+    { name: 'AI Resume Builder', href: '/resume-builder' },
   ]
 
   return (

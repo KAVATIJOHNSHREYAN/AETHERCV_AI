@@ -265,7 +265,7 @@ export default function Home() {
 
         </div>
 
-        {/* Featured AI Resume Analyzer Showcase Banner */}
+        {/* Featured AI Career Suite Showcase Banner */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -276,21 +276,28 @@ export default function Home() {
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-[#4F7DFF]/15 text-[#818cf8] text-xs font-semibold">
                 <Sparkles className="h-3.5 w-3.5" />
-                <span>AI Career Suite</span>
+                <span>Enterprise AI Career Suite</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-poppins text-white">
-                AI Resume Analyzer &amp; ATS Scoring Engine
+                AI Resume Builder, Analyzer &amp; Cover Letter Suite
               </h2>
               <p className="text-[#9CAEC9] font-outfit text-sm sm:text-base max-w-2xl">
-                Audit your resume against a custom 100-point ATS grading scale. Automatically extract 8-cluster tech skills, analyze action verbs, match job descriptions, and generate executive sentence rewrites.
+                Create recruiter-ready resumes from scratch with 13 templates, real-time 100-point ATS scoring, AI STAR rewriters, instant document imports, and customized cover letters.
               </p>
             </div>
-            <Link href="/resume-analyzer" prefetch={false} className="shrink-0">
-              <Button size="lg" className="px-6 shadow-md hover:shadow-lg transition-all gap-2 bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] hover:from-[#5D8CFF] hover:to-[#3B82F6] text-white">
-                <span>Analyze Resume Free</span>
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+            <div className="flex items-center gap-3 flex-wrap shrink-0">
+              <Link href="/resume-builder" prefetch={false}>
+                <Button size="lg" className="px-6 shadow-md hover:shadow-lg transition-all gap-2 bg-gradient-to-r from-[#4D48E6] via-[#2662EB] to-[#1E50DA] hover:brightness-110 text-white">
+                  <span>Open Resume Builder</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/resume-analyzer" prefetch={false}>
+                <Button size="lg" variant="outline" className="px-5 border-blue-500/30 hover:bg-blue-600/15 text-sky-300">
+                  <span>Analyze Resume</span>
+                </Button>
+              </Link>
+            </div>
           </div>
         </motion.div>
       </div>
