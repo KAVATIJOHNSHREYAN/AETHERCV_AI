@@ -437,7 +437,7 @@ export function FormEditor({ data, onChange }: FormEditorProps) {
               <ProfessionalTitleSelector
                 value={data.personalInfo.professionalTitle}
                 onChange={(title) => handlePersonalInfo('professionalTitle', title)}
-                placeholder="Select or search 50+ titles, or choose Others to type custom..."
+                placeholder="Select or search 200+ job roles, or choose Others to type custom..."
               />
             </div>
 

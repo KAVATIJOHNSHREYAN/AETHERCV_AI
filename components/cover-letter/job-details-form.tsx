@@ -8,6 +8,7 @@ import {
   Building2, Briefcase, User, MapPin, Clock, Globe,
   Sparkles, Sliders
 } from 'lucide-react'
+import { UniversalJobRoleSelector } from '@/components/shared/universal-job-role-selector'
 
 interface JobDetailsFormProps {
   jobDetails: JobDetails
@@ -56,12 +57,11 @@ export function JobDetailsForm({ jobDetails, onChange, disabled }: JobDetailsFor
             <Briefcase className="w-3.5 h-3.5 text-[#818cf8]" />
             Job Title / Target Role <span className="text-blue-400">*</span>
           </Label>
-          <Input
+          <UniversalJobRoleSelector
             value={jobDetails.jobTitle}
-            onChange={(e) => updateField('jobTitle', e.target.value)}
-            placeholder="e.g. Senior Full Stack Engineer"
-            disabled={disabled}
-            className="bg-[#08111F] border-blue-500/25 text-white placeholder:text-slate-500 text-xs font-outfit rounded-xl focus:border-[#4D48E6]"
+            onChange={(role) => updateField('jobTitle', role)}
+            placeholder="Select or search 200+ roles, or type custom..."
+            id="cover-letter-job-title"
           />
         </div>
       </div>
