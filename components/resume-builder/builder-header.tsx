@@ -27,6 +27,7 @@ interface BuilderHeaderProps {
   onOpenImport: () => void
   onOpenCompare: () => void
   onOpenCustomize: () => void
+  onOptimizeToOnePage?: () => void
 }
 
 export function BuilderHeader({
@@ -41,7 +42,8 @@ export function BuilderHeader({
   onDeleteVersion,
   onOpenImport,
   onOpenCompare,
-  onOpenCustomize
+  onOpenCustomize,
+  onOptimizeToOnePage
 }: BuilderHeaderProps) {
   const [isExportOpen, setIsExportOpen] = useState(false)
   const [isNewVerModalOpen, setIsNewVerModalOpen] = useState(false)
@@ -203,6 +205,19 @@ export function BuilderHeader({
 
         {/* Right: Actions (Customize, Import, Compare, Export) */}
         <div className="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+          {onOptimizeToOnePage && (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={onOptimizeToOnePage}
+              className="text-xs text-amber-300 border-amber-500/40 hover:bg-amber-600/15 gap-1.5 font-bold"
+              title="Ensure resume fits on 1 page"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+              <span>Optimize to 1 Page</span>
+            </Button>
+          )}
+
           <Button
             size="sm"
             variant="outline"

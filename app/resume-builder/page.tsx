@@ -10,6 +10,7 @@ import { ResumePreview } from '@/components/resume-builder/resume-preview'
 import { CustomizationDrawer } from '@/components/resume-builder/customization-drawer'
 import { ImportModal } from '@/components/resume-builder/import-modal'
 import { ComparisonModal } from '@/components/resume-builder/comparison-modal'
+import { optimizeToOnePage } from '@/lib/resume-builder/one-page-optimizer'
 import { FileText, Eye, Sparkles, X, Palette, ShieldCheck } from 'lucide-react'
 
 export default function ResumeBuilderPage() {
@@ -53,6 +54,7 @@ export default function ResumeBuilderPage() {
         onOpenImport={() => setIsImportOpen(true)}
         onOpenCompare={() => setIsCompareOpen(true)}
         onOpenCustomize={() => setIsCustomizeOpen(true)}
+        onOptimizeToOnePage={() => updateResumeData((prev) => optimizeToOnePage(prev))}
       />
 
       {/* 2. Mobile Responsive Tab Switcher */}
@@ -140,7 +142,10 @@ export default function ResumeBuilderPage() {
             }`}
           >
             <div className="h-[calc(100vh-130px)]">
-              <ResumePreview data={resumeData} />
+              <ResumePreview
+                data={resumeData}
+                onOptimizeToOnePage={() => updateResumeData((prev) => optimizeToOnePage(prev))}
+              />
             </div>
           </div>
         </div>

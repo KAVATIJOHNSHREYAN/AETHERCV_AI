@@ -1,150 +1,155 @@
 import { ResumeBuilderData } from '@/types/resume-builder'
 
+/**
+ * Fictional demo prototype data for ATS Resume Builder.
+ * Contains purely synthetic placeholder information.
+ */
 export const defaultResumeData: ResumeBuilderData = {
   personalInfo: {
-    firstName: 'Kavati John',
-    lastName: 'Shreyan',
-    professionalTitle: 'AI & Full Stack Software Engineer',
-    email: 'johnshreyan83@gmail.com',
-    phone: '+91 93924 93902',
-    location: 'Andhra Pradesh, India',
-    linkedin: 'https://linkedin.com/in/kavati-john-shreyan-956a35366',
-    github: 'https://github.com/KAVATIJOHNSHREYAN',
-    portfolio: 'https://kavatijohnshreyan-github-io.vercel.app',
+    firstName: 'Alex',
+    lastName: 'Johnson',
+    professionalTitle: 'Software Engineer',
+    email: 'alex.johnson@example.com',
+    phone: '+1 (555) 234-5678',
+    location: 'San Francisco, CA',
+    linkedin: 'https://linkedin.com/in/alexjohnson',
+    github: 'https://github.com/alexjohnson',
+    portfolio: 'https://alexjohnson.dev',
     profilePhoto: ''
   },
   professionalSummary:
-    'AI & Full Stack Software Engineer specializing in Python, FastAPI, React, TypeScript, RAG, LLM Applications, and scalable cloud architectures. Experienced in building production-ready multimodal platforms, intelligent document processing pipelines, and high-concurrency microservices with sub-second latency.',
+    'Results-driven Software Engineer with 3+ years of experience designing scalable microservices, RESTful APIs, and distributed data pipelines. Proven expertise in Python, TypeScript, React, and cloud architecture, delivering high-concurrency systems with 99.9% uptime and measurable latency reduction.',
   education: [
     {
-      id: 'edu-1',
-      degree: 'B.Tech in Computer Science and Engineering',
-      university: 'K L University',
-      college: 'Specialization in AI & Computational Intelligence',
-      location: 'Andhra Pradesh, India',
-      cgpa: '7.74',
-      startDate: '2024',
-      endDate: 'Present',
-      current: true,
-      description: 'Core coursework in Data Structures, Algorithms, AI Systems, Cloud Computing, and Database Management.'
+      id: 'edu-demo-1',
+      degree: 'B.S. in Computer Science',
+      university: 'State University of California',
+      college: 'College of Engineering & Computer Science',
+      location: 'San Francisco, CA',
+      cgpa: '3.85 / 4.0',
+      startDate: '2020',
+      endDate: '2024',
+      current: false,
+      description: 'Coursework: Distributed Systems, Database Architecture, Data Structures, Algorithms, Cloud Computing.'
     }
   ],
   experience: [
     {
-      id: 'exp-1',
-      company: 'Siemens',
-      role: 'Data Science Intern',
-      location: 'Remote / Virtual',
-      employmentType: 'internship',
-      startDate: 'Apr 2026',
-      endDate: 'Jun 2026',
-      current: false,
+      id: 'exp-demo-1',
+      company: 'Acme Cloud Systems',
+      role: 'Software Engineer',
+      location: 'San Francisco, CA',
+      employmentType: 'full-time',
+      startDate: 'Jul 2024',
+      endDate: 'Present',
+      current: true,
       responsibilities: [
-        'Processed and cleaned analytical datasets using Python NumPy and Pandas to establish baseline data quality standards.',
-        'Evaluated classification models and precision-recall metrics while automating ETL scripts for downstream model ingestion, reducing prep time by 35%.'
+        'Architected asynchronous message processing pipeline using Python and Redis, reducing queue latency by 42%.',
+        'Engineered 12+ RESTful microservice endpoints with automated OpenAPI schemas, handling 250,000+ daily API requests.',
+        'Spearheaded CI/CD automated test suite optimization, reducing deployment cycle times from 35 minutes to 8 minutes.'
       ],
       achievements: [
-        'Automated end-to-end data pipeline decreasing data processing latency by 40%.'
+        'Recognized with Engineering Excellence Award for zero-downtime database migration across 2M+ customer records.'
       ],
-      technologiesUsed: ['Python', 'Pandas', 'NumPy', 'Scikit-learn', 'ETL', 'Git']
+      technologiesUsed: ['Python', 'FastAPI', 'TypeScript', 'PostgreSQL', 'Docker', 'AWS']
+    },
+    {
+      id: 'exp-demo-2',
+      company: 'TechFlow Labs',
+      role: 'Software Engineering Intern',
+      location: 'San Jose, CA',
+      employmentType: 'internship',
+      startDate: 'Jun 2023',
+      endDate: 'Aug 2023',
+      current: false,
+      responsibilities: [
+        'Built real-time telemetry dashboard using React and TypeScript, accelerating customer issue triage by 30%.',
+        'Optimized SQL queries and database indexes, improving report generation throughput by 25%.'
+      ],
+      achievements: [
+        'Delivered production-ready telemetry analytics component adopted across all enterprise client accounts.'
+      ],
+      technologiesUsed: ['React', 'TypeScript', 'Node.js', 'PostgreSQL', 'Git']
     }
   ],
   projects: [
     {
-      id: 'proj-1',
-      name: 'AetherMind Multi-Modal AI',
-      description: 'Production-grade multimodal AI platform unifying workspace chat, OCR document intelligence, Vision AI, and voice interaction.',
-      technologies: ['Python', 'FastAPI', 'Streamlit', 'Qdrant', 'Supabase', 'Amazon Bedrock'],
-      githubUrl: 'https://github.com/KAVATIJOHNSHREYAN',
-      liveUrl: 'https://aethercv-ai.vercel.app',
-      duration: 'Jan 2026 - Present',
-      role: 'Lead Architect',
+      id: 'proj-demo-1',
+      name: 'Distributed Task Queue Engine',
+      description: 'High-throughput distributed task scheduling framework supporting prioritization and retry backoff.',
+      technologies: ['Python', 'Redis', 'Docker', 'FastAPI'],
+      githubUrl: 'https://github.com/alexjohnson/distributed-task-queue',
+      liveUrl: 'https://task-queue-demo.example.com',
+      duration: '3 Months',
+      role: 'Lead Developer',
       bulletPoints: [
-        'Built an intelligent AI routing pipeline orchestrating multi-LLM execution across Amazon Bedrock, Google Gemini, and OpenAI GPT-4 with dynamic fallback.',
-        'Implemented RAG architecture indexing 10,000+ document embeddings in Qdrant vector memory with sub-second semantic retrieval.'
+        'Engineered distributed task worker system processing 5,000+ tasks/second with sub-50ms execution delay.',
+        'Implemented exponential backoff retry algorithms with dead-letter queue routing, achieving 99.98% delivery rate.'
       ]
     },
     {
-      id: 'proj-2',
-      name: 'KL University Attendance Calculator',
-      description: 'Open-source student attendance tracking application featuring instant percentage calculations, forecasting, and 60 FPS mobile UI.',
-      technologies: ['React', 'Next.js', 'TypeScript', 'Tailwind CSS', 'Vercel Edge'],
-      githubUrl: 'https://github.com/KAVATIJOHNSHREYAN/AETHERCV_AI',
-      liveUrl: 'https://attendance-calculator-sandy.vercel.app',
-      duration: 'Apr 2026 - May 2026',
-      role: 'Creator & Developer',
+      id: 'proj-demo-2',
+      name: 'Enterprise Cloud Metrics Monitor',
+      description: 'Full-stack infrastructure observability platform monitoring server health and resource bottlenecks.',
+      technologies: ['TypeScript', 'Next.js', 'PostgreSQL', 'Tailwind CSS'],
+      githubUrl: 'https://github.com/alexjohnson/cloud-metrics-monitor',
+      liveUrl: 'https://metrics-monitor.example.com',
+      duration: '2 Months',
+      role: 'Full Stack Creator',
       bulletPoints: [
-        'Engineered instant percentage calculator with LTPS breakdown and predictive condonation forecasting for university students.',
-        'Deployed production web application on Vercel edge infrastructure, supporting high-concurrency student query sessions with zero downtime.'
+        'Built responsive metrics dashboard visualizing server CPU, memory, and disk I/O metrics in real time.',
+        'Integrated automated webhook alerts notifying DevOps engineers via Slack when error thresholds exceed 1%.'
       ]
     }
   ],
   skills: [
     {
       category: 'Programming Languages',
-      skills: ['Python', 'TypeScript', 'JavaScript', 'Java', 'SQL', 'HTML5', 'CSS3']
+      skills: ['Python', 'TypeScript', 'JavaScript', 'Java', 'SQL', 'C++']
     },
     {
-      category: 'Artificial Intelligence & ML',
-      skills: ['Multimodal AI', 'LLMs', 'RAG', 'Qdrant Vector DB', 'Amazon Bedrock', 'Vision AI', 'Prompt Engineering']
+      category: 'Frameworks & Libraries',
+      skills: ['React', 'Next.js', 'FastAPI', 'Node.js', 'Express', 'Tailwind CSS']
     },
     {
-      category: 'Web & Backend',
-      skills: ['FastAPI', 'Next.js', 'React', 'Node.js', 'Express.js', 'REST APIs', 'JWT Auth']
+      category: 'Databases & Storage',
+      skills: ['PostgreSQL', 'Redis', 'MongoDB', 'MySQL', 'SQLite']
     },
     {
-      category: 'Databases & Cloud',
-      skills: ['Qdrant', 'Supabase', 'Firebase Firestore', 'MySQL', 'SQLite', 'Microsoft Azure', 'Vercel']
-    },
-    {
-      category: 'Engineering Practices',
-      skills: ['Software Architecture', 'System Design', 'Git', 'CI/CD Pipelines', 'Agile/Scrum', 'Code Review']
+      category: 'Cloud & Developer Tools',
+      skills: ['Docker', 'AWS (EC2, S3, RDS)', 'Git', 'Linux', 'CI/CD Pipelines', 'REST APIs']
     }
   ],
   certifications: [
     {
-      id: 'cert-1',
-      name: 'Microsoft Certified Azure Fundamentals',
-      issuer: 'Microsoft',
-      issueDate: 'June 2026',
-      credentialUrl: ''
-    },
-    {
-      id: 'cert-2',
-      name: 'Data Science Virtual Internship Certificate',
-      issuer: 'Siemens',
-      issueDate: 'June 2026',
-      credentialUrl: ''
+      id: 'cert-demo-1',
+      name: 'AWS Certified Solutions Architect – Associate',
+      issuer: 'Amazon Web Services',
+      issueDate: '2024',
+      credentialUrl: 'https://aws.amazon.com/certification'
     }
   ],
   achievements: [
     {
-      id: 'ach-1',
-      title: 'AWS 18-Hour Hackathon (KL University)',
-      description: 'Engineered a cloud-native prototype during an intensive 18-hour sprint at KL University, evaluated and scored by industry experts.',
-      date: '2026'
-    },
-    {
-      id: 'ach-2',
-      title: 'Smart India Hackathon (SIH 2026)',
-      description: 'Participated in an 18-hour continuous sprint in a 6-member team executing rapid problem solving and REST API integration.',
-      date: '2026'
+      id: 'ach-demo-1',
+      title: 'State Hackathon 1st Place Winner',
+      description: 'Built autonomous disaster-relief logistics optimizer in 24 hours out of 85 participating engineering teams.',
+      date: '2023'
     }
   ],
   languages: [
-    { id: 'lang-1', language: 'English', proficiency: 'Professional' },
-    { id: 'lang-2', language: 'Telugu', proficiency: 'Native' },
-    { id: 'lang-3', language: 'Hindi', proficiency: 'Intermediate' }
+    { id: 'lang-demo-1', language: 'English', proficiency: 'Native' },
+    { id: 'lang-demo-2', language: 'Spanish', proficiency: 'Professional' }
   ],
-  interests: ['Generative AI', 'Cloud Infrastructure', 'Open Source Software', 'Autonomous Agents'],
+  interests: ['Distributed Systems', 'Cloud Native Architecture', 'Open Source Tooling'],
   customization: {
     templateId: 'modern-ats',
-    accentColor: '#2563EB',
-    fontFamily: 'outfit',
-    fontSize: 'md',
-    lineHeight: 'normal',
-    margins: 'normal',
-    showIcons: true,
+    accentColor: '#111827',
+    fontFamily: 'inter',
+    fontSize: 'sm',
+    lineHeight: 'tight',
+    margins: 'compact',
+    showIcons: false,
     showPhoto: false,
     headerStyle: 'left',
     sectionOrder: [
@@ -155,9 +160,7 @@ export const defaultResumeData: ResumeBuilderData = {
       'projects',
       'skills',
       'certifications',
-      'achievements',
-      'languages',
-      'interests'
+      'achievements'
     ]
   }
 }

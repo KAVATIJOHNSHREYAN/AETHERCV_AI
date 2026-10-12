@@ -5,8 +5,8 @@ import { ResumeBuilderData, ResumeVersion } from '@/types/resume-builder'
 import { defaultResumeData } from '@/lib/resume-builder/default-data'
 import { calculateLiveAtsScore } from '@/lib/resume-builder/ats-calculator'
 
-const LOCAL_STORAGE_ACTIVE_KEY = 'aethercv_active_resume_builder_v1'
-const LOCAL_STORAGE_VERSIONS_KEY = 'aethercv_resume_builder_versions_v1'
+const LOCAL_STORAGE_ACTIVE_KEY = 'aethercv_ats_active_resume_v2'
+const LOCAL_STORAGE_VERSIONS_KEY = 'aethercv_ats_resume_versions_v2'
 
 export function useResumeVersions() {
   const [resumeData, setResumeData] = useState<ResumeBuilderData>(defaultResumeData)
