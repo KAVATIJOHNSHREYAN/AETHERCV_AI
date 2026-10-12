@@ -83,10 +83,7 @@ export function optimizeToOnePage(data: ResumeBuilderData): ResumeBuilderData {
     lineHeight: 'tight',
     margins: 'compact',
     showIcons: false,
-    showPhoto: false,
-    headerStyle: 'left',
-    accentColor: '#111827', // Neutral black/dark slate ATS typography
-    fontFamily: cloned.customization.fontFamily === 'merriweather' ? 'merriweather' : 'inter'
+    showPhoto: false
   }
 
   return cloned

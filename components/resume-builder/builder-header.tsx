@@ -13,6 +13,7 @@ import {
   exportToMarkdown,
   downloadFile
 } from '@/lib/resume-builder/import-export'
+import { getTemplateConfig } from '@/lib/resume-builder/templates'
 
 interface BuilderHeaderProps {
   data: ResumeBuilderData
@@ -226,6 +227,9 @@ export function BuilderHeader({
           >
             <Palette className="w-3.5 h-3.5" />
             <span>Templates</span>
+            <span className="hidden xl:inline text-[10px] px-1.5 py-0.5 rounded-md bg-blue-500/20 text-sky-200 font-mono">
+              {getTemplateConfig(data.customization.templateId).name}
+            </span>
           </Button>
 
           <Button

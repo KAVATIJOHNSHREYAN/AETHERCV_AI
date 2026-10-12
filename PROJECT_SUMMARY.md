@@ -192,9 +192,27 @@ Supports 5 tailored writing styles:
 - Scores contact completeness, summary strength, action verbs, quantified metrics, education, projects, skills diversity, and readability on every keystroke.
 - Emits real-time suggestions and grade classification (*A+, A, B, C, D, F*).
 
-#### 4. 13 Recruiter-Tested ATS Templates
-- **Template Library**: *Modern ATS, Classic ATS, Harvard, Stanford, Google, Microsoft, Amazon, Minimalist, Elegant, Executive, Academic CV, Sidebar Two-Column, Modern Professional*.
-- **Customization Engine**: Accent color picker, font selector (*Outfit, Inter, Poppins, Roboto, Merriweather, JetBrains Mono*), font sizing, line height, margins, and reorderable sections.
+#### 4. 15 Recruiter-Tested ATS Templates
+- **Template Library (Gallery Cards with Previews)**:
+  1. *Modern ATS* (Recommended) — Single-column layout with bold headers, subtle horizontal dividers, and crisp hierarchy.
+  2. *Classic Corporate ATS* — Conservative linear format favored by Fortune 500 ATS systems and institutional employers.
+  3. *Harvard Ivy ATS* — Formal academic serif typography with centered credentials, right-aligned dates, and classic Ivy prestige.
+  4. *Stanford Tech ATS* — Streamlined Bay Area tech format emphasizing software stack, technical contributions, and rapid scaling.
+  5. *Google SDE ATS* — Engineered for XYZ metric formula bullets (Accomplished [X] measured by [Y] through doing [Z]).
+  6. *Minimalist Clean ATS* — Pure high-contrast text on white document with generous breathing room and zero parsing interference.
+  7. *Executive Leadership ATS* — Dense leadership format highlighting executive summaries, board impact, P&L ownership, and strategic scale.
+  8. *Product Manager ATS* — Tailored for Product Managers with focus on business metrics, product lifecycles, and user impact.
+  9. *Software Engineer ATS* — Developer-first hierarchy featuring prominent Technical Skills grid followed by enterprise system projects.
+  10. *Data Scientist ATS* — Structures statistical models, deep learning frameworks, analytical benchmarks, and quantitative results.
+  11. *Consulting ATS* — Structured analytical format for McKinsey, BCG, and Bain recruiting emphasizing client ROI and rigor.
+  12. *Creative Professional ATS (ATS Safe)* — Contemporary typography with slate styling for UX designers and creative leads while remaining 100% ATS text-safe.
+  13. *Finance ATS* — Banking and private equity standard with rigorous deal transaction summaries, financial modeling, and valuations.
+  14. *Healthcare ATS* — Clinical layout prioritizing medical licensures, clinical certifications, hospital experience, and patient care.
+  15. *Student / Fresher ATS* — Optimized for university students and entry-level grads with Education, GPA, and Capstone projects upfront.
+- **ATS Safe Typography**: 11 certified machine-readable fonts (Inter, Calibri, Arial, Helvetica, Lato, Roboto, Source Sans Pro, Open Sans, Georgia, Cambria, Times New Roman).
+- **Recruiter Accent Palettes**: 10 ATS-safe accent tones affecting headings and dividers only (Pure ATS Charcoal, Enterprise Blue, Royal Indigo, Navy Professional, Slate Gray, Emerald Professional, Graphite Black, Steel Blue, Deep Violet, Classic Black).
+- **Section Order & Custom Visibility**: Up/down reordering for all 14 standard sections and instant toggle visibility for optional sections.
+- **Strict One-Page A4 Guarantee & AI Auto-Optimizer**: Live page counter (`1 / 1` vs `2 / 1`), overflow boundary guides, and 1-click optimization to compress spacing, summaries, and bullets to fit within A4 dimensions.
 
 #### 5. Multi-Channel Import & Multi-Format Export
 - **Import Channels**: Direct import from AI Resume Analyzer (`localStorage`), document upload (PDF, DOCX, TXT, OCR images), GitHub portfolio repos, and JSON backups.

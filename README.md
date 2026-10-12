@@ -14,7 +14,7 @@
 
 **AETHERCV AI** is a comprehensive, production-ready career intelligence and academic productivity ecosystem engineered with Next.js 15, TypeScript, and modern UI architectures. The platform integrates three core pillars into a unified enterprise SaaS experience:
 
-1. **AI Resume Builder** (`/resume-builder`) — Full-featured commercial split-screen builder with 13 recruiter templates, live 100-point ATS scoring on every keystroke, AI summary/STAR bullet rewriters, multi-channel import (Analyzed Resume, PDF/DOCX, GitHub portfolio), version manager, and multi-format exports.
+1. **AI Resume Builder & ATS Template System** (`/resume-builder`) — Full-featured commercial split-screen builder with 15 recruiter-tested ATS templates, live 100-point ATS scoring on every keystroke, 11 certified ATS fonts, 10 recruiter accent colors, section reordering & visibility toggles, 1-click single-page A4 optimization, AI summary/STAR bullet rewriters, multi-channel import, and multi-format exports.
 2. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching.
 3. **AI Cover Letter Generator** (`/cover-letter`) — Tailored, recruiter-ready cover letter generator based on resume content, job description, company name, target role, and tone selection with `.docx` export and draft history.
 4. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
@@ -37,8 +37,25 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 - **Interactive Split-Screen Workspace**: Instant live preview rendering alongside a comprehensive 10-step form editor with zero re-rendering delays.
 - **Real-Time Continuous ATS Scoring**: Pinned live audit widget computing a 100-point ATS compliance score on every keystroke with categorized grade badges and AI recommendations.
-- **13 Recruiter-Tested Templates**: Modern ATS, Classic ATS, Harvard, Stanford, Google, Microsoft, Amazon, Minimalist, Elegant, Executive, Academic CV, Sidebar Two-Column, and Modern Professional.
-- **AI Summary & Bullet Rewriter Suite**:
+- **15 Recruiter-Tested ATS Templates**:
+  - `Modern ATS` (Recommended)
+  - `Classic Corporate ATS`
+  - `Harvard Ivy ATS`
+  - `Stanford Tech ATS`
+  - `Google SDE ATS`
+  - `Minimalist Clean ATS`
+  - `Executive Leadership ATS`
+  - `Product Manager ATS`
+  - `Software Engineer ATS`
+  - `Data Scientist ATS`
+  - `Consulting ATS`
+  - `Creative Professional ATS` (ATS Safe)
+  - `Finance ATS`
+  - `Healthcare ATS`
+  - `Student / Fresher ATS`
+- **ATS Safe Typography & Color Controls**: 11 certified machine-readable fonts (Inter, Calibri, Arial, Helvetica, Lato, Roboto, Source Sans Pro, Open Sans, Georgia, Cambria, Times New Roman) and 10 ATS-safe accent palettes.
+- **Section Order & Custom Visibility**: Drag/reorder section hierarchy and toggle visibility ON/OFF for optional sections (Summary, Projects, Certifications, Achievements, Internships, Research, Languages, Volunteer, References).
+- **Strict One-Page A4 Guarantee**: Live page indicator (`1 / 1` vs `2 / 1`), overflow alerts, and 1-click AI optimizer to automatically eliminate page overflow.
   - Auto-generate professional summaries for 10 roles (*Fresher, Software Engineer, AI Engineer, Full Stack, Data Scientist, DevOps, etc.*) across 8 tones.
   - Transform responsibility bullets with *STAR Format*, *Add Metrics*, *Improve Action Verbs*, and *Technical Polish*.
   - Enhance project descriptions, suggest system architecture, and generate impact metrics.

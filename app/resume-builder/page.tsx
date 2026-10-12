@@ -153,21 +153,21 @@ export default function ResumeBuilderPage() {
 
       {/* 4. Customization Drawer Modal */}
       {isCustomizeOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-xl rounded-3xl bg-[#0C162B] border border-blue-500/25 p-6 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-2xl rounded-3xl bg-[#0C162B] border border-blue-500/25 p-5 sm:p-6 shadow-2xl space-y-5 max-h-[92vh] overflow-y-auto">
             <div className="flex items-center justify-between border-b border-blue-500/15 pb-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-xl bg-blue-500/15 border border-blue-500/30 text-[#818cf8] flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-[#818cf8] flex items-center justify-center">
                   <Palette className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold font-poppins text-white">Templates &amp; Customization</h3>
-                  <p className="text-xs text-slate-400">13 recruiter-tested ATS designs, fonts, and accents</p>
+                  <h3 className="text-base font-bold font-poppins text-white">ATS Template System</h3>
+                  <p className="text-xs text-slate-400">15 recruiter-tested ATS templates, certified fonts &amp; layout controls</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsCustomizeOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+                className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -175,6 +175,7 @@ export default function ResumeBuilderPage() {
 
             <CustomizationDrawer
               customization={resumeData.customization}
+              onOptimizeToOnePage={() => updateResumeData((prev) => optimizeToOnePage(prev))}
               onChange={(updated) =>
                 updateResumeData((prev) => ({
                   ...prev,

@@ -3,21 +3,46 @@ export type EmploymentType = 'full-time' | 'part-time' | 'internship' | 'contrac
 export type LanguageProficiency = 'Beginner' | 'Intermediate' | 'Professional' | 'Native'
 
 export type TemplateId =
-  | 'classic-ats'
   | 'modern-ats'
+  | 'classic-ats'
   | 'harvard'
   | 'stanford'
   | 'google'
+  | 'minimal'
+  | 'executive'
+  | 'product-manager'
+  | 'software-engineer'
+  | 'data-scientist'
+  | 'consulting'
+  | 'creative'
+  | 'finance'
+  | 'healthcare'
+  | 'student-fresher'
+  // Backward compatibility legacy IDs
   | 'microsoft'
   | 'amazon'
-  | 'minimal'
   | 'elegant'
-  | 'executive'
   | 'academic-cv'
   | 'sidebar'
   | 'modern-professional'
 
-export type FontFamily = 'inter' | 'outfit' | 'poppins' | 'roboto' | 'merriweather' | 'jetbrains'
+export type FontFamily =
+  | 'inter'
+  | 'calibri'
+  | 'arial'
+  | 'helvetica'
+  | 'lato'
+  | 'roboto'
+  | 'source-sans'
+  | 'open-sans'
+  | 'georgia'
+  | 'cambria'
+  | 'times-new-roman'
+  // Backward compatibility legacy fonts
+  | 'outfit'
+  | 'poppins'
+  | 'merriweather'
+  | 'jetbrains'
 
 export type FontSize = 'sm' | 'md' | 'lg'
 
@@ -30,13 +55,18 @@ export type HeaderStyle = 'centered' | 'left' | 'banner' | 'minimal'
 export type SectionKey =
   | 'personal'
   | 'summary'
-  | 'experience'
-  | 'education'
-  | 'projects'
   | 'skills'
+  | 'experience'
+  | 'projects'
+  | 'education'
   | 'certifications'
   | 'achievements'
+  | 'internships'
+  | 'research'
+  | 'publications'
   | 'languages'
+  | 'volunteer'
+  | 'references'
   | 'interests'
 
 export interface PersonalInfo {
@@ -128,6 +158,7 @@ export interface CustomizationSettings {
   showPhoto: boolean
   headerStyle: HeaderStyle
   sectionOrder: SectionKey[]
+  hiddenSections?: SectionKey[]
 }
 
 export interface ResumeBuilderData {
@@ -141,6 +172,11 @@ export interface ResumeBuilderData {
   achievements: AchievementEntry[]
   languages: LanguageEntry[]
   interests: string[]
+  internships?: ExperienceEntry[]
+  research?: AchievementEntry[]
+  publications?: AchievementEntry[]
+  volunteer?: AchievementEntry[]
+  references?: string[]
   customization: CustomizationSettings
 }
 
