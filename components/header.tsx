@@ -1,19 +1,35 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
-import { Menu, X, Laptop, Smartphone } from "lucide-react"
+import { Menu, X, Laptop, Smartphone, ChevronDown, Calculator, FileText, SearchCheck, Mail, Linkedin, Github, LogIn, Camera, Sparkles, UserCheck } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { DeviceCompatibilityModal } from "@/components/device-compatibility-modal"
+
+interface NavSubItem {
+  name: string
+  href: string
+  badge?: string
+  icon?: any
+}
+
+interface NavGroupItem {
+  name: string
+  href?: string
+  subItems?: NavSubItem[]
+}
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isDeviceModalOpen, setIsDeviceModalOpen] = useState(false)
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [mobileExpandedGroup, setMobileExpandedGroup] = useState<string | null>(null)
+  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const pathname = usePathname()
 
   useEffect(() => {
@@ -29,18 +45,55 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const navigationItems = [
+  // Auto-expand active group on mobile
+  useEffect(() => {
+    navigationGroups.forEach((group) => {
+      if (group.subItems?.some((sub) => sub.href === pathname)) {
+        setMobileExpandedGroup(group.name)
+      }
+    })
+  }, [pathname])
+
+  const navigationGroups: NavGroupItem[] = [
     { name: 'Home', href: '/' },
-    { name: 'Simple Calculator', href: '/simple' },
-    { name: 'LTPS Calculator', href: '/ltps' },
-    { name: 'Screenshot Calculator', href: '/screenshot' },
-    { name: 'ERP Login', href: '/login' },
-    { name: 'AI Resume Analyzer', href: '/resume-analyzer' },
-    { name: 'AI Cover Letter', href: '/cover-letter' },
-    { name: 'AI Resume Builder', href: '/resume-builder' },
-    { name: 'LinkedIn Optimizer', href: '/linkedin' },
-    { name: 'GitHub Optimizer', href: '/github' },
+    {
+      name: 'LTPS Calculator',
+      subItems: [
+        { name: 'LTPS Calculator', href: '/ltps', icon: Calculator, badge: 'Weighted' },
+        { name: 'Simple Calculator', href: '/simple', icon: Calculator },
+        { name: 'Screenshot Calculator', href: '/screenshot', icon: Camera, badge: 'OCR' },
+        { name: 'ERP Login', href: '/login', icon: LogIn, badge: 'Live ERP' },
+      ],
+    },
+    {
+      name: 'AI Resume Suite',
+      subItems: [
+        { name: 'AI Resume Builder', href: '/resume-builder', icon: FileText, badge: '15 Templates' },
+        { name: 'AI Resume Analyzer', href: '/resume-analyzer', icon: SearchCheck, badge: '100-Pt ATS' },
+        { name: 'AI Cover Letter', href: '/cover-letter', icon: Mail },
+      ],
+    },
+    {
+      name: 'Profile Optimizers',
+      subItems: [
+        { name: 'LinkedIn Optimizer', href: '/linkedin', icon: Linkedin, badge: 'Recruiter SEO' },
+        { name: 'GitHub Optimizer', href: '/github', icon: Github, badge: 'Engineering' },
+      ],
+    },
   ]
+
+  const handleMouseEnter = (name: string) => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current)
+    }
+    setActiveDropdown(name)
+  }
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setActiveDropdown(null)
+    }, 160)
+  }
 
   return (
     <header
@@ -69,34 +122,121 @@ export default function Header() {
           </Link>
         </motion.div>
 
-        <div className="hidden md:flex items-center gap-3 lg:gap-5">
+        {/* Desktop Navigation with Dropdown Groups */}
+        <div className="hidden md:flex items-center gap-2 lg:gap-3">
           <nav>
-            <ul className="flex items-center gap-2 lg:gap-4">
-              {navigationItems.map((item, index) => {
-                const isActive = pathname === item.href
+            <ul className="flex items-center gap-1.5 lg:gap-2">
+              {navigationGroups.map((group, index) => {
+                if (group.href) {
+                  const isActive = pathname === group.href
+                  return (
+                    <motion.li
+                      key={group.name}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <Link
+                        href={group.href}
+                        prefetch={false}
+                        className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-all relative font-outfit ${
+                          isActive
+                            ? "bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.35)]"
+                            : "text-[#9CAEC9] hover:text-white hover:bg-blue-600/15"
+                        }`}
+                      >
+                        {group.name}
+                      </Link>
+                    </motion.li>
+                  )
+                }
+
+                const isGroupActive = group.subItems?.some((sub) => sub.href === pathname)
+                const isOpen = activeDropdown === group.name
+
                 return (
                   <motion.li
-                    key={item.name}
+                    key={group.name}
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="relative"
+                    onMouseEnter={() => handleMouseEnter(group.name)}
+                    onMouseLeave={handleMouseLeave}
                   >
-                    <Link
-                      href={item.href}
-                      prefetch={false}
-                      className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-all relative font-outfit ${
-                        isActive
+                    <button
+                      type="button"
+                      onClick={() => setActiveDropdown(isOpen ? null : group.name)}
+                      className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-all relative font-outfit flex items-center gap-1.5 ${
+                        isGroupActive
                           ? "bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] text-white shadow-[0_0_15px_rgba(59,130,246,0.35)]"
+                          : isOpen
+                          ? "text-white bg-blue-600/20"
                           : "text-[#9CAEC9] hover:text-white hover:bg-blue-600/15"
                       }`}
                     >
-                      {item.name}
-                    </Link>
+                      <span>{group.name}</span>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          isOpen ? "rotate-180 text-white" : "text-[#9CAEC9]"
+                        }`}
+                      />
+                    </button>
+
+                    <AnimatePresence>
+                      {isOpen && group.subItems && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 4, scale: 0.98 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute top-full left-0 mt-1.5 w-56 rounded-2xl bg-[#0C162B]/95 backdrop-blur-xl border border-blue-500/25 p-1.5 shadow-[0_12px_35px_rgba(0,0,0,0.55)] z-50"
+                        >
+                          <ul className="flex flex-col gap-1">
+                            {group.subItems.map((sub) => {
+                              const isSubActive = pathname === sub.href
+                              const IconComponent = sub.icon
+                              return (
+                                <li key={sub.name}>
+                                  <Link
+                                    href={sub.href}
+                                    prefetch={false}
+                                    onClick={() => setActiveDropdown(null)}
+                                    className={`px-2.5 py-2 rounded-xl text-xs font-semibold font-outfit transition-all flex items-center justify-between group ${
+                                      isSubActive
+                                        ? "bg-blue-600/25 text-white border border-blue-500/35 shadow-sm"
+                                        : "text-[#9CAEC9] hover:text-white hover:bg-blue-600/15"
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      {IconComponent && (
+                                        <IconComponent
+                                          className={`w-3.5 h-3.5 ${
+                                            isSubActive ? "text-sky-400" : "text-[#818cf8] group-hover:text-sky-400"
+                                          }`}
+                                        />
+                                      )}
+                                      <span>{sub.name}</span>
+                                    </div>
+                                    {sub.badge && (
+                                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-500/15 text-sky-300 font-mono border border-blue-500/25">
+                                        {sub.badge}
+                                      </span>
+                                    )}
+                                  </Link>
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.li>
                 )
               })}
             </ul>
           </nav>
+
           <button
             type="button"
             onClick={() => setIsDeviceModalOpen(true)}
@@ -111,6 +251,7 @@ export default function Header() {
           <ModeToggle />
         </div>
 
+        {/* Mobile Action Controls */}
         <div className="md:hidden flex items-center gap-1.5">
           <button
             type="button"
@@ -135,6 +276,7 @@ export default function Header() {
         onClose={() => setIsDeviceModalOpen(false)}
       />
 
+      {/* Mobile Menu with Expandable Sub-Groups */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -142,26 +284,92 @@ export default function Header() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-[#0C162B]/95 backdrop-blur-xl border-b border-blue-500/20"
+            className="md:hidden bg-[#0C162B]/95 backdrop-blur-xl border-b border-blue-500/20 max-h-[80vh] overflow-y-auto"
           >
             <nav className="container mx-auto px-4 py-3">
               <ul className="flex flex-col gap-2">
-                {navigationItems.map((item) => {
-                  const isActive = pathname === item.href
+                {navigationGroups.map((group) => {
+                  if (group.href) {
+                    const isActive = pathname === group.href
+                    return (
+                      <li key={group.name}>
+                        <Link
+                          href={group.href}
+                          prefetch={false}
+                          className={`text-xs font-semibold px-3 py-2 rounded-xl transition-all block font-outfit ${
+                            isActive
+                              ? "bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] text-white shadow-sm"
+                              : "text-[#9CAEC9] hover:text-white hover:bg-blue-600/15"
+                          }`}
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {group.name}
+                        </Link>
+                      </li>
+                    )
+                  }
+
+                  const isGroupActive = group.subItems?.some((sub) => sub.href === pathname)
+                  const isExpanded = mobileExpandedGroup === group.name
+
                   return (
-                    <li key={item.name}>
-                      <Link
-                        href={item.href}
-                        prefetch={false}
-                        className={`text-xs font-semibold px-3 py-2 rounded-xl transition-all block font-outfit ${
-                          isActive
-                            ? "bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] text-white shadow-sm"
-                            : "text-[#9CAEC9] hover:text-white hover:bg-blue-600/15"
+                    <li key={group.name} className="rounded-xl border border-blue-500/15 bg-[#111D34]/40 overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => setMobileExpandedGroup(isExpanded ? null : group.name)}
+                        className={`w-full text-xs font-semibold px-3 py-2.5 transition-all flex items-center justify-between font-outfit ${
+                          isGroupActive
+                            ? "text-sky-300 bg-blue-500/10 font-bold"
+                            : "text-white hover:bg-blue-600/10"
                         }`}
-                        onClick={() => setMobileMenuOpen(false)}
                       >
-                        {item.name}
-                      </Link>
+                        <div className="flex items-center gap-2">
+                          <span>{group.name}</span>
+                          {isGroupActive && (
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+                          )}
+                        </div>
+                        <ChevronDown
+                          className={`w-4 h-4 text-[#9CAEC9] transition-transform duration-200 ${
+                            isExpanded ? "rotate-180 text-sky-400" : ""
+                          }`}
+                        />
+                      </button>
+
+                      {isExpanded && group.subItems && (
+                        <div className="px-2 pb-2 pt-1 border-t border-blue-500/10 bg-[#0C162B]/60">
+                          <ul className="flex flex-col gap-1">
+                            {group.subItems.map((sub) => {
+                              const isSubActive = pathname === sub.href
+                              const IconComponent = sub.icon
+                              return (
+                                <li key={sub.name}>
+                                  <Link
+                                    href={sub.href}
+                                    prefetch={false}
+                                    className={`text-xs font-medium px-3 py-2 rounded-lg transition-all flex items-center justify-between font-outfit ${
+                                      isSubActive
+                                        ? "bg-gradient-to-r from-[#4F7DFF] to-[#2563EB] text-white shadow-sm"
+                                        : "text-[#9CAEC9] hover:text-white hover:bg-blue-600/15"
+                                    }`}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      {IconComponent && <IconComponent className="w-3.5 h-3.5 text-sky-400" />}
+                                      <span>{sub.name}</span>
+                                    </div>
+                                    {sub.badge && (
+                                      <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-500/20 text-sky-300">
+                                        {sub.badge}
+                                      </span>
+                                    )}
+                                  </Link>
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        </div>
+                      )}
                     </li>
                   )
                 })}
