@@ -279,17 +279,22 @@ export default function Home() {
                 <span>Enterprise AI Career Suite</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-poppins text-white">
-                AI Resume Builder, Analyzer, Cover Letter &amp; LinkedIn Suite
+                AI Resume Builder, Analyzer, LinkedIn &amp; GitHub Suite
               </h2>
               <p className="text-[#9CAEC9] font-outfit text-sm sm:text-base max-w-2xl">
-                Create recruiter-ready resumes from scratch with 13 templates, real-time 100-point ATS scoring, AI STAR rewriters, instant document imports, and optimize your LinkedIn profile for top recruiter search ranking.
+                Build recruiter-ready resumes, optimize LinkedIn &amp; GitHub developer profiles, generate tailored cover letters, and score your FAANG/internship readiness with our unified AI Career Suite.
               </p>
             </div>
             <div className="flex items-center gap-3 flex-wrap shrink-0">
-              <Link href="/linkedin" prefetch={false}>
-                <Button size="lg" className="px-6 shadow-md hover:shadow-lg transition-all gap-2 bg-gradient-to-r from-[#2563EB] to-[#0077B5] hover:brightness-110 text-white font-semibold">
-                  <span>LinkedIn Optimizer</span>
+              <Link href="/github" prefetch={false}>
+                <Button size="lg" className="px-5 shadow-md hover:shadow-lg transition-all gap-2 bg-gradient-to-r from-[#238636] to-[#2EA043] hover:brightness-110 text-white font-semibold">
+                  <span>GitHub Optimizer</span>
                   <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <Link href="/linkedin" prefetch={false}>
+                <Button size="lg" variant="outline" className="px-5 border-blue-500/30 hover:bg-blue-600/15 text-white">
+                  <span>LinkedIn Optimizer</span>
                 </Button>
               </Link>
               <Link href="/resume-builder" prefetch={false}>

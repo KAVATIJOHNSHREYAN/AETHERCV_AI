@@ -272,7 +272,60 @@ Supports 5 tailored writing styles:
 
 ---
 
-### MODULE 7: GLOBAL DESIGN SYSTEM & ZERO-RED ARCHITECTURE
+### MODULE 7: GITHUB PROFILE OPTIMIZER (ENTERPRISE IMPLEMENTATION) (`/github`)
+
+#### 1. Multi-Channel Ingestion & Universal Integration
+- **1-Click AI Resume Builder Import**: Synchronizes developer projects, core skills, bio, and experience directly from `localStorage`.
+- **Client-Side Document Ingestion**: In-browser PDF (Mozilla PDF.js) and DOCX (Mammoth) extraction with zero data leakage.
+- **Direct Bio/Profile Paste**: Quick parser for extracting username, headline, repositories, and technical competencies.
+- **Manual Starter Template**: Preloaded with a recruiter-tested software engineer portfolio (`alexjohnson-dev`).
+
+#### 2. 100-Point GitHub Engineering Score Engine
+Evaluates developer presence across 9 rigorous pillars:
+1. *Profile Completeness*: Avatar, username, bio, company, location, blog/portfolio, and social handles.
+2. *README Quality*: Animated headers, categorized skills, badges, and project highlights.
+3. *Repository Quality*: Star/fork counts, descriptions, topics, and documentation.
+4. *Project Depth*: Architecture explanations, deployment links, features, and screenshots.
+5. *Documentation Health*: Presence of README, LICENSE, and setup guides.
+6. *Commit Quality & Cadence*: Consistent commit cadence, meaningful messages, and active contribution streaks.
+7. *Portfolio & Demo Links*: Live production deployments, interactive demos, and domain links.
+8. *Recruiter Appeal*: Readability, clarity of impact, and strong technical keywords.
+9. *Open Source Readiness*: Contributing guidelines, issue templates, security policy, and releases.
+
+#### 3. 5 Developer Readiness Indicators
+- **Portfolio Readiness**: Assesses portfolio depth, live URLs, and visual screenshots.
+- **Recruiter Appeal**: Benchmarks keyword density, clarity of technical role, and contact ease.
+- **Internship Readiness**: Evaluates fundamentals, student projects, and basic repository health.
+- **Placement Readiness**: Measures campus placement standards, multi-stack fluency, and project metrics.
+- **FAANG Readiness**: Scans for distributed systems, high concurrency, algorithmic complexity, and scalable architectures.
+
+#### 4. 6-Style README Studio
+- `Neon Developer` — Animated typing SVGs, Shields badges, streak stats cards, and social links.
+- `Corporate Engineer` — Systems design architecture, clean markdown formatting, and high-trust enterprise summaries.
+- `FAANG SDE` — Large-scale distributed systems projects, microservices, and concurrency metrics.
+- `Open Source Hero` — Community badges, maintainer guidelines, RFC workflows, and GitHub Sponsors banner.
+- `Student / Fresher` — Computer science fundamentals, capstone repositories, and coursework achievements.
+- `Minimalist Clean` — Distraction-free, scannable markdown with pure clean formatting.
+
+#### 5. Pinned Repository Curation & 9-Point Health Checker
+- Analyzes every repository and scores individual repo health (0–100%).
+- Audits 9 health attributes: README, License, `.gitignore`, Topics, Releases, Issues, Contributing guide, Security policy, Code Quality.
+- Recommends optimal pinned repositories based on star count, forks, and architectural complexity.
+- Suggests topics, badges, screenshots, and live demo links.
+
+#### 6. Authentic Live GitHub Profile Preview
+- Instant desktop replica featuring GitHub's signature dark navigation tabs (*Overview*, *Repositories*, *README.md*).
+- Real-time contribution heatmap simulation with activity metrics and streaks.
+- Profile sidebar with avatar, follower counters, social links, and organizations.
+
+#### 7. Multi-Format Developer Exports
+- **Production `README.md`**: Ready to commit directly to `<username>/<username>` repository.
+- **Plain Text (`.txt`)**: Quick copy format for notes and application portals.
+- **Portfolio Summary**: Structured project and stack brief for recruiters.
+
+---
+
+### MODULE 8: GLOBAL DESIGN SYSTEM & ZERO-RED ARCHITECTURE
 
 - **Unified Color Palette**:
   - Primary Background: `#07101F`
@@ -294,6 +347,7 @@ Supports 5 tailored writing styles:
 
 | Feature Area | Module | Core Capabilities | Primary Deliverables |
 |---|---|---|---|
+| **GitHub Profile Optimizer** | `/github` | 100-pt engineering score, 5 readiness metrics, 6 README styles, repo health | Live GitHub preview, README.md, TXT, Portfolio Summary |
 | **LinkedIn Profile Optimizer** | `/linkedin` | Recruiter score (0-100), 10 pillars, 6-style headlines, STAR rewriter, live preview | Live authentic preview, PDF, Markdown, TXT, 1-click copy |
 | **AI Resume Builder** | `/resume-builder` | Split-screen editor, 13 templates, AI assistant, version manager | Live A4 preview, PDF, Word, Markdown, TXT, JSON |
 | **Resume Authenticity Validator** | `/resume-analyzer` | Multi-synonym matching, PDF normalization, fallback tolerance | Non-blocking verification & console logs |

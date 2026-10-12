@@ -17,7 +17,9 @@
 1. **AI Resume Builder & ATS Template System** (`/resume-builder`) — Full-featured commercial split-screen builder with 15 recruiter-tested ATS templates, live 100-point ATS scoring on every keystroke, 11 certified ATS fonts, 10 recruiter accent colors, section reordering & visibility toggles, 1-click single-page A4 optimization, AI summary/STAR bullet rewriters, multi-channel import, and multi-format exports.
 2. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching.
 3. **AI Cover Letter Generator** (`/cover-letter`) — Tailored, recruiter-ready cover letter generator based on resume content, job description, company name, target role, and tone selection with `.docx` export and draft history.
-4. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
+4. **LinkedIn Profile Optimizer** (`/linkedin`) — Recruiter-focused LinkedIn optimization engine with 10-pillar audit, 6 headline styles, 6 summary tones, SEO scanner, and live desktop preview.
+5. **GitHub Profile Optimizer** (`/github`) — Enterprise developer portfolio & open-source optimizer with 100-point engineering score, 5 readiness indicators, 6 README styles, pinned repository curation, health checks, and live GitHub desktop preview.
+6. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
 
 ---
 
@@ -132,7 +134,32 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 - **Live Authentic LinkedIn Preview**: Real-time visual mockup featuring banner, avatar, `#OpenToWork` emerald frame, experience timeline, and 1-click copy buttons for each section.
 - **Multi-Format Exports**: 1-click downloads for PDF specification documents, Markdown (`.md`), and plaintext (`.txt`).
 
-### 4. 📊 Academic Attendance Platform & ERP Suite
+---
+
+### 4. 🐙 GitHub Profile Optimizer (`/github`)
+
+- **Multi-Channel Ingestion**: 1-click instant import from AI Resume Builder (`localStorage`), resume PDF/DOCX upload via client-side PDF.js/mammoth parsers, paste profile/bio, or manual profile starter.
+- **100-Point GitHub Engineering Score**: Real-time audit across 9 categories (Profile Info, README Quality, Repositories, Projects Depth, Documentation, Commit Quality, Portfolio Links, Recruiter Appeal, Open Source Readiness).
+- **5 Developer Readiness Indicators**: Specialized percentage benchmarks for *Portfolio Score*, *Recruiter Appeal*, *Internship Readiness*, *Placement Readiness*, and *FAANG Readiness*.
+- **Multi-Style README Generator (6 Visual Archetypes)**:
+  - `Neon Developer` — Animated typing headers, dynamic GitHub Stats/Streak cards, Shield badges, quick links.
+  - `Corporate Engineer` — High-trust enterprise architecture, systems design highlights, clean typography.
+  - `FAANG SDE` — Distributed systems metrics, high-concurrency projects, algorithmic problem-solving credentials.
+  - `Open Source Hero` — Maintainer badges, RFC contributions, community guidelines, sponsorship CTA.
+  - `Student / Fresher` — Computer science fundamentals, academic hackathons, capstone projects, learning milestones.
+  - `Minimalist Clean` — Distraction-free, scannable markdown with pure clean formatting.
+- **Pinned Repository Curation & Health Checker**:
+  - Automatically recommends top repositories based on stars, forks, and architectural complexity.
+  - Audits 9 health metrics per repository: README, License, `.gitignore`, Topics, Releases, Issues, Contributing guide, Security policy, Code Quality.
+  - 1-click action items: Add demo URL, attach screenshots, add topics, attach MIT/Apache license.
+- **Categorized Tech Stack Visualizer**: Modern categorized shield badges across Languages, Frameworks, Cloud & DevOps, AI / ML, Databases, and Tools.
+- **AI Improvement Engine**: Automated recommendations for missing trending skills, architecture enhancements, deployment strategies, and high-impact project ideas.
+- **Authentic Live GitHub Profile Preview**: Real-time desktop mockup reproducing GitHub's profile layout: Overview, Repositories tab, standalone README view, contribution heatmap grid, sidebar bio, organizations, achievements, and social links.
+- **Multi-Format Exports**: 1-click downloads for production `README.md`, developer resume text (`.txt`), and formatted Portfolio Summary.
+
+---
+
+### 5. 📊 Academic Attendance Platform & ERP Suite
 
 - **Simple Attendance Calculator (`/simple`)**: Fast attendance calculation based on conducted vs. attended classes, displaying skippable or required recovery classes.
 - **LTPS Calculator (`/ltps`)**: Weighted academic calculations across Lecture (L), Tutorial (T), Practical (P), and Skilling (S) components.
