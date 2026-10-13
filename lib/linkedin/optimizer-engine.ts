@@ -155,8 +155,13 @@ export function calculateLinkedInScore(
 
   // 6. Recruiter Search SEO (0 - 10)
   const combinedText = `${data.headline} ${data.about} ${allBullets.join(' ')} ${(data.skills || []).join(' ')}`.toLowerCase()
-  const detectedRole: TargetRole = targetRole || 'software-engineer'
-  const targetKeywords = ROLE_SEO_KEYWORDS[detectedRole] || ROLE_SEO_KEYWORDS['software-engineer']
+  const detectedRole: string = targetRole || 'software-engineer'
+  const normalizedKey = detectedRole.toLowerCase().replace(/\s+/g, '-')
+  const targetKeywords =
+    ROLE_SEO_KEYWORDS[detectedRole as TargetRole] ||
+    ROLE_SEO_KEYWORDS[normalizedKey as TargetRole] || [
+      detectedRole, 'Python', 'TypeScript', 'Cloud', 'System Architecture', 'Git', 'Agile', 'APIs'
+    ]
   const matchedKeywords = targetKeywords.filter((kw) => combinedText.includes(kw.toLowerCase()))
   const missingKeywords = targetKeywords.filter((kw) => !combinedText.includes(kw.toLowerCase()))
   const seoScore = Math.min(10, Math.round((matchedKeywords.length / targetKeywords.length) * 10) + 1)
@@ -458,7 +463,7 @@ export function generateHeadlines(
     'backend-developer': 'Backend Distributed Systems Engineer'
   }
 
-  const baseTitle = roleTitles[role] || 'Software Engineer'
+  const baseTitle = roleTitles[role as TargetRole] || role || 'Software Engineer'
 
   switch (style) {
     case 'corporate':

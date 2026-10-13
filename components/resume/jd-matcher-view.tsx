@@ -9,6 +9,7 @@ import {
   Briefcase, CheckCircle2, Sparkles, Target,
   Zap, ArrowRight, FileText, Check, PlusCircle, Layers
 } from 'lucide-react'
+import { UniversalJobRoleSelector } from '@/components/shared/universal-job-role-selector'
 
 interface JdMatcherViewProps {
   resume: ParsedResume
@@ -43,6 +44,7 @@ Requirements:
 
 export function JdMatcherView({ resume }: JdMatcherViewProps) {
   const [jdText, setJdText] = useState('')
+  const [selectedRole, setSelectedRole] = useState('')
   const [matchResult, setMatchResult] = useState<JDMatchResult | null>(null)
   const [isMatching, setIsMatching] = useState(false)
 
@@ -63,6 +65,30 @@ export function JdMatcherView({ resume }: JdMatcherViewProps) {
     handleMatch(sampleContent)
   }
 
+  const handleSelectRole = (role: string) => {
+    setSelectedRole(role)
+    if (!role) return
+    const generatedJD = `Position: ${role}
+
+Overview:
+We are looking for a highly qualified ${role} to join our high-performing team. The ideal candidate will design, implement, and maintain scalable systems while collaborating effectively across cross-functional engineering and product stakeholders.
+
+Key Responsibilities:
+- Design, build, and optimize production-grade solutions following ${role} industry standards.
+- Partner with engineering teams, product managers, and QA to ship robust, reliable features.
+- Continuously refine system architectures, optimize runtime performance, and ensure automated test coverage.
+- Champion best engineering practices, participating in code reviews and agile sprint workflows.
+
+Required Qualifications & Skills:
+- Relevant academic degree or proven equivalent industry experience in computer science or related discipline.
+- Hands-on technical proficiency with primary tools, stacks, and problem-solving methodologies relevant to a ${role}.
+- Proven track record with version control (Git), modern CI/CD deployment pipelines, and scalable APIs.
+- Strong analytical mindset, clean coding discipline, and collaborative communication skills.`
+
+    setJdText(generatedJD)
+    handleMatch(generatedJD)
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -73,17 +99,34 @@ export function JdMatcherView({ resume }: JdMatcherViewProps) {
             Job Description Target Matcher &amp; ATS Gap Analysis
           </h3>
           <p className="text-xs text-slate-400 font-outfit">
-            Paste any job posting to analyze skill alignment, match percentage, and missing keywords
+            Paste any job posting or select a categorized role to analyze skill alignment, match percentage, and missing keywords
           </p>
         </div>
       </div>
 
       {/* Input & Sample Buttons */}
       <div className="p-6 rounded-3xl bg-[#0F172A]/85 backdrop-blur-xl border border-blue-500/20 shadow-[0_4px_30px_rgba(37,99,235,0.08)] space-y-4">
+        {/* Role Selector */}
+        <div className="space-y-1.5 pb-2 border-b border-blue-500/15">
+          <label className="text-xs font-semibold text-slate-200 flex items-center justify-between">
+            <span className="flex items-center gap-1.5">
+              <Briefcase className="w-3.5 h-3.5 text-sky-400" />
+              Target Role Template (200+ Categorized Roles &amp; Custom Other):
+            </span>
+            <span className="text-[10px] text-slate-400">Auto-loads tailored JD requirements</span>
+          </label>
+          <UniversalJobRoleSelector
+            value={selectedRole}
+            onChange={handleSelectRole}
+            placeholder="Select or search any role (e.g. AI Engineer, Full Stack, SRE)..."
+            id="jd-matcher-role-selector"
+          />
+        </div>
+
         <div className="flex flex-wrap items-center justify-between gap-2">
           <label className="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
             <FileText className="w-3.5 h-3.5 text-sky-400" />
-            Paste Target Job Description:
+            Target Job Description Content:
           </label>
           <div className="flex items-center gap-2 text-xs">
             <span className="text-slate-400 text-[11px]">Load Sample:</span>

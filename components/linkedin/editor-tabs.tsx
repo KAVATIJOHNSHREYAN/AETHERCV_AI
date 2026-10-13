@@ -16,6 +16,8 @@ import {
   Sparkles, Type, FileText, Briefcase, Award, Check, Copy,
   Plus, Trash2, ArrowRight, UserCheck, ShieldCheck, Zap
 } from 'lucide-react'
+import { UniversalJobRoleSelector } from '@/components/shared/universal-job-role-selector'
+import { getRoleLabel } from '@/lib/linkedin/default-data'
 
 interface EditorTabsProps {
   data: LinkedInProfileData
@@ -195,22 +197,12 @@ export function EditorTabs({ data, onChange, targetRole, onRoleChange }: EditorT
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
                 <label className="text-[11px] font-semibold text-slate-300 block mb-1">Target Role</label>
-                <select
-                  value={headlineRole}
-                  onChange={(e) => setHeadlineRole(e.target.value as TargetRole)}
-                  className="w-full bg-[#07101F] border border-blue-500/20 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
-                >
-                  <option value="software-engineer">Software Engineer</option>
-                  <option value="ai-engineer">AI Engineer & LLMs</option>
-                  <option value="full-stack">Full Stack Developer</option>
-                  <option value="data-scientist">Data Scientist</option>
-                  <option value="cloud-engineer">Cloud Engineer</option>
-                  <option value="product-manager">Product Manager</option>
-                  <option value="devops-engineer">DevOps Engineer</option>
-                  <option value="cyber-security">Cyber Security</option>
-                  <option value="frontend-developer">Frontend Engineer</option>
-                  <option value="backend-developer">Backend Engineer</option>
-                </select>
+                <UniversalJobRoleSelector
+                  value={getRoleLabel(headlineRole)}
+                  onChange={(role) => setHeadlineRole(role as TargetRole)}
+                  placeholder="Select or search role..."
+                  id="headline-target-role"
+                />
               </div>
 
               <div>
@@ -316,19 +308,12 @@ export function EditorTabs({ data, onChange, targetRole, onRoleChange }: EditorT
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <div>
                 <label className="text-[11px] font-semibold text-slate-300 block mb-1">Target Role</label>
-                <select
-                  value={aboutRole}
-                  onChange={(e) => setAboutRole(e.target.value as TargetRole)}
-                  className="w-full bg-[#07101F] border border-blue-500/20 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500 cursor-pointer"
-                >
-                  <option value="software-engineer">Software Engineer</option>
-                  <option value="ai-engineer">AI Engineer & LLMs</option>
-                  <option value="full-stack">Full Stack Developer</option>
-                  <option value="data-scientist">Data Scientist</option>
-                  <option value="cloud-engineer">Cloud Engineer</option>
-                  <option value="product-manager">Product Manager</option>
-                  <option value="devops-engineer">DevOps Engineer</option>
-                </select>
+                <UniversalJobRoleSelector
+                  value={getRoleLabel(aboutRole)}
+                  onChange={(role) => setAboutRole(role as TargetRole)}
+                  placeholder="Select or search role..."
+                  id="about-target-role"
+                />
               </div>
 
               <div>
@@ -402,15 +387,15 @@ export function EditorTabs({ data, onChange, targetRole, onRoleChange }: EditorT
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   <div>
                     <label className="text-[11px] font-semibold text-slate-400 block mb-0.5">Role Title</label>
-                    <input
-                      type="text"
+                    <UniversalJobRoleSelector
                       value={exp.role}
-                      onChange={(e) => {
+                      onChange={(newRole) => {
                         const updated = [...data.experience]
-                        updated[expIdx].role = e.target.value
+                        updated[expIdx].role = newRole
                         onChange({ experience: updated })
                       }}
-                      className="w-full bg-[#07101F] border border-blue-500/20 rounded-xl px-2.5 py-1.5 text-xs text-white focus:outline-none"
+                      placeholder="e.g. Software Engineer, Data Scientist..."
+                      id={`linkedin-exp-role-${expIdx}`}
                     />
                   </div>
                   <div>
@@ -648,6 +633,50 @@ export function EditorTabs({ data, onChange, targetRole, onRoleChange }: EditorT
                   onChange={(e) => onChange({ openToWork: e.target.checked })}
                   className="w-4 h-4 accent-emerald-500 cursor-pointer"
                 />
+              </div>
+
+              {/* Target Roles Manager */}
+              <div className="col-span-1 sm:col-span-2 space-y-2 pt-2 border-t border-blue-500/20">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-semibold text-slate-300 block">
+                    Target Job Roles ({(data.targetRoles || []).length})
+                  </label>
+                  <span className="text-[10px] text-slate-400">Select or enter multiple target roles for recruiters</span>
+                </div>
+                <UniversalJobRoleSelector
+                  value=""
+                  onChange={(newRole) => {
+                    if (newRole && !(data.targetRoles || []).includes(newRole)) {
+                      onChange({ targetRoles: [...(data.targetRoles || []), newRole] })
+                    }
+                  }}
+                  placeholder="Add target role from 200+ library or custom..."
+                  id="linkedin-target-role-adder"
+                />
+                {(data.targetRoles || []).length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {(data.targetRoles || []).map((r, rIdx) => (
+                      <span
+                        key={rIdx}
+                        className="px-2.5 py-1 rounded-xl bg-[#07101F] border border-blue-500/30 text-xs text-sky-200 flex items-center gap-1.5"
+                      >
+                        <span>{r}</span>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            onChange({
+                              targetRoles: (data.targetRoles || []).filter((_, i) => i !== rIdx)
+                            })
+                          }
+                          className="text-slate-400 hover:text-red-400 cursor-pointer font-bold"
+                          title="Remove target role"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

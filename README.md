@@ -15,11 +15,12 @@
 **AETHERCV AI** is a comprehensive, production-ready career intelligence and academic productivity ecosystem engineered with Next.js 15, TypeScript, and modern UI architectures. The platform integrates three core pillars into a unified enterprise SaaS experience:
 
 1. **AI Resume Builder & ATS Template System** (`/resume-builder`) — Full-featured commercial split-screen builder with 15 recruiter-tested ATS templates, live 100-point ATS scoring on every keystroke, 11 certified ATS fonts, 10 recruiter accent colors, section reordering & visibility toggles, 1-click single-page A4 optimization, AI summary/STAR bullet rewriters, multi-channel import, and multi-format exports.
-2. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching.
+2. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching with role-based templates.
 3. **AI Cover Letter Generator** (`/cover-letter`) — Tailored, recruiter-ready cover letter generator based on resume content, job description, company name, target role, and tone selection with `.docx` export and draft history.
-4. **LinkedIn Profile Optimizer** (`/linkedin`) — Recruiter-focused LinkedIn optimization engine with 10-pillar audit, 6 headline styles, 6 summary tones, SEO scanner, and live desktop preview.
+4. **LinkedIn Profile Optimizer** (`/linkedin`) — Recruiter-focused LinkedIn optimization engine with 10-pillar audit, 6 headline styles, 6 summary tones, SEO scanner, multiple target roles management, and live desktop preview.
 5. **GitHub Profile Optimizer** (`/github`) — Enterprise developer portfolio & open-source optimizer with 100-point engineering score, 5 readiness indicators, 6 README styles, pinned repository curation, health checks, and live GitHub desktop preview.
-6. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
+6. **Universal Job Roles & Careers Library** (`lib/job-roles/master-library.ts`) — Platform-wide 200+ roles catalog across 18 distinct categories with fuzzy search, instant category filtering, and "Others" custom role specification with persistent storage.
+7. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
 
 ---
 
@@ -159,7 +160,42 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 ---
 
-### 5. 📊 Academic Attendance Platform & ERP Suite
+### 5. 🎯 Universal Job Roles & Careers Library (Platform-Wide)
+
+- **200+ Standardized Roles Across 18 Industry Categories**:
+  - Full-text fuzzy search bar with instantaneous filtering across role names, categories, and keywords.
+  - Category pill filters with visual icons:
+    * 💻 **Software Engineering** (Full Stack, Backend, Frontend, Systems, Embedded, Compiler, etc.)
+    * 🤖 **AI & Machine Learning** (AI Engineer, LLM Specialist, RAG Architect, Computer Vision, NLP, etc.)
+    * 📊 **Data Science & Analytics** (Data Scientist, BI Analyst, Data Architect, ML Analyst, etc.)
+    * ☁️ **Cloud & DevOps** (Cloud Architect, Site Reliability Engineer, Platform Engineer, DevSecOps, etc.)
+    * 🛡️ **Cyber Security** (Security Analyst, Penetration Tester, Incident Responder, Cryptographer, etc.)
+    * 📱 **Mobile Development** (iOS, Android, React Native, Flutter, Swift, Kotlin, etc.)
+    * 🌐 **Web & Frontend** (Frontend Architect, UI Engineer, WebGL Specialist, React Engineer, etc.)
+    * ⚙️ **Backend & Distributed Systems** (Microservices Architect, High-Concurrency Engineer, API Architect, etc.)
+    * 🎯 **Product & Management** (Product Manager, Technical PM, Scrum Master, Agile Coach, etc.)
+    * 🎨 **UI/UX Design** (Product Designer, UX Researcher, Interaction Designer, Design Systems Lead, etc.)
+    * 🧪 **Quality Assurance & Testing** (SDET, QA Automation, Performance Tester, Security QA, etc.)
+    * ⚡ **Hardware & Embedded Systems** (IoT Engineer, Firmware Developer, Robotics Engineer, FPGA, etc.)
+    * 🗄️ **Database & Data Engineering** (Data Engineer, Database Administrator, ETL Developer, Big Data, etc.)
+    * ⛓️ **Blockchain & Web3** (Smart Contract Auditor, Solidity Developer, Web3 Architect, etc.)
+    * 🎮 **Game Development** (Unity Developer, Unreal Engine Programmer, Gameplay Engineer, etc.)
+    * 🏢 **IT & Enterprise Systems** (SysAdmin, Solutions Architect, Network Engineer, IT Director, etc.)
+    * 💼 **Business & Consulting** (Technology Consultant, Management Analyst, Solution Architect, etc.)
+    * 🚀 **Emerging Technologies** (Quantum Computing Researcher, AR/VR Engineer, Autonomous Systems, etc.)
+- **"Others" Custom Role Specification**:
+  - Seamless inline entry to type any custom, specialized, or emergent title directly.
+  - Automatically persists user-defined custom roles in Local Storage and Recent Roles.
+- **Ubiquitous Integration Across All Platform Modules**:
+  - **AI Resume Builder**: Step 1 Professional Title, Step 2 AI Summary Generator, Step 3 Work Experience Role / Title.
+  - **AI Resume Analyzer**: Target Role Template in Job Description Matcher for automated role-specific JD generation and instant ATS gap analysis.
+  - **AI Cover Letter Generator**: Target Role / Job Title selector.
+  - **LinkedIn Profile Optimizer**: Global target role switcher, AI Recruiter Headline Generator, AI About Section Generator, Work Experience role title, and Open-To-Work multi-role management.
+  - **GitHub Profile Optimizer**: Target Engineering Role for README and profile optimization.
+
+---
+
+### 6. 📊 Academic Attendance Platform & ERP Suite
 
 - **Simple Attendance Calculator (`/simple`)**: Fast attendance calculation based on conducted vs. attended classes, displaying skippable or required recovery classes.
 - **LTPS Calculator (`/ltps`)**: Weighted academic calculations across Lecture (L), Tutorial (T), Practical (P), and Skilling (S) components.
@@ -232,49 +268,38 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 │   ├── layout.tsx                 # Root layout, favicon & metadata
 │   ├── page.tsx                   # Landing page
 │   ├── globals.css                # Enterprise design tokens & global CSS
+│   ├── resume-builder/            # Commercial 15-template ATS Resume Builder
 │   ├── resume-analyzer/           # AI Resume Analyzer & ATS suite
 │   ├── cover-letter/              # AI Cover Letter Generator
+│   ├── linkedin/                  # LinkedIn Profile Optimizer & Recruiter Score
+│   ├── github/                    # GitHub Developer Portfolio Optimizer
 │   ├── simple/                    # Simple attendance calculator
 │   ├── ltps/                      # LTPS component calculator
 │   ├── screenshot/                # Screenshot OCR calculator
 │   ├── login/                     # ERP portal authentication & captcha
 │   ├── dashboard/                 # Student analytics dashboard
-│   └── api/
-│       ├── resume/parse/          # Resume upload & parsing endpoint
-│       ├── cover-letter/generate/ # Cover letter AI generation endpoint
-│       ├── parse-ocr/             # OCR screenshot parser
-│       ├── solve-captcha/         # Automated captcha solver
-│       └── fetch-attendance/      # ERP attendance sync endpoint
+│   └── api/                       # OCR, Captcha, Resume AI, and Attendance APIs
 ├── components/
-│   ├── header.tsx                 # Global navigation header
+│   ├── header.tsx                 # Global navigation header with grouped sub-buttons
 │   ├── footer.tsx                 # Global footer
+│   ├── shared/
+│   │   └── universal-job-role-selector.tsx # Universal 200+ roles categorized selector & custom input
+│   ├── resume-builder/            # Form editor, 15 ATS templates, and export engines
 │   ├── cover-letter/              # Cover Letter Generator sub-components
-│   │   ├── history-modal.tsx      # Past generated letters drawer
-│   │   ├── loading-animation.tsx  # Multi-step generation animation
-│   │   └── word-count-slider.tsx  # Interactive word length slider
+│   ├── linkedin/                  # LinkedIn Headline Studio, About, and STAR editors
+│   ├── github/                    # GitHub README generator and metric cards
 │   ├── resume/                    # Resume Analyzer sub-components
-│   │   ├── ats-circular-score.tsx # Circular SVG score gauge
-│   │   ├── category-breakdown.tsx # 8-category dual-color progress bars
-│   │   ├── section-audit-view.tsx # Section detection & health check
-│   │   ├── skills-radar-view.tsx  # Skill distribution breakdown
-│   │   ├── keywords-actions-view.tsx # Action verbs & keyword audit
-│   │   ├── jd-matcher-view.tsx    # Job Description matching tool
-│   │   ├── ai-feedback-view.tsx   # STAR rewrites & recruiter review
-│   │   ├── ai-rewriter-view.tsx   # Full resume rewriter & markdown export
-│   │   ├── export-report-modal.tsx# Report & analysis download modal
-│   │   └── resume-upload-zone.tsx # File dropzone & text input
 │   └── ui/                        # Accessible Shadcn / Radix primitives
 ├── lib/
 │   ├── theme.ts                   # Unified enterprise design system tokens
+│   ├── job-roles/
+│   │   └── master-library.ts      # 200+ standardized roles, 18 categories, and search index
+│   ├── resume-builder/            # AI assistant, templates, and PDF export logic
+│   ├── linkedin/                  # Recruiter score engine, headline & about generators
+│   ├── github/                    # Developer score engine, markdown templates
 │   ├── resume/                    # Core ATS & Resume analysis engines
-│   │   ├── validator.ts           # Tolerant resume verification engine
-│   │   ├── ats-calculator.ts      # Multi-dimensional ATS scoring logic
-│   │   ├── parser.ts              # Document text normalization & regex
-│   │   ├── keywords-db.ts         # Industry keywords & power verbs database
-│   │   ├── rewriter.ts            # Markdown resume builder
-│   │   └── jd-matcher.ts          # TF-IDF & keyword matcher
 │   └── cover-letter/              # Cover letter generator templates & engine
-├── public/                        # Static assets, logos & favicons
+├── public/                        # Optimized logo emblem, icons & favicons
 ├── PROJECT_SUMMARY.md             # High-level architecture & feature summary
 └── README.md                      # Primary project documentation
 ```

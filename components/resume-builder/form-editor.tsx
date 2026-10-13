@@ -29,6 +29,7 @@ import {
 } from '@/lib/resume-builder/ai-assistant'
 import { Button } from '@/components/ui/button'
 import { ProfessionalTitleSelector } from './professional-title-selector'
+import { UniversalJobRoleSelector } from '@/components/shared/universal-job-role-selector'
 
 interface FormEditorProps {
   data: ResumeBuilderData
@@ -548,19 +549,12 @@ export function FormEditor({ data, onChange }: FormEditorProps) {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <div>
                   <label className="text-[10px] font-semibold text-slate-400 block mb-1">Target Role</label>
-                  <select
+                  <UniversalJobRoleSelector
                     value={summaryRole}
-                    onChange={(e) => setSummaryRole(e.target.value as TargetRole)}
-                    className="w-full bg-[#0C162B] border border-blue-500/20 rounded-lg px-2.5 py-1.5 text-xs text-white"
-                  >
-                    {[
-                      'Fresher', 'Software Engineer', 'AI Engineer', 'Data Scientist',
-                      'Frontend Developer', 'Backend Developer', 'Full Stack Developer',
-                      'Cloud Engineer', 'DevOps Engineer', 'Cyber Security'
-                    ].map((r) => (
-                      <option key={r} value={r}>{r}</option>
-                    ))}
-                  </select>
+                    onChange={(role) => setSummaryRole(role)}
+                    placeholder="Search 200+ roles or type..."
+                    id="summary-role-selector"
+                  />
                 </div>
 
                 <div>
@@ -663,12 +657,11 @@ export function FormEditor({ data, onChange }: FormEditorProps) {
 
                     <div>
                       <label className="text-[11px] font-semibold text-slate-300 block mb-1">Job Role / Title *</label>
-                      <input
-                        type="text"
+                      <UniversalJobRoleSelector
                         value={exp.role}
-                        onChange={(e) => updateExperience(exp.id, { role: e.target.value })}
-                        placeholder="e.g. Data Science Intern"
-                        className="w-full bg-[#0C162B] border border-blue-500/20 rounded-xl px-3 py-1.5 text-white text-xs"
+                        onChange={(role) => updateExperience(exp.id, { role })}
+                        placeholder="Select or search 200+ roles, or type custom..."
+                        id={`exp-role-${exp.id}`}
                       />
                     </div>
                   </div>

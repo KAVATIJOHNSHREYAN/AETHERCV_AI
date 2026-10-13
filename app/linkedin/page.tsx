@@ -20,7 +20,7 @@ import {
   FileDown
 } from 'lucide-react'
 import { LinkedInProfileData, TargetRole } from '@/types/linkedin'
-import { DEFAULT_LINKEDIN_PROFILE, TARGET_ROLES, ROLE_LABELS } from '@/lib/linkedin/default-data'
+import { DEFAULT_LINKEDIN_PROFILE, TARGET_ROLES, ROLE_LABELS, getRoleLabel } from '@/lib/linkedin/default-data'
 import { calculateLinkedInScore } from '@/lib/linkedin/optimizer-engine'
 import {
   exportToLinkedInPlainText,
@@ -32,6 +32,7 @@ import { EditorTabs } from '@/components/linkedin/editor-tabs'
 import { ProfilePreview } from '@/components/linkedin/profile-preview'
 import { ScoreDashboard } from '@/components/linkedin/score-dashboard'
 import { ImportModal } from '@/components/linkedin/import-modal'
+import { UniversalJobRoleSelector } from '@/components/shared/universal-job-role-selector'
 
 export default function LinkedInOptimizerPage() {
   const [profileData, setProfileData] = useState<LinkedInProfileData>(() => {
@@ -155,19 +156,13 @@ export default function LinkedInOptimizerPage() {
           {/* Target Role & Action Buttons */}
           <div className="flex items-center gap-2 flex-wrap">
             {/* Target Role Selector */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#07101F] border border-white/10 text-xs">
-              <span className="text-slate-400 font-medium hidden sm:inline">Role:</span>
-              <select
-                value={targetRole}
-                onChange={(e) => setTargetRole(e.target.value as TargetRole)}
-                className="bg-transparent text-blue-300 font-semibold focus:outline-none cursor-pointer"
-              >
-                {TARGET_ROLES.map((role) => (
-                  <option key={role} value={role} className="bg-[#0B1528] text-white">
-                    {ROLE_LABELS[role] || role}
-                  </option>
-                ))}
-              </select>
+            <div className="min-w-[210px] sm:min-w-[250px]">
+              <UniversalJobRoleSelector
+                value={getRoleLabel(targetRole)}
+                onChange={(role) => setTargetRole(role as TargetRole)}
+                placeholder="Target Role..."
+                id="linkedin-header-role"
+              />
             </div>
 
             {/* Import Button */}

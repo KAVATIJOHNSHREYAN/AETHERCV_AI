@@ -9,6 +9,7 @@ export type TargetRole =
   | 'Cloud Engineer'
   | 'DevOps Engineer'
   | 'Cyber Security'
+  | (string & {})
 
 export type WritingTone =
   | 'Professional'
@@ -131,7 +132,17 @@ export function generateSummaryByRole(
     }
   }
 
-  const roleMap = roleTemplates[role] || roleTemplates['Software Engineer']
+  const roleTemplatesMap = roleTemplates as Record<string, Record<WritingTone, string>>
+  const roleMap = roleTemplatesMap[role] || {
+    Professional: `${role} with demonstrated expertise across ${skillsSnippet}. Proven track record of designing robust solutions, architecting maintainable systems, and delivering high-impact results with excellence.`,
+    Technical: `${role} specializing in scalable architecture, performance optimization, and modular design. Proficient in ${skillsSnippet}, automated testing, and agile workflows.`,
+    Executive: `Strategic ${role} delivering scalable solutions that balance innovation velocity with operational resilience across ${skillsSnippet}.`,
+    Startup: `Product-focused ${role} experienced in rapid prototyping, clean architecture, and shipping customer-ready features with ${skillsSnippet}.`,
+    Shorter: `Results-driven ${role} experienced in building scalable solutions using ${skillsSnippet}.`,
+    Longer: `${role} with end-to-end lifecycle experience from requirements analysis to deployment. Expertise in designing scalable architectures, optimizing execution latencies, and implementing best-in-class industry patterns with ${skillsSnippet}. Dedicated to continuous improvement and high software quality.`,
+    Friendly: `Collaborative ${role} passionate about writing clean code and creating delightful experiences powered by ${skillsSnippet}. Eager to drive positive team impact and mentor peers.`,
+    Corporate: `Enterprise ${role} well-versed in governance standards, architectural compliance, and scalable distributed workflows using ${skillsSnippet}.`
+  }
   return roleMap[tone] || roleMap['Professional']
 }
 

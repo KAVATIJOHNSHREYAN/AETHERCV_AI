@@ -25,6 +25,7 @@ export type TargetRole =
   | 'cyber-security'
   | 'frontend-developer'
   | 'backend-developer'
+  | (string & {})
 
 export interface LinkedInExperience {
   id: string

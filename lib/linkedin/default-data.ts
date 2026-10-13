@@ -158,7 +158,7 @@ export const TARGET_ROLES: TargetRole[] = [
   'backend-developer'
 ]
 
-export const ROLE_LABELS: Record<TargetRole, string> = {
+export const ROLE_LABELS: Record<string, string> = {
   'software-engineer': 'Software Engineer',
   'ai-engineer': 'AI Engineer',
   'full-stack': 'Full Stack Developer',
@@ -169,4 +169,9 @@ export const ROLE_LABELS: Record<TargetRole, string> = {
   'cyber-security': 'Cyber Security Engineer',
   'frontend-developer': 'Frontend Developer',
   'backend-developer': 'Backend Developer'
+}
+
+export function getRoleLabel(role: string): string {
+  if (!role) return 'Software Engineer'
+  return ROLE_LABELS[role] || role
 }

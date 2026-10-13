@@ -2,10 +2,14 @@
 
 ## 📌 Executive Overview
 
-**AETHERCV AI** is an intelligent, high-performance web platform that integrates three powerful enterprise-grade suites into a single unified application:
-1. **AI Resume Analyzer & ATS Score Suite** — An advanced resume evaluation engine that verifies document authenticity, scores ATS compliance across 8 distinct dimensions, provides STAR-method bullet optimizations, and benchmarks resumes against target job descriptions.
-2. **AI Cover Letter Generator** — A tailored generator that synthesizes resume credentials with target job requirements to produce customized, recruiter-ready cover letters with Word (`.docx`) export and draft persistence.
-3. **KLU Attendance Calculator & Academic Intelligence** — A real-time academic tracker designed for university students to calculate attendance percentages, compute weighted LTPS course credits, automate ERP portal login with CAPTCHA solving, extract screenshot tables via OCR, and monitor detention risks.
+**AETHERCV AI** is an intelligent, high-performance career intelligence and academic analytics web platform that integrates seven powerful enterprise-grade suites into a single unified application:
+1. **AI Resume Builder & 15 ATS Templates Suite** (`/resume-builder`) — Real-time split-screen builder with 15 certified recruiter ATS templates, live 100-point audit, 11 fonts, 10 accents, section reordering, 1-click single-page A4 PDF export, and AI rewriters.
+2. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — An advanced resume evaluation engine that verifies document authenticity, scores ATS compliance across 8 distinct dimensions, provides STAR-method bullet optimizations, and benchmarks resumes against target job descriptions.
+3. **AI Cover Letter Generator** (`/cover-letter`) — A tailored generator that synthesizes resume credentials with target job requirements to produce customized, recruiter-ready cover letters with Word (`.docx`) export and draft persistence.
+4. **LinkedIn Profile Optimizer** (`/linkedin`) — Recruiter audit engine with 10 score categories, 6 headline styles, 6 summary tones, SEO scanner, and authentic live desktop preview.
+5. **GitHub Profile Optimizer** (`/github`) — 100-point engineering evaluation with 5 readiness metrics, 6 README generation styles, repo health audits, and live GitHub desktop preview.
+6. **Universal Job Roles & Careers Library** (`lib/job-roles/master-library.ts`) — Omnipresent 200+ roles catalog across 18 industry groups with instant fuzzy search, category filter pills, and "Others" custom typing with persistent storage.
+7. **KLU Attendance Calculator & Academic Intelligence** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — A real-time academic tracker designed for university students to calculate attendance percentages, compute weighted LTPS course credits, automate ERP portal login with CAPTCHA solving, extract screenshot tables via OCR, and monitor detention risks.
 
 ---
 
@@ -347,13 +351,14 @@ Evaluates developer presence across 9 rigorous pillars:
 
 | Feature Area | Module | Core Capabilities | Primary Deliverables |
 |---|---|---|---|
+| **Universal Job Roles Library** | Platform-Wide | 200+ roles, 18 categories, fuzzy search, "Others" custom role persistence | Categorized role selector across all platform modules |
 | **GitHub Profile Optimizer** | `/github` | 100-pt engineering score, 5 readiness metrics, 6 README styles, repo health | Live GitHub preview, README.md, TXT, Portfolio Summary |
 | **LinkedIn Profile Optimizer** | `/linkedin` | Recruiter score (0-100), 10 pillars, 6-style headlines, STAR rewriter, live preview | Live authentic preview, PDF, Markdown, TXT, 1-click copy |
-| **AI Resume Builder** | `/resume-builder` | Split-screen editor, 13 templates, AI assistant, version manager | Live A4 preview, PDF, Word, Markdown, TXT, JSON |
+| **AI Resume Builder** | `/resume-builder` | Split-screen editor, 15 ATS templates, AI assistant, version manager | Live A4 preview, PDF, Word, Markdown, TXT, JSON |
 | **Resume Authenticity Validator** | `/resume-analyzer` | Multi-synonym matching, PDF normalization, fallback tolerance | Non-blocking verification & console logs |
 | **ATS Score Engine** | `/resume-analyzer` | 0–100 score, grade classification, 8-pillar audit | Circular neon gauge & category bars |
 | **STAR Bullet Rewriter** | `/resume-analyzer` | Converts passive bullets to metric-driven STAR format | Before/After comparisons |
-| **JD Matcher** | `/resume-analyzer` | Keyword matching, match % calculation, missing skills | Targeted application advice |
+| **JD Matcher** | `/resume-analyzer` | Keyword matching, role-based JD generation, match % calculation, missing skills | Targeted application advice |
 | **Resume Exports** | `/resume-analyzer` | Full resume rewriter, feedback memo, audit report | `.md` and `.txt` downloads |
 | **AI Cover Letter Generator** | `/cover-letter` | Resume + JD synthesis, 5 tones, word count slider | Live markdown editor, Word `.docx`, `.txt` |
 | **Cover Letter History** | `/cover-letter` | Local draft archive, preview, reload, download, delete | Persistent history drawer |
