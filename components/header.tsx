@@ -113,12 +113,15 @@ export default function Header() {
               <Image
                 src="/aethercv-logo.png"
                 alt="AETHERCV AI Logo"
-                width={44}
-                height={44}
-                className="h-9 sm:h-10 w-auto rounded-xl object-contain shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform"
+                width={42}
+                height={42}
+                className="h-9 w-9 sm:h-10 sm:w-10 rounded-full object-cover shadow-[0_0_18px_rgba(37,99,235,0.55)] border border-blue-400/40 group-hover:scale-105 transition-transform"
                 priority
               />
             </div>
+            <span className="font-poppins font-bold text-sm sm:text-base text-white tracking-tight group-hover:text-sky-300 transition-colors">
+              AETHERCV <span className="text-sky-400">AI</span>
+            </span>
           </Link>
         </motion.div>
 
