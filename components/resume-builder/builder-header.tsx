@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { ResumeBuilderData, ResumeVersion } from '@/types/resume-builder'
 import {
   FileText, ArrowLeft, Download, Upload, GitCompare, Palette,
-  Copy, Edit3, Trash2, Plus, Sparkles, Check, RefreshCw, Printer
+  Copy, Edit3, Trash2, Plus, Sparkles, Check, RefreshCw, Printer,
+  Save, RotateCcw, FilePlus, FolderOpen, AlertCircle
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,7 +21,9 @@ interface BuilderHeaderProps {
   data: ResumeBuilderData
   versions: ResumeVersion[]
   activeVersionId: string
-  saveStatus: 'saved' | 'saving'
+  saveStatus: 'sample' | 'unsaved' | 'saved'
+  isUserEdited?: boolean
+  hasSavedResume?: boolean
   onSelectVersion: (id: string) => void
   onSaveNewVersion: (name: string) => void
   onDuplicateVersion: (id: string) => void
@@ -30,6 +33,10 @@ interface BuilderHeaderProps {
   onOpenCompare: () => void
   onOpenCustomize: () => void
   onOptimizeToOnePage?: () => void
+  onResetToSample?: () => void
+  onNewResume?: () => void
+  onSaveResume?: () => void
+  onLoadSavedResume?: () => void
 }
 
 export function BuilderHeader({
@@ -37,6 +44,8 @@ export function BuilderHeader({
   versions,
   activeVersionId,
   saveStatus,
+  isUserEdited = false,
+  hasSavedResume = false,
   onSelectVersion,
   onSaveNewVersion,
   onDuplicateVersion,
@@ -45,13 +54,51 @@ export function BuilderHeader({
   onOpenImport,
   onOpenCompare,
   onOpenCustomize,
-  onOptimizeToOnePage
+  onOptimizeToOnePage,
+  onResetToSample,
+  onNewResume,
+  onSaveResume,
+  onLoadSavedResume
 }: BuilderHeaderProps) {
   const [isExportOpen, setIsExportOpen] = useState(false)
   const [isNewVerModalOpen, setIsNewVerModalOpen] = useState(false)
   const [newVerName, setNewVerName] = useState('')
   const [isRenaming, setIsRenaming] = useState(false)
   const [renameValue, setRenameValue] = useState('')
+  const [feedback, setFeedback] = useState<string | null>(null)
+
+  const showToast = (msg: string) => {
+    setFeedback(msg)
+    setTimeout(() => setFeedback(null), 3000)
+  }
+
+  const handleManualSave = () => {
+    if (onSaveResume) {
+      onSaveResume()
+      showToast('✓ Resume saved to your browser storage!')
+    }
+  }
+
+  const handleManualLoad = () => {
+    if (onLoadSavedResume) {
+      onLoadSavedResume()
+      showToast('✓ Loaded your saved resume!')
+    }
+  }
+
+  const handleResetSample = () => {
+    if (onResetToSample) {
+      onResetToSample()
+      showToast('✓ Reset to official demo sample resume!')
+    }
+  }
+
+  const handleNewResume = () => {
+    if (onNewResume) {
+      onNewResume()
+      showToast('✓ Fresh resume started (Autosave OFF)!')
+    }
+  }
 
   const activeVersion = versions.find((v) => v.id === activeVersionId) || versions[0]
 
@@ -195,34 +242,88 @@ export function BuilderHeader({
             </button>
           </div>
 
-          {/* Auto-save status */}
-          <div className="hidden lg:flex items-center gap-1.5 text-[11px] text-slate-400">
-            {saveStatus === 'saving' ? (
-              <>
-                <RefreshCw className="w-3 h-3 animate-spin text-sky-400" />
-                <span>Saving...</span>
-              </>
+          {/* State & Autosave Indicator */}
+          <div className="hidden md:flex items-center gap-2">
+            {!isUserEdited ? (
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/10 border border-blue-500/25 text-sky-300 text-[11px] font-semibold">
+                <Sparkles className="w-3 h-3 text-sky-400" />
+                <span>Sample Resume (Autosave OFF)</span>
+              </span>
             ) : (
-              <>
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Saved</span>
-              </>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/25 text-amber-300 text-[11px] font-semibold">
+                <span className={`w-1.5 h-1.5 rounded-full ${saveStatus === 'saved' ? 'bg-emerald-400' : 'bg-amber-400 animate-pulse'}`} />
+                <span>User Session {saveStatus === 'saved' ? '(Saved)' : '(Unsaved)'}</span>
+              </span>
             )}
           </div>
         </div>
 
-        {/* Right: Actions (Customize, Import, Compare, Export) */}
-        <div className="flex items-center gap-2 w-full md:w-auto justify-end flex-wrap">
+        {/* Right: Actions (Save, Load, Reset, Templates, Import, Export) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 w-full md:w-auto justify-end flex-wrap">
+          {/* Explicit Action: Save Resume */}
+          <Button
+            size="sm"
+            onClick={handleManualSave}
+            className="text-xs bg-emerald-600 hover:bg-emerald-500 text-white gap-1.5 font-bold shadow-[0_0_15px_rgba(16,185,129,0.3)] transition-all cursor-pointer h-8 px-2.5 sm:px-3"
+            title="Save current resume to browser storage"
+          >
+            <Save className="w-3.5 h-3.5" />
+            <span>Save Resume</span>
+          </Button>
+
+          {/* Explicit Action: Load Saved Resume */}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleManualLoad}
+            disabled={!hasSavedResume}
+            className={`text-xs gap-1.5 font-semibold transition-all h-8 px-2 sm:px-2.5 ${
+              hasSavedResume
+                ? 'text-sky-300 border-sky-500/40 hover:bg-sky-500/15 cursor-pointer'
+                : 'text-slate-500 border-slate-700 opacity-50 cursor-not-allowed'
+            }`}
+            title={hasSavedResume ? 'Load manually saved resume' : 'No saved resume in browser'}
+          >
+            <FolderOpen className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Load Saved</span>
+          </Button>
+
+          {/* Explicit Action: Reset to Sample */}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleResetSample}
+            className="text-xs text-slate-300 border-blue-500/25 hover:bg-blue-600/15 gap-1.5 font-semibold cursor-pointer h-8 px-2 sm:px-2.5"
+            title="Restore original demo sample resume"
+          >
+            <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
+            <span className="hidden xl:inline">Reset to Sample</span>
+            <span className="xl:hidden hidden sm:inline">Sample</span>
+          </Button>
+
+          {/* Explicit Action: New Resume */}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleNewResume}
+            className="text-xs text-slate-300 border-blue-500/25 hover:bg-blue-600/15 gap-1.5 font-semibold cursor-pointer h-8 px-2 sm:px-2.5"
+            title="Clear all fields and restart with fresh sample"
+          >
+            <FilePlus className="w-3.5 h-3.5 text-slate-400" />
+            <span className="hidden xl:inline">New Resume</span>
+            <span className="xl:hidden hidden sm:inline">New</span>
+          </Button>
+
           {onOptimizeToOnePage && (
             <Button
               size="sm"
               variant="outline"
               onClick={onOptimizeToOnePage}
-              className="text-xs text-amber-300 border-amber-500/40 hover:bg-amber-600/15 gap-1.5 font-bold"
+              className="text-xs text-amber-300 border-amber-500/40 hover:bg-amber-600/15 gap-1.5 font-bold h-8 px-2.5 sm:px-3"
               title="Ensure resume fits on 1 page"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Optimize to 1 Page</span>
+              <span className="hidden sm:inline">1-Page Fit</span>
             </Button>
           )}
 
@@ -230,11 +331,11 @@ export function BuilderHeader({
             size="sm"
             variant="outline"
             onClick={onOpenCustomize}
-            className="text-xs text-sky-300 border-blue-500/30 hover:bg-blue-600/15 gap-1.5"
+            className="text-xs text-sky-300 border-blue-500/30 hover:bg-blue-600/15 gap-1.5 h-8 px-2.5 sm:px-3"
           >
             <Palette className="w-3.5 h-3.5" />
             <span>Templates</span>
-            <span className="hidden xl:inline text-[10px] px-1.5 py-0.5 rounded-md bg-blue-500/20 text-sky-200 font-mono">
+            <span className="hidden 2xl:inline text-[10px] px-1.5 py-0.5 rounded-md bg-blue-500/20 text-sky-200 font-mono">
               {getTemplateConfig(data.customization.templateId).name}
             </span>
           </Button>
@@ -243,7 +344,7 @@ export function BuilderHeader({
             size="sm"
             variant="outline"
             onClick={onOpenImport}
-            className="text-xs text-slate-300 border-blue-500/30 hover:bg-blue-600/15 gap-1.5"
+            className="text-xs text-slate-300 border-blue-500/30 hover:bg-blue-600/15 gap-1.5 h-8 px-2 sm:px-2.5"
           >
             <Upload className="w-3.5 h-3.5" />
             <span>Import</span>
@@ -253,7 +354,7 @@ export function BuilderHeader({
             size="sm"
             variant="outline"
             onClick={onOpenCompare}
-            className="text-xs text-slate-300 border-blue-500/30 hover:bg-blue-600/15 gap-1.5 hidden sm:flex"
+            className="text-xs text-slate-300 border-blue-500/30 hover:bg-blue-600/15 gap-1.5 hidden md:flex h-8 px-2 sm:px-2.5"
           >
             <GitCompare className="w-3.5 h-3.5" />
             <span>Compare</span>
@@ -308,6 +409,16 @@ export function BuilderHeader({
           </div>
         </div>
       </div>
+
+      {/* Toast Notification Banner */}
+      {feedback && (
+        <div className="container mx-auto px-2 pt-2">
+          <div className="flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold shadow-lg animate-in fade-in duration-200">
+            <span>{feedback}</span>
+            <button onClick={() => setFeedback(null)} className="text-emerald-400 hover:text-white text-sm font-bold ml-3 cursor-pointer">×</button>
+          </div>
+        </div>
+      )}
 
       {/* New Version Modal */}
       {isNewVerModalOpen && (

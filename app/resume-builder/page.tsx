@@ -20,11 +20,17 @@ export default function ResumeBuilderPage() {
     versions,
     activeVersionId,
     saveStatus,
+    isUserEdited,
+    hasSavedResume,
     loadVersion,
     saveAsNewVersion,
     duplicateVersion,
     renameVersion,
-    deleteVersion
+    deleteVersion,
+    resetToSample,
+    newResume,
+    saveResume,
+    loadSavedResume
   } = useResumeVersions()
 
   // Mobile View Switcher: 'editor' | 'preview' | 'ats'
@@ -46,6 +52,8 @@ export default function ResumeBuilderPage() {
         versions={versions}
         activeVersionId={activeVersionId}
         saveStatus={saveStatus}
+        isUserEdited={isUserEdited}
+        hasSavedResume={hasSavedResume}
         onSelectVersion={loadVersion}
         onSaveNewVersion={saveAsNewVersion}
         onDuplicateVersion={duplicateVersion}
@@ -55,6 +63,10 @@ export default function ResumeBuilderPage() {
         onOpenCompare={() => setIsCompareOpen(true)}
         onOpenCustomize={() => setIsCustomizeOpen(true)}
         onOptimizeToOnePage={() => updateResumeData((prev) => optimizeToOnePage(prev))}
+        onResetToSample={resetToSample}
+        onNewResume={newResume}
+        onSaveResume={saveResume}
+        onLoadSavedResume={loadSavedResume}
       />
 
       {/* 2. Mobile Responsive Tab Switcher */}
