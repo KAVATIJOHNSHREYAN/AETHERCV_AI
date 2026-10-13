@@ -68,6 +68,7 @@ export default function Header() {
     {
       name: 'AI Resume Suite',
       subItems: [
+        { name: 'AI Interview Prep Suite', href: '/interview-prep', icon: Sparkles, badge: 'Live Mock' },
         { name: 'AI Global Salary Predictor', href: '/global-salary-predictor', icon: DollarSign, badge: 'Live Data' },
         { name: 'AI Skill Gap Analyzer', href: '/skill-gap-analyzer', icon: Target, badge: 'New AI' },
         { name: 'AI Resume Builder', href: '/resume-builder', icon: FileText, badge: '15 Templates' },
