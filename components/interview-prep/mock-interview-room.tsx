@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
   InterviewQuestion,
   InterviewInput,
@@ -31,7 +31,10 @@ import {
   Bot,
   User,
   Zap,
-  Layers
+  Layers,
+  RefreshCw,
+  Award,
+  TrendingUp
 } from 'lucide-react'
 
 interface MockInterviewRoomProps {
@@ -68,13 +71,29 @@ export function MockInterviewRoom({
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
-  // Guidance toggle
-  const [showGuidance, setShowGuidance] = useState(false)
+  // Evaluation & Pipeline Loading State
   const [isEvaluatingCurrent, setIsEvaluatingCurrent] = useState(false)
+  const [evaluatingStageText, setEvaluatingStageText] = useState('')
   const [evaluatedPreview, setEvaluatedPreview] = useState<QuestionEvaluation | null>(null)
+  const [evalError, setEvalError] = useState<string | null>(null)
+  const [showGuidance, setShowGuidance] = useState(false)
 
   const currentQuestion = questions[currentIndex]
   const isLastQuestion = currentIndex === questions.length - 1
+
+  // Live Running Scores Calculation across answered questions
+  const liveScores = useMemo(() => {
+    const answered = questions.filter(q => q.evaluation)
+    if (answered.length === 0) return null
+
+    const count = answered.length
+    const overall = Math.round(answered.reduce((a, b) => a + (b.evaluation?.score || 50), 0) / count)
+    const tech = Math.round(answered.reduce((a, b) => a + (b.evaluation?.technicalAccuracy || 50), 0) / count)
+    const comm = Math.round(answered.reduce((a, b) => a + (b.evaluation?.communicationRating || 50), 0) / count)
+    const conf = Math.round(answered.reduce((a, b) => a + (b.evaluation?.confidenceScore || 50), 0) / count)
+
+    return { overall, tech, comm, conf, count }
+  }, [questions])
 
   // Timer effect
   useEffect(() => {
@@ -84,7 +103,7 @@ export function MockInterviewRoom({
     return () => clearInterval(timer)
   }, [])
 
-  // Sync answer state when switching question
+  // Sync state when switching questions
   useEffect(() => {
     if (currentQuestion) {
       setCurrentAnswer(currentQuestion.userAnswer || (currentQuestion.codeTemplate || ''))
@@ -92,6 +111,7 @@ export function MockInterviewRoom({
       setIsFollowUpMode(Boolean(currentQuestion.activeFollowUpQuestion))
       setActiveFollowUpText(currentQuestion.activeFollowUpQuestion || '')
       setEvaluatedPreview(currentQuestion.evaluation || null)
+      setEvalError(null)
     }
   }, [currentIndex, currentQuestion])
 
@@ -107,7 +127,7 @@ export function MockInterviewRoom({
     }
   }, [])
 
-  // Speech Recognition setup (Voice Mode)
+  // Speech Recognition (Voice Mode)
   const toggleListening = () => {
     if (typeof window === 'undefined') return
 
@@ -115,7 +135,7 @@ export function MockInterviewRoom({
       (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
 
     if (!SpeechRecognition) {
-      setSpeechError('Speech-to-Text is not supported in this browser. Please use Google Chrome or Edge.')
+      setSpeechError('Speech-to-Text is not supported in this browser. Please use Google Chrome or Microsoft Edge.')
       return
     }
 
@@ -143,7 +163,7 @@ export function MockInterviewRoom({
         for (let i = 0; i < event.results.length; i++) {
           transcript += event.results[i][0].transcript + ' '
         }
-        if (isFollowUpMode) {
+        if (isFollowUpMode && activeFollowUpText) {
           setFollowUpAnswer(transcript.trim())
         } else {
           setCurrentAnswer(transcript.trim())
@@ -153,7 +173,7 @@ export function MockInterviewRoom({
       recognition.onerror = (event: any) => {
         console.error('Speech recognition error:', event)
         if (event.error !== 'no-speech') {
-          setSpeechError(`Speech recognition error: ${event.error}`)
+          setSpeechError(`Microphone notice: ${event.error}`)
         }
         setIsListening(false)
       }
@@ -165,7 +185,7 @@ export function MockInterviewRoom({
       recognitionRef.current = recognition
       recognition.start()
     } catch (err: any) {
-      setSpeechError('Could not start microphone.')
+      setSpeechError('Could not start microphone. Please check permissions.')
       setIsListening(false)
     }
   }
@@ -180,15 +200,14 @@ export function MockInterviewRoom({
       return
     }
 
-    const textToSpeak = isFollowUpMode
-      ? activeFollowUpText
-      : `${currentQuestion.interviewerPersona} says: ${currentQuestion.questionText}`
+    const textToSpeak = isFollowUpMode && activeFollowUpText
+      ? `Follow up challenge: ${activeFollowUpText}`
+      : `${currentQuestion.interviewerPersona} asks: ${currentQuestion.questionText}`
 
     const utterance = new SpeechSynthesisUtterance(textToSpeak)
     utterance.rate = 0.95
     utterance.pitch = 1.0
 
-    // Try to pick a natural English voice
     const voices = window.speechSynthesis.getVoices()
     const preferredVoice = voices.find(
       v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('David'))
@@ -202,7 +221,7 @@ export function MockInterviewRoom({
     window.speechSynthesis.speak(utterance)
   }
 
-  // Webcam Toggle
+  // Webcam Mirror Toggle
   const toggleWebcam = async () => {
     if (isWebcamActive) {
       if (streamRef.current) {
@@ -230,72 +249,178 @@ export function MockInterviewRoom({
     }
   }
 
-  // Generate Intelligent Follow-Up
-  const handleTriggerFollowUp = () => {
-    if (!currentAnswer.trim()) {
-      alert('Please provide your initial answer before asking for a follow-up challenge.')
-      return
-    }
+  /**
+   * Robust Backend API Call with Automatic Retry & Fallback
+   */
+  const requestEvaluationFromAPI = async (
+    questionToEval: InterviewQuestion,
+    answerText: string,
+    retryCount = 0
+  ): Promise<{ evaluation: QuestionEvaluation; followUpQuestion: string }> => {
+    try {
+      const res = await fetch('/api/interview-prep', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'evaluate-answer',
+          question: questionToEval,
+          answer: answerText,
+          input
+        })
+      })
 
-    const followUpQuestion = generateIntelligentFollowUp(currentQuestion, currentAnswer, input)
-    setActiveFollowUpText(followUpQuestion)
-    setIsFollowUpMode(true)
+      if (!res.ok) {
+        throw new Error(`API returned status ${res.status}`)
+      }
 
-    // Update in question state
-    const updated = [...questions]
-    updated[currentIndex] = {
-      ...updated[currentIndex],
-      userAnswer: currentAnswer,
-      isFollowUpActive: true,
-      activeFollowUpQuestion: followUpQuestion
+      const data = await res.json()
+      if (!data.success || !data.evaluation) {
+        throw new Error(data.error || 'Invalid API evaluation payload')
+      }
+
+      return {
+        evaluation: data.evaluation,
+        followUpQuestion: data.followUpQuestion || generateIntelligentFollowUp(questionToEval, answerText, input)
+      }
+    } catch (err: any) {
+      console.warn(`Evaluation attempt ${retryCount + 1} failed:`, err)
+      if (retryCount < 1) {
+        // Auto-retry once after 400ms delay
+        await new Promise(r => setTimeout(r, 400))
+        return requestEvaluationFromAPI(questionToEval, answerText, retryCount + 1)
+      }
+
+      // Safe deterministic fallback ensures NO freeze and NO infinite loading
+      const localEval = evaluateAnswer(questionToEval, answerText, input)
+      const localFollowUp = generateIntelligentFollowUp(questionToEval, answerText, input)
+      return {
+        evaluation: localEval,
+        followUpQuestion: localFollowUp
+      }
     }
-    setQuestions(updated)
   }
 
-  // Submit Answer & Evaluate
-  const handleSaveAndEvaluate = () => {
-    if (!currentAnswer.trim()) {
-      alert('Please enter or speak your answer before proceeding.')
+  /**
+   * Main Answer Submission Pipeline
+   */
+  const handleSubmitAnswer = async () => {
+    const rawAnswer = currentAnswer.trim()
+    if (!rawAnswer) {
+      alert('Please type or speak your answer before submitting for evaluation.')
       return
     }
 
     setIsEvaluatingCurrent(true)
+    setEvalError(null)
 
-    const fullAnswerText = isFollowUpMode && followUpAnswer
-      ? `${currentAnswer}\n\n[FOLLOW-UP: ${activeFollowUpText}]\n${followUpAnswer}`
-      : currentAnswer
+    try {
+      // Stage 1
+      setEvaluatingStageText('Evaluating your answer with AI recruiter engine...')
+      await new Promise(r => setTimeout(r, 300))
 
-    const evalResult = evaluateAnswer(currentQuestion, fullAnswerText, input)
+      // Stage 2
+      setEvaluatingStageText('Generating recruiter feedback, strengths & ideal response...')
+      const fullAnswerText = isFollowUpMode && followUpAnswer.trim()
+        ? `${rawAnswer}\n\n[FOLLOW-UP ANSWER: ${activeFollowUpText}]\n${followUpAnswer.trim()}`
+        : rawAnswer
 
-    const updated = [...questions]
-    updated[currentIndex] = {
-      ...updated[currentIndex],
-      userAnswer: currentAnswer,
-      followUpAnswer: isFollowUpMode ? followUpAnswer : undefined,
-      answeredAt: new Date().toISOString(),
-      evaluation: evalResult
+      const apiResult = await requestEvaluationFromAPI(currentQuestion, fullAnswerText)
+
+      // Stage 3
+      setEvaluatingStageText('Preparing intelligent probing follow-up challenge...')
+      await new Promise(r => setTimeout(r, 200))
+
+      // Safely apply result to questions state
+      const updatedQ: InterviewQuestion = {
+        ...currentQuestion,
+        userAnswer: rawAnswer,
+        followUpAnswer: isFollowUpMode ? followUpAnswer.trim() : undefined,
+        answeredAt: new Date().toISOString(),
+        evaluation: apiResult.evaluation,
+        isFollowUpActive: true,
+        activeFollowUpQuestion: apiResult.followUpQuestion
+      }
+
+      const newQuestions = questions.map((q, idx) => (idx === currentIndex ? updatedQ : q))
+      setQuestions(newQuestions)
+      setEvaluatedPreview(apiResult.evaluation)
+      setActiveFollowUpText(apiResult.followUpQuestion)
+      setIsFollowUpMode(true)
+    } catch (err: any) {
+      console.error('Submission pipeline failed:', err)
+      setEvalError('A temporary network interruption occurred. Please click Retry.')
+    } finally {
+      setIsEvaluatingCurrent(false)
+      setEvaluatingStageText('')
     }
-
-    setQuestions(updated)
-    setEvaluatedPreview(evalResult)
-    setIsEvaluatingCurrent(false)
   }
 
-  // Next Question
-  const handleNextQuestion = () => {
-    if (!evaluatedPreview) {
-      handleSaveAndEvaluate()
+  /**
+   * Submit Follow-Up Response Specifically
+   */
+  const handleSubmitFollowUp = async () => {
+    if (!followUpAnswer.trim()) {
+      alert('Please speak or type your response to the follow-up question.')
+      return
     }
+
+    setIsEvaluatingCurrent(true)
+    setEvaluatingStageText('Evaluating your follow-up answer & updating score...')
+
+    try {
+      const combined = `${currentAnswer}\n\n[FOLLOW-UP RESPONSE: ${activeFollowUpText}]\n${followUpAnswer.trim()}`
+      const apiResult = await requestEvaluationFromAPI(currentQuestion, combined)
+
+      const updatedQ: InterviewQuestion = {
+        ...currentQuestion,
+        userAnswer: currentAnswer,
+        followUpAnswer: followUpAnswer.trim(),
+        answeredAt: new Date().toISOString(),
+        evaluation: apiResult.evaluation
+      }
+
+      const newQuestions = questions.map((q, idx) => (idx === currentIndex ? updatedQ : q))
+      setQuestions(newQuestions)
+      setEvaluatedPreview(apiResult.evaluation)
+    } catch (err: any) {
+      setEvalError('Could not evaluate follow-up response. Please retry.')
+    } finally {
+      setIsEvaluatingCurrent(false)
+      setEvaluatingStageText('')
+    }
+  }
+
+  /**
+   * Proceed to Next Round or Finalize
+   */
+  const handleProceedToNextRound = () => {
+    // Construct the latest verified questions array synchronously
+    let currentQ = questions[currentIndex]
+
+    if (!currentQ.evaluation && currentAnswer.trim()) {
+      // Evaluate synchronously if somehow not evaluated
+      const quickEval = evaluateAnswer(currentQ, currentAnswer.trim(), input)
+      currentQ = {
+        ...currentQ,
+        userAnswer: currentAnswer.trim(),
+        evaluation: quickEval,
+        answeredAt: new Date().toISOString()
+      }
+    }
+
+    const verifiedQuestions = questions.map((q, idx) => (idx === currentIndex ? currentQ : q))
+    setQuestions(verifiedQuestions)
 
     if (isLastQuestion) {
       const minutes = Math.max(1, Math.round(elapsedSeconds / 60))
-      onCompleteInterview(questions, minutes)
+      onCompleteInterview(verifiedQuestions, minutes)
     } else {
       setCurrentIndex(prev => prev + 1)
       setEvaluatedPreview(null)
       setIsFollowUpMode(false)
       setActiveFollowUpText('')
       setFollowUpAnswer('')
+      setEvalError(null)
     }
   }
 
@@ -310,7 +435,7 @@ export function MockInterviewRoom({
 
   return (
     <div className="w-full space-y-5 animate-in fade-in duration-300">
-      {/* Top Bar: Recruiter Banner & Controls */}
+      {/* Top Bar: Recruiter Banner, Live Scores & Timer */}
       <div className="bg-[#0C162B] border border-blue-500/20 rounded-2xl p-4 sm:p-5 backdrop-blur-md shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Recruiter Persona */}
         <div className="flex items-center gap-3">
@@ -337,8 +462,15 @@ export function MockInterviewRoom({
           </div>
         </div>
 
-        {/* Room Status & Timer */}
+        {/* Live Running Scores & Status */}
         <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+          {liveScores && (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-xs text-emerald-300 font-mono">
+              <Award className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Live Score: <strong className="text-white font-bold">{liveScores.overall}%</strong></span>
+            </div>
+          )}
+
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 font-mono">
             <Clock className="w-3.5 h-3.5 text-blue-400" />
             <span>{formatTime(elapsedSeconds)}</span>
@@ -402,7 +534,7 @@ export function MockInterviewRoom({
               {currentQuestion.questionText}
             </p>
 
-            {/* System Design / Coding Constraints */}
+            {/* Scale Constraints (System Design) */}
             {currentQuestion.systemDesignConstraints && (
               <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 text-xs text-slate-300 space-y-1 font-mono">
                 <span className="text-[11px] font-bold text-cyan-400 uppercase">Scale Constraints:</span>
@@ -414,7 +546,7 @@ export function MockInterviewRoom({
               </div>
             )}
 
-            {/* Recruiter Intent & Suggested Key Points Guidance */}
+            {/* Guidance hints */}
             {showGuidance && (
               <div className="p-4 rounded-xl bg-blue-950/30 border border-blue-500/30 text-xs space-y-2.5 animate-in fade-in duration-150">
                 <div>
@@ -422,7 +554,7 @@ export function MockInterviewRoom({
                   <p className="text-slate-300">{currentQuestion.recruiterIntent}</p>
                 </div>
                 <div>
-                  <span className="font-bold text-blue-300 block mb-1">Recommended Angles to Hit:</span>
+                  <span className="font-bold text-blue-300 block mb-1">Recommended Points to Cover:</span>
                   <div className="flex flex-wrap gap-1.5">
                     {currentQuestion.suggestedKeyPoints.map((pt, i) => (
                       <span
@@ -438,21 +570,42 @@ export function MockInterviewRoom({
             )}
           </div>
 
-          {/* Follow-Up Card (If Triggered) */}
-          {isFollowUpMode && (
+          {/* Follow-Up Card (If Triggered/Available) */}
+          {isFollowUpMode && activeFollowUpText && (
             <div className="bg-amber-950/20 border border-amber-500/30 rounded-2xl p-4 sm:p-5 backdrop-blur-md shadow-xl space-y-3 animate-in slide-in-from-top-2 duration-200">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5 uppercase tracking-wide">
                   <Zap className="w-4 h-4 text-amber-400" />
-                  Live Recruiter Probing Follow-Up
+                  Live Recruiter Probing Challenge
                 </span>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono">
-                  Deep Dive
+                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-mono font-semibold">
+                  Follow-Up Round
                 </span>
               </div>
               <p className="text-xs sm:text-sm font-semibold text-white leading-relaxed">
                 {activeFollowUpText}
               </p>
+
+              {/* Follow-up answer textarea if candidate wants to answer follow-up */}
+              <div className="space-y-2 pt-1">
+                <textarea
+                  rows={3}
+                  value={followUpAnswer}
+                  onChange={e => setFollowUpAnswer(e.target.value)}
+                  placeholder="Type or dictate your response to this follow-up challenge..."
+                  className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 font-mono leading-relaxed"
+                />
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleSubmitFollowUp}
+                    disabled={isEvaluatingCurrent || !followUpAnswer.trim()}
+                    className="px-4 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold text-xs transition disabled:opacity-50 flex items-center gap-1.5 shadow"
+                  >
+                    <span>Submit Follow-Up Response</span>
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -462,14 +615,11 @@ export function MockInterviewRoom({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2">
                 <User className="w-4 h-4 text-cyan-400" />
-                <span className="text-xs font-bold text-white">
-                  {isFollowUpMode ? 'Your Response to Follow-Up' : 'Your Candidate Answer'}
-                </span>
+                <span className="text-xs font-bold text-white">Your Candidate Answer</span>
               </div>
 
-              {/* Voice, Code, and Tool controls */}
+              {/* Voice and Video toggles */}
               <div className="flex items-center gap-2">
-                {/* Voice Mode Button */}
                 <button
                   type="button"
                   onClick={toggleListening}
@@ -484,7 +634,6 @@ export function MockInterviewRoom({
                   <span>{isListening ? 'Recording (Click to stop)' : 'Voice Answer'}</span>
                 </button>
 
-                {/* Webcam toggle */}
                 <button
                   type="button"
                   onClick={toggleWebcam}
@@ -508,15 +657,28 @@ export function MockInterviewRoom({
               </div>
             )}
 
-            {/* Textarea Answer Area */}
+            {evalError && (
+              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 text-rose-400" />
+                  <span>{evalError}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSubmitAnswer}
+                  className="px-3 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold"
+                >
+                  Retry Evaluation
+                </button>
+              </div>
+            )}
+
+            {/* Answer Textarea */}
             <div className="relative">
               <textarea
-                rows={isFollowUpMode ? 4 : 8}
-                value={isFollowUpMode ? followUpAnswer : currentAnswer}
-                onChange={e => {
-                  if (isFollowUpMode) setFollowUpAnswer(e.target.value)
-                  else setCurrentAnswer(e.target.value)
-                }}
+                rows={8}
+                value={currentAnswer}
+                onChange={e => setCurrentAnswer(e.target.value)}
                 placeholder={
                   currentQuestion.category === 'dsa'
                     ? '// Write your algorithmic solution or explain your approach here...\nfunction solution() {\n  // ...\n}'
@@ -526,46 +688,64 @@ export function MockInterviewRoom({
               />
             </div>
 
+            {/* Progressive Loading State Banner (Step 7) */}
+            {isEvaluatingCurrent && (
+              <div className="p-4 rounded-xl bg-blue-950/40 border border-blue-500/40 flex items-center gap-3 animate-in fade-in duration-150">
+                <RefreshCw className="w-5 h-5 text-blue-400 animate-spin shrink-0" />
+                <div>
+                  <p className="text-xs font-bold text-white">{evaluatingStageText}</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    Analyzing technical accuracy, communication depth, and recruiter benchmarks...
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Answer Footer Info & Buttons */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 text-xs text-slate-400">
               <div className="flex items-center gap-3">
                 <span>
                   Words:{' '}
                   <strong className="text-white">
-                    {(isFollowUpMode ? followUpAnswer : currentAnswer)
-                      .split(/\s+/)
-                      .filter(Boolean).length}
+                    {currentAnswer.split(/\s+/).filter(Boolean).length}
                   </strong>
                 </span>
-                {!isFollowUpMode && (
-                  <button
-                    type="button"
-                    onClick={handleTriggerFollowUp}
-                    className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1 transition"
-                  >
-                    <Zap className="w-3.5 h-3.5" />
-                    <span>Request Recruiter Follow-Up Challenge</span>
-                  </button>
+                {evaluatedPreview && (
+                  <span className="text-emerald-400 font-mono font-bold flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Evaluated ({evaluatedPreview.score}%)
+                  </span>
                 )}
               </div>
 
               <div className="flex items-center gap-2">
+                {/* Primary Submit Button */}
                 <button
                   type="button"
-                  onClick={handleSaveAndEvaluate}
-                  disabled={isEvaluatingCurrent}
-                  className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-white font-medium transition flex items-center gap-1.5"
+                  onClick={handleSubmitAnswer}
+                  disabled={isEvaluatingCurrent || !currentAnswer.trim()}
+                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold transition flex items-center gap-2 shadow-lg shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Evaluate Answer</span>
+                  {isEvaluatingCurrent ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 animate-spin text-white" />
+                      <span>Evaluating Answer...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5 text-white" />
+                      <span>{evaluatedPreview ? 'Re-Evaluate Answer' : 'Submit & Evaluate Answer'}</span>
+                    </>
+                  )}
                 </button>
 
+                {/* Proceed Button */}
                 <button
                   type="button"
-                  onClick={handleNextQuestion}
-                  className="px-5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold transition flex items-center gap-1.5 shadow-md shadow-blue-500/20"
+                  onClick={handleProceedToNextRound}
+                  disabled={isEvaluatingCurrent}
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold transition flex items-center gap-1.5 shadow-md shadow-cyan-500/20"
                 >
-                  <span>{isLastQuestion ? 'Finish & Generate Dossier' : 'Next Round'}</span>
+                  <span>{isLastQuestion ? 'Finish & Generate Dossier' : 'Proceed to Next Round'}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -574,43 +754,50 @@ export function MockInterviewRoom({
 
           {/* Real-Time Evaluation Preview Banner (If Answer Evaluated) */}
           {evaluatedPreview && (
-            <div className="bg-[#0C162B] border border-emerald-500/30 rounded-2xl p-5 backdrop-blur-md shadow-xl space-y-3.5 animate-in fade-in duration-200">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+            <div className="bg-[#0C162B] border border-emerald-500/30 rounded-2xl p-5 sm:p-6 backdrop-blur-md shadow-xl space-y-4 animate-in fade-in duration-200">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">
                     ✓
                   </div>
-                  <span className="text-xs font-bold text-white">Round Evaluation Feedback</span>
+                  <div>
+                    <span className="text-xs sm:text-sm font-bold text-white">Round Evaluation Feedback</span>
+                    <span className="text-[11px] text-slate-400 block mt-0.2">
+                      Recruiter metrics updated in real time
+                    </span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs text-slate-400">Score:</span>
-                  <span className="text-sm font-bold font-mono text-emerald-400">
+                <div className="text-right">
+                  <span className="text-xs text-slate-400">Round Score</span>
+                  <div className="text-base sm:text-lg font-bold font-mono text-emerald-400">
                     {evaluatedPreview.score} / 100
-                  </span>
+                  </div>
                 </div>
               </div>
 
+              {/* Strengths & Improvement Tips */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
+                <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
                   <span className="font-semibold text-emerald-300">Strengths Highlighted:</span>
-                  <ul className="list-disc list-inside space-y-0.5 text-slate-300 text-[11px]">
-                    {evaluatedPreview.strengths.slice(0, 2).map((s, i) => (
+                  <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px]">
+                    {evaluatedPreview.strengths.slice(0, 3).map((s, i) => (
                       <li key={i}>{s}</li>
                     ))}
                   </ul>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
-                  <span className="font-semibold text-amber-300">Key Improvement Tip:</span>
+                <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800 space-y-1">
+                  <span className="font-semibold text-amber-300">Actionable Improvement Tip:</span>
                   <p className="text-slate-300 text-[11px] leading-relaxed">
-                    {evaluatedPreview.improvementTips[0] || 'Clarify production scale constraints.'}
+                    {evaluatedPreview.improvementTips[0] || 'Incorporate explicit architectural trade-offs.'}
                   </p>
                 </div>
               </div>
 
-              <div className="p-3 rounded-xl bg-blue-950/20 border border-blue-500/20 text-xs text-slate-300">
-                <span className="font-semibold text-blue-300 block mb-1">Ideal Recruiter Framing:</span>
-                <p className="text-[11px] italic text-slate-300 leading-relaxed">
+              {/* Ideal Recruiter Answer */}
+              <div className="p-3.5 rounded-xl bg-blue-950/25 border border-blue-500/25 text-xs text-slate-300 space-y-1">
+                <span className="font-semibold text-blue-300 block">Ideal Recruiter Framing:</span>
+                <p className="text-[11px] sm:text-xs italic text-slate-200 leading-relaxed">
                   {evaluatedPreview.idealRecruiterAnswer}
                 </p>
               </div>
@@ -640,7 +827,7 @@ export function MockInterviewRoom({
                 />
               </div>
               <p className="text-[10px] text-slate-400 text-center">
-                Check your eye contact, lighting, and posture as you speak.
+                Maintain steady eye contact and clear posture while answering.
               </p>
             </div>
           )}
@@ -683,7 +870,7 @@ export function MockInterviewRoom({
                           {q.evaluation?.score}%
                         </span>
                       ) : isCurrent ? (
-                        <span className="text-[10px] text-blue-300">In Progress</span>
+                        <span className="text-[10px] text-blue-300 font-semibold">Active</span>
                       ) : (
                         <span className="text-[10px] text-slate-600">Pending</span>
                       )}
@@ -694,20 +881,20 @@ export function MockInterviewRoom({
             </div>
           </div>
 
-          {/* Quick Interview Tips */}
+          {/* Recruiter Cheat Sheet */}
           <div className="bg-[#0C162B] border border-slate-800/80 rounded-2xl p-5 backdrop-blur-md shadow-xl text-xs space-y-2 text-slate-400">
             <h5 className="font-bold text-white flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
               Recruiter Cheat Sheet
             </h5>
             <p className="leading-relaxed text-[11px]">
-              • <strong>STAR Framework:</strong> Quantify results (&quot;reduced p99 latency by 35%&quot;).
+              • <strong>STAR Framework:</strong> Structure behavioral answers into Situation, Task, Action, and Result.
             </p>
             <p className="leading-relaxed text-[11px]">
-              • <strong>Trade-offs:</strong> Never claim one tech is universally best; explain why it fits these constraints.
+              • <strong>Trade-offs:</strong> Explicitly explain why you chose this design over viable alternatives.
             </p>
             <p className="leading-relaxed text-[11px]">
-              • <strong>Reverse Questions:</strong> Prepare 2 sharp architectural questions for the recruiter at the end.
+              • <strong>Follow-Ups:</strong> Answering the recruiter follow-up challenge boosts your overall score.
             </p>
           </div>
         </div>

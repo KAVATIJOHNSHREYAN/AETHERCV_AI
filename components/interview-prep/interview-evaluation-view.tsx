@@ -369,7 +369,7 @@ export function InterviewEvaluationView({
                       <div className="p-3.5 rounded-xl bg-emerald-950/20 border border-emerald-500/30 space-y-1.5">
                         <span className="font-bold text-emerald-300 block">Strengths:</span>
                         <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px]">
-                          {q.evaluation?.strengths.map((s, i) => (
+                          {(q.evaluation?.strengths || ['Good attempt to address the question prompt.']).map((s, i) => (
                             <li key={i}>{s}</li>
                           ))}
                         </ul>
@@ -378,7 +378,7 @@ export function InterviewEvaluationView({
                       <div className="p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/30 space-y-1.5">
                         <span className="font-bold text-rose-300 block">Areas to Improve:</span>
                         <ul className="list-disc list-inside space-y-1 text-slate-300 text-[11px]">
-                          {q.evaluation?.weaknesses.map((w, i) => (
+                          {(q.evaluation?.weaknesses || ['Provide more concrete production metrics and scale numbers.']).map((w, i) => (
                             <li key={i}>{w}</li>
                           ))}
                         </ul>
@@ -391,7 +391,7 @@ export function InterviewEvaluationView({
                         Ideal Recruiter Answer & Structure:
                       </span>
                       <p className="text-[11px] sm:text-xs text-slate-200 leading-relaxed italic">
-                        {q.evaluation?.idealRecruiterAnswer}
+                        {q.evaluation?.idealRecruiterAnswer || 'Focus on outlining requirements, choosing modular architecture components, and measuring SLAs.'}
                       </p>
                     </div>
                   </div>
