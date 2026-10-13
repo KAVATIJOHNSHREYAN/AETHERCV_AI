@@ -353,14 +353,15 @@ export default function ResumeAnalyzerPage() {
         {/* Top Header Banner */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-blue-500/20">
           <div className="flex items-start sm:items-center gap-4 sm:gap-5">
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-2xl overflow-hidden border border-blue-400/40 shadow-[0_0_25px_rgba(59,130,246,0.4)] bg-[#0F172A]/90 p-1 group hover:scale-105 transition-transform">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-full overflow-hidden border border-blue-400/40 shadow-[0_0_25px_rgba(59,130,246,0.4)] bg-[#0F172A]/90 p-1 group hover:scale-105 transition-transform">
               <Image
                 src="/aethercv-logo.png"
                 alt="AETHERCV AI Emblem"
                 width={80}
                 height={80}
-                className="w-full h-full object-contain rounded-xl"
+                className="w-full h-full object-cover rounded-full"
                 priority
+                unoptimized
               />
             </div>
             <div className="space-y-2">

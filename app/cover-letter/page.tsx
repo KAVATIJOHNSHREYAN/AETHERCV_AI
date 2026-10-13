@@ -226,15 +226,16 @@ export default function CoverLetterGeneratorPage() {
         {/* Hero Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-blue-500/20">
           <div className="flex items-start gap-4">
-            <div className="relative w-14 h-14 rounded-2xl bg-gradient-to-tr from-[#4D48E6] via-[#2662EB] to-[#1E50DA] p-0.5 shadow-[0_0_25px_rgba(77,72,230,0.35)] shrink-0">
-              <div className="w-full h-full rounded-2xl bg-[#08111F] flex items-center justify-center overflow-hidden">
+            <div className="relative w-14 h-14 rounded-full bg-gradient-to-tr from-[#4D48E6] via-[#2662EB] to-[#1E50DA] p-0.5 shadow-[0_0_25px_rgba(77,72,230,0.35)] shrink-0">
+              <div className="w-full h-full rounded-full bg-[#08111F] flex items-center justify-center overflow-hidden">
                 <Image
                   src="/aethercv-logo.png"
                   alt="AETHERCV AI Emblem"
                   width={56}
                   height={56}
-                  className="w-12 h-12 object-contain"
+                  className="w-full h-full object-cover rounded-full"
                   priority
+                  unoptimized
                 />
               </div>
             </div>

@@ -13,7 +13,8 @@ export function Footer() {
               alt="AETHERCV AI"
               width={38}
               height={38}
-              className="h-9 w-9 rounded-xl object-contain shadow-sm border border-blue-500/20"
+              className="h-9 w-9 rounded-full object-cover shadow-[0_0_12px_rgba(37,99,235,0.4)] border border-blue-400/40"
+              unoptimized
             />
             <div>
               <p className="text-sm text-[#9CAEC9] font-outfit">

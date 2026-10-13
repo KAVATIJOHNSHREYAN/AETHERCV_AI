@@ -158,13 +158,14 @@ export function ResumeUploadZone({ onAnalyze, isLoading }: ResumeUploadZoneProps
           />
 
           <div className="relative mb-4 group-hover:scale-105 transition-transform">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl p-1 bg-gradient-to-tr from-[#4D48E6] via-[#2662EB] to-[#1E50DA] shadow-[0_0_25px_rgba(77,72,230,0.5)] flex items-center justify-center">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full p-1 bg-gradient-to-tr from-[#4D48E6] via-[#2662EB] to-[#1E50DA] shadow-[0_0_25px_rgba(77,72,230,0.5)] flex items-center justify-center">
               <Image
                 src="/aethercv-logo.png"
                 alt="AETHERCV AI Upload"
                 width={76}
                 height={76}
-                className="w-full h-full object-contain rounded-xl"
+                className="w-full h-full object-cover rounded-full"
+                unoptimized
               />
             </div>
             <div className="absolute -bottom-1 -right-1 p-1.5 rounded-lg bg-[#1E50DA] text-white shadow-md border border-[#818cf8]/50">

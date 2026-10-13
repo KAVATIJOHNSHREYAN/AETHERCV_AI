@@ -92,13 +92,14 @@ export function AiScanningOverlay({ isLoading }: AiScanningOverlayProps) {
             />
 
             {/* Center Core */}
-            <div className="relative w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 p-1 flex items-center justify-center text-white shadow-[0_0_30px_rgba(59,130,246,0.6)]">
+            <div className="relative w-16 h-16 rounded-full bg-gradient-to-tr from-blue-600 via-sky-500 to-cyan-400 p-1 flex items-center justify-center text-white shadow-[0_0_30px_rgba(59,130,246,0.6)]">
               <Image
                 src="/aethercv-logo.png"
                 alt="AETHERCV AI Scanner Core"
                 width={60}
                 height={60}
-                className="w-full h-full object-contain rounded-xl"
+                className="w-full h-full object-cover rounded-full"
+                unoptimized
               />
             </div>
           </div>
