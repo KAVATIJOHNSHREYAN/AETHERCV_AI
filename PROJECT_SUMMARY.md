@@ -2,14 +2,15 @@
 
 ## 📌 Executive Overview
 
-**AETHERCV AI** is an intelligent, high-performance career intelligence and academic analytics web platform that integrates seven powerful enterprise-grade suites into a single unified application:
-1. **AI Resume Builder & 15 ATS Templates Suite** (`/resume-builder`) — Real-time split-screen builder with 15 certified recruiter ATS templates, live 100-point audit, 11 fonts, 10 accents, section reordering, 1-click single-page A4 PDF export, and AI rewriters.
-2. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — An advanced resume evaluation engine that verifies document authenticity, scores ATS compliance across 8 distinct dimensions, provides STAR-method bullet optimizations, and benchmarks resumes against target job descriptions.
-3. **AI Cover Letter Generator** (`/cover-letter`) — A tailored generator that synthesizes resume credentials with target job requirements to produce customized, recruiter-ready cover letters with Word (`.docx`) export and draft persistence.
-4. **LinkedIn Profile Optimizer** (`/linkedin`) — Recruiter audit engine with 10 score categories, 6 headline styles, 6 summary tones, SEO scanner, and authentic live desktop preview.
-5. **GitHub Profile Optimizer** (`/github`) — 100-point engineering evaluation with 5 readiness metrics, 6 README generation styles, repo health audits, and live GitHub desktop preview.
-6. **Universal Job Roles & Careers Library** (`lib/job-roles/master-library.ts`) — Omnipresent 200+ roles catalog across 18 industry groups with instant fuzzy search, category filter pills, and "Others" custom typing with persistent storage.
-7. **KLU Attendance Calculator & Academic Intelligence** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — A real-time academic tracker designed for university students to calculate attendance percentages, compute weighted LTPS course credits, automate ERP portal login with CAPTCHA solving, extract screenshot tables via OCR, and monitor detention risks.
+**AETHERCV AI** is an intelligent, high-performance career intelligence and academic analytics web platform that integrates eight powerful enterprise-grade suites into a single unified application:
+1. **AI Skill Gap Analyzer** (`/skill-gap-analyzer`) — Intelligent employability gap analysis engine comparing candidate resumes against 200+ roles or custom JDs with 0–100 circular gauges, 11-category skills matching, missing skills priority tiers, missing recruiter keywords, experience & scale gaps, recommended portfolio projects, certifications, 12-week learning roadmaps, market demand salary data, STAR bullet improvements, prioritized action checklist, and multi-format exports.
+2. **AI Resume Builder & 15 ATS Templates Suite** (`/resume-builder`) — Real-time split-screen builder with 15 certified recruiter ATS templates, live 100-point audit, 11 fonts, 10 accents, section reordering, 1-click single-page A4 PDF export, and AI rewriters.
+3. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — An advanced resume evaluation engine that verifies document authenticity, scores ATS compliance across 8 distinct dimensions, provides STAR-method bullet optimizations, and benchmarks resumes against target job descriptions.
+4. **AI Cover Letter Generator** (`/cover-letter`) — A tailored generator that synthesizes resume credentials with target job requirements to produce customized, recruiter-ready cover letters with Word (`.docx`) export and draft persistence.
+5. **LinkedIn Profile Optimizer** (`/linkedin`) — Recruiter audit engine with 10 score categories, 6 headline styles, 6 summary tones, SEO scanner, and authentic live desktop preview.
+6. **GitHub Profile Optimizer** (`/github`) — 100-point engineering evaluation with 5 readiness metrics, 6 README generation styles, repo health audits, and live GitHub desktop preview.
+7. **Universal Job Roles & Careers Library** (`lib/job-roles/master-library.ts`) — Omnipresent 200+ roles catalog across 18 industry groups with instant fuzzy search, category filter pills, and "Others" custom typing with persistent storage.
+8. **KLU Attendance Calculator & Academic Intelligence** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — A real-time academic tracker designed for university students to calculate attendance percentages, compute weighted LTPS course credits, automate ERP portal login with CAPTCHA solving, extract screenshot tables via OCR, and monitor detention risks.
 
 ---
 
@@ -17,7 +18,78 @@
 
 ---
 
-### MODULE 1: AI RESUME ANALYZER & ATS SCORE SUITE (`/resume-analyzer`)
+### MODULE 1: AI SKILL GAP ANALYZER (`/skill-gap-analyzer`)
+
+#### 1. Purpose & Core Value
+Empowers candidates to identify the exact qualification, skill, and keyword discrepancies between their current resume and target tech positions, delivering actionable roadmaps and projects to maximize employability and interview callbacks.
+
+#### 2. Multi-Method Resume Ingestion
+- **Document Upload**: Direct client-side parsing of `.pdf`, `.docx`, and `.txt` files with zero server data retention.
+- **Resume Builder Direct Sync**: 1-click import from Resume Builder workspace (`localStorage`).
+- **Resume Analyzer History Sync**: 1-click reload of parsed text from recent ATS audits.
+- **Raw Text Paste**: Flexible manual paste box with character length validation.
+
+#### 3. Strict Authenticity Validation
+- Verifies document structure using non-blocking ATS checks.
+- If uploaded document is an assignment, lecture note, or non-resume, gracefully displays:
+  > *"This document does not appear to be a resume. Please upload a valid resume or use Resume Builder."*
+- Requires target role or job description before launching analysis.
+
+#### 4. 0–100 Animated Skill Match Gauge
+- Visual SVG circular score gauge calculating match alignment across 5 tiers:
+  - `Excellent Match` (85–100)
+  - `Strong Match` (70–84)
+  - `Moderate Match` (55–69)
+  - `Needs Improvement` (40–54)
+  - `Poor Match` (<40)
+
+#### 5. 11-Domain Matched Skills Breakdown
+Displays matched competencies categorized into:
+- Programming Languages
+- Frontend
+- Backend
+- Cloud
+- DevOps
+- AI
+- Machine Learning
+- Databases
+- Tools
+- Frameworks
+- Soft Skills
+
+#### 6. Prioritized Missing Skills & Justifications
+Categorizes missing skills into `High Priority`, `Medium Priority`, and `Low Priority`, detailing:
+- Why each skill matters to recruiters
+- Learning difficulty (Easy, Moderate, Challenging)
+- Estimated study hours
+
+#### 7. Missing Recruiter Keywords
+Identifies essential search terms missing from the resume (e.g. *Docker, Redis, AWS Lambda, Terraform, REST APIs, GraphQL, FastAPI, Kafka, Microservices, LLMs, Prompt Engineering, RAG, PyTorch, TensorFlow, Kubernetes*), noting where each appears in the JD and providing natural phrasing tips.
+
+#### 8. Experience & Scale Analysis
+- Required years vs demonstrated years comparison.
+- Leadership, architecture, and ownership scoring gauges.
+- Project scale assessment and key missing engineering responsibilities.
+
+#### 9. Recommended Portfolio Projects
+Curates production projects tailored to the target role (e.g., RAG document engine, distributed queue, API gateway) with difficulty, tech stack, estimated build time, deliverables, and GitHub architecture.
+
+#### 10. Industry Certifications & 12-Week Roadmap
+- Role-aligned certifications (AWS, Azure, GCP, NVIDIA, Cisco, etc.).
+- 12-week strategic learning roadmap with weekly milestones and deliverables.
+
+#### 11. Market Demand & Resume Improvements
+- Average salary, salary ranges, hiring demand, remote flexibility, and top hiring companies.
+- Before-and-after STAR bullet rewrites with metrics and recruiter tips.
+- Prioritized action checklist with completion toggles.
+
+#### 12. Multi-Format Exports & Local History
+- Downloads available for PDF Report, TXT Report, Markdown Report, JSON Report, Career Roadmap, and Improvement Checklist.
+- Saves history in browser storage with rename, delete, compare side-by-side, and reopen capabilities.
+
+---
+
+### MODULE 2: AI RESUME ANALYZER & ATS SCORE SUITE (`/resume-analyzer`)
 
 #### 1. Multi-Format Document Ingestion
 - **Native Document Upload**: Supports `.pdf`, `.docx`, and `.txt` files with automated text extraction.

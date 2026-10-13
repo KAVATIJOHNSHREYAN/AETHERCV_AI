@@ -14,13 +14,14 @@
 
 **AETHERCV AI** is a comprehensive, production-ready career intelligence and academic productivity ecosystem engineered with Next.js 15, TypeScript, and modern UI architectures. The platform integrates three core pillars into a unified enterprise SaaS experience:
 
-1. **AI Resume Builder & ATS Template System** (`/resume-builder`) — Full-featured commercial split-screen builder with 15 recruiter-tested ATS templates, live 100-point ATS scoring on every keystroke, 11 certified ATS fonts, 10 recruiter accent colors, section reordering & visibility toggles, 1-click single-page A4 optimization, AI summary/STAR bullet rewriters, multi-channel import, and multi-format exports.
-2. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching with role-based templates.
-3. **AI Cover Letter Generator** (`/cover-letter`) — Tailored, recruiter-ready cover letter generator based on resume content, job description, company name, target role, and tone selection with `.docx` export and draft history.
-4. **LinkedIn Profile Optimizer** (`/linkedin`) — Recruiter-focused LinkedIn optimization engine with 10-pillar audit, 6 headline styles, 6 summary tones, SEO scanner, multiple target roles management, and live desktop preview.
-5. **GitHub Profile Optimizer** (`/github`) — Enterprise developer portfolio & open-source optimizer with 100-point engineering score, 5 readiness indicators, 6 README styles, pinned repository curation, health checks, and live GitHub desktop preview.
-6. **Universal Job Roles & Careers Library** (`lib/job-roles/master-library.ts`) — Platform-wide 200+ roles catalog across 18 distinct categories with fuzzy search, instant category filtering, and "Others" custom role specification with persistent storage.
-7. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
+1. **AI Skill Gap Analyzer** (`/skill-gap-analyzer`) — Production-grade employability audit engine comparing resumes against 200+ roles or custom job descriptions with 0–100 animated match gauges, 11-category matched skills, prioritized missing skills, missing recruiter keywords, experience & architecture gap analysis, recommended portfolio projects, industry certifications, 12-week learning roadmaps, market demand salary data, STAR bullet improvements, prioritized action checklist, and multi-format exports.
+2. **AI Resume Builder & ATS Template System** (`/resume-builder`) — Full-featured commercial split-screen builder with 15 recruiter-tested ATS templates, live 100-point ATS scoring on every keystroke, 11 certified ATS fonts, 10 recruiter accent colors, section reordering & visibility toggles, 1-click single-page A4 optimization, AI summary/STAR bullet rewriters, multi-channel import, and multi-format exports.
+3. **AI Resume Analyzer & ATS Score Suite** (`/resume-analyzer`) — Intelligent, tolerant resume verification, 8-pillar ATS compliance scoring, STAR-method bullet rewriting, skill domain taxonomy, and interactive Job Description matching with role-based templates.
+4. **AI Cover Letter Generator** (`/cover-letter`) — Tailored, recruiter-ready cover letter generator based on resume content, job description, company name, target role, and tone selection with `.docx` export and draft history.
+5. **LinkedIn Profile Optimizer** (`/linkedin`) — Recruiter-focused LinkedIn optimization engine with 10-pillar audit, 6 headline styles, 6 summary tones, SEO scanner, multiple target roles management, and live desktop preview.
+6. **GitHub Profile Optimizer** (`/github`) — Enterprise developer portfolio & open-source optimizer with 100-point engineering score, 5 readiness indicators, 6 README styles, pinned repository curation, health checks, and live GitHub desktop preview.
+7. **Universal Job Roles & Careers Library** (`lib/job-roles/master-library.ts`) — Platform-wide 200+ roles catalog across 18 distinct categories with fuzzy search, instant category filtering, and "Others" custom role specification with persistent storage.
+8. **Academic Attendance Intelligence & ERP Suite** (`/`, `/simple`, `/ltps`, `/screenshot`, `/login`, `/dashboard`) — Real-time attendance percentage tracking, LTPS credit weighting, automated screenshot OCR extraction, automated ERP portal authentication, and detention risk monitoring.
 
 ---
 
@@ -36,7 +37,26 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 ## 🚀 Key Modules & Capabilities
 
-### 1. 📄 AI Resume Builder (`/resume-builder`)
+### 1. 🎯 AI Skill Gap Analyzer (`/skill-gap-analyzer`)
+
+- **Multi-Channel Resume Ingestion**: Upload documents (`.PDF`, `.DOCX`, `.TXT`), sync directly from Resume Builder, pull parsed history from Resume Analyzer, or paste raw resume text.
+- **Strict Document Validation**: Authenticity verification rejecting homework assignments, lecture notes, and non-resumes with the prompt: *"This document does not appear to be a resume. Please upload a valid resume or use Resume Builder."*
+- **Target Role or Job Description Flexibility**: Compare against 200+ indexed tech roles with fuzzy search and custom typing, or paste any full job description.
+- **0–100 Animated Skill Match Gauge**: Dynamic SVG circular gauge with match tiers (*Excellent Match*, *Strong Match*, *Moderate Match*, *Needs Improvement*, *Poor Match*).
+- **11-Domain Matched Skills Breakdown**: Categorized across Programming Languages, Frontend, Backend, Cloud, DevOps, AI, Machine Learning, Databases, Tools, Frameworks, and Soft Skills.
+- **Prioritized Missing Skills**: High, Medium, and Low priority gaps with "Why each skill matters", learning difficulty, and estimated hours.
+- **Recruiter Missing Keywords**: Identifies missing search terms (Docker, Redis, AWS Lambda, Terraform, REST APIs, GraphQL, FastAPI, Kafka, Microservices, LLMs, RAG, Kubernetes, etc.) with JD occurrence and natural addition tips.
+- **Experience & Scale Gap Analysis**: Evaluates required vs demonstrated years, leadership signals, architecture score, and project scale assessment.
+- **Recommended Portfolio Projects**: Tailored project suggestions with difficulty, tech stack, estimated time, deliverables, and GitHub architecture.
+- **Industry Certifications**: Recommended credentials (AWS, Azure, GCP, NVIDIA, Cisco, etc.) with difficulty, duration, and career impact.
+- **12-Week Strategic Roadmap**: Milestone-driven timeline from week 1 to 12 with deliverables.
+- **Market Demand & Salary Benchmarks**: Realistic compensation ranges, hiring demand, remote flexibility, and top hiring companies.
+- **Resume Improvements**: Before/after STAR bullet rewrites with metrics, missing sections, and recruiter tips.
+- **Prioritized Action Plan**: Interactive checklist with completion tracking.
+- **Multi-Format Exports**: PDF Report, TXT Report, Markdown Report, JSON Report, Career Roadmap, and Improvement Checklist.
+- **Local History Management**: Save, view, rename, delete, compare side-by-side, and reopen past analyses.
+
+### 2. 📄 AI Resume Builder (`/resume-builder`)
 
 - **Interactive Split-Screen Workspace**: Instant live preview rendering alongside a comprehensive 10-step form editor with zero re-rendering delays.
 - **Real-Time Continuous ATS Scoring**: Pinned live audit widget computing a 100-point ATS compliance score on every keystroke with categorized grade badges and AI recommendations.
@@ -72,19 +92,7 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 ---
 
-### 2. 📱 Cross-Platform Device Compatibility Suite (All Modules)
-
-- **Mixed Device Icon**: Universal Monitor + Smartphone launcher in the global header for immediate screen testing.
-- **Live Viewport Detector**: Real-time measurement of screen dimensions (Width × Height), Device Pixel Ratio (DPR), and orientation.
-- **Tested Screen Matrix**:
-  - **Laptops & Desktops**: 16" MacBook Pro (2560×1600), 15.6" Full HD (1920×1080), 14" Business (1600×900), 13.3" Ultrabook (1366×768), 13" MacBook Air (1440×900), 2K External Monitors (2560×1440).
-  - **Tablets & iPads**: iPad Pro 12.9" (1024×1366), iPad Air 11" (820×1180), iPad 10th Gen (810×1080), Galaxy Tab S9 (800×1280), Surface Pro 9 (912×1368), iPad Mini (744×1133).
-  - **Smartphones**: iPhone 16/15 Pro Max (430×932), iPhone 16/15/14 (390×844), Samsung S24 Ultra (412×915), Pixel 9/8 (412×892), OnePlus/Xiaomi (360×800), iPhone SE (375×667).
-- **All-Module Responsive Architecture**: Complete touch and desktop optimization across Home, Simple, LTPS, Screenshot OCR, ERP Login, Dashboard, Resume Analyzer, Cover Letter, and Resume Builder.
-
----
-
-### 2. 🤖 AI Resume Analyzer & ATS Score Suite (`/resume-analyzer`)
+### 3. 🤖 AI Resume Analyzer & ATS Score Suite (`/resume-analyzer`)
 
 - **Multi-Format Document Ingestion**: Upload native `.pdf`, `.docx`, or `.txt` resumes, or paste plain text directly. Handled in-browser and server-side with zero cloud leakage.
 - **Intelligent Non-Blocking Validation Engine**:
@@ -108,7 +116,7 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 ---
 
-### 2. ✍️ AI Cover Letter Generator (`/cover-letter`)
+### 4. ✍️ AI Cover Letter Generator (`/cover-letter`)
 
 - **Context-Aware Generation**: Synthesizes uploaded resume data and target job requirements to generate bespoke, recruiter-ready cover letters.
 - **Configurable Parameters**:
@@ -124,7 +132,7 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 ---
 
-### 3. 💼 LinkedIn Profile Optimizer (`/linkedin`)
+### 5. 💼 LinkedIn Profile Optimizer (`/linkedin`)
 
 - **Multi-Method Ingestion**: 1-click sync from AI Resume Builder, paste raw profile text/bio, client-side PDF/DOCX resume upload, or manual starter template.
 - **LinkedIn Recruiter Score Engine (0–100)**: Evaluates profile across 10 category scores (Headline, About, Experience, Projects, Skills, SEO Keywords, Recruiter Appeal, Completeness, Networking Strength, Personal Branding) with All-Star status indicator.
@@ -137,7 +145,7 @@ The entire application adopts a cohesive, high-end dark SaaS visual language:
 
 ---
 
-### 4. 🐙 GitHub Profile Optimizer (`/github`)
+### 6. 🐙 GitHub Profile Optimizer (`/github`)
 
 - **Multi-Channel Ingestion**: 1-click instant import from AI Resume Builder (`localStorage`), resume PDF/DOCX upload via client-side PDF.js/mammoth parsers, paste profile/bio, or manual profile starter.
 - **100-Point GitHub Engineering Score**: Real-time audit across 9 categories (Profile Info, README Quality, Repositories, Projects Depth, Documentation, Commit Quality, Portfolio Links, Recruiter Appeal, Open Source Readiness).

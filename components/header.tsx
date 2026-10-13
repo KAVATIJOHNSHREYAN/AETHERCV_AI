@@ -6,7 +6,7 @@ import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
-import { Menu, X, Laptop, Smartphone, ChevronDown, Calculator, FileText, SearchCheck, Mail, Linkedin, Github, LogIn, Camera, Sparkles, UserCheck } from "lucide-react"
+import { Menu, X, Laptop, Smartphone, ChevronDown, Calculator, FileText, SearchCheck, Mail, Linkedin, Github, LogIn, Camera, Sparkles, UserCheck, Target } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { DeviceCompatibilityModal } from "@/components/device-compatibility-modal"
 
@@ -68,6 +68,7 @@ export default function Header() {
     {
       name: 'AI Resume Suite',
       subItems: [
+        { name: 'AI Skill Gap Analyzer', href: '/skill-gap-analyzer', icon: Target, badge: 'New AI' },
         { name: 'AI Resume Builder', href: '/resume-builder', icon: FileText, badge: '15 Templates' },
         { name: 'AI Resume Analyzer', href: '/resume-analyzer', icon: SearchCheck, badge: '100-Pt ATS' },
         { name: 'AI Cover Letter', href: '/cover-letter', icon: Mail },
