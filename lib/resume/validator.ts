@@ -27,15 +27,26 @@ export interface ResumeValidationResult {
   }
 }
 
-// Strictly definite classroom assignment or test paper indicators (only flagged if no resume sections exist)
+// Strictly definite classroom assignment or test paper indicators
 const DEFINITE_ASSIGNMENT_INDICATORS = [
   /\b(?:home\s+assignment|homework\s*(?:#|\d|no|one|two|three)?)\b/i,
-  /\b(?:lab\s+(?:manual|record|exercise)|experiment\s+no\.?)\b/i,
-  /\b(?:problem\s+statement|question\s+paper|q\d+[\.:\)]\s*(?:what|explain|derive|calculate|prove))\b/i,
+  /\b(?:lab\s+(?:manual|record|exercise|sheet|task|questions?|session)|experiment\s+no\.?)\b/i,
+  /\b(?:practical\s+(?:lab|exam|questions?|session|record|exercise)|lab\s+(?:practical|tasks?))\b/i,
+  /\b(?:question\s+paper|questions?\s+bank|lab\s+questions?|practical\s+questions?)\b/i,
+  /\b(?:problem\s+statement|q\d+[\.:\)]\s*(?:what|explain|derive|calculate|prove|write|implement|design))\b/i,
   /\b(?:answer\s*key|solutions?\s+to\s+problem\s+\d+)\b/i,
   /\b(?:submitted\s+to\s*(?:dr\.|prof\.|faculty|sir|madam)|guided\s+by\s*(?:dr\.|prof\.))\b/i,
-  /\b(?:internal\s+assessment|mid\s+exam\s+paper|semester\s+end\s+exam)\b/i
+  /\b(?:internal\s+assessment|mid\s+exam\s+paper|semester\s+end\s+exam|end\s+semester\s+exam)\b/i,
+  /\b(?:write\s+a\s+(?:program|code|query|script|algorithm)\s+(?:to|for|that|in))\b/i,
+  /\b(?:differentiate\s+between|explain\s+the\s+(?:following|concept|working|architecture))\b/i,
+  /\b(?:aim\s*:|apparatus\s*:|algorithm\s*:|viva\s+voce|theory\s*:|procedure\s*:|observation\s*:)\b/i,
+  /\b(?:course\s+code\s*:|course\s+title\s*:|register\s+no\.?|regd?\s+no\.?|hall\s+ticket|max(?:imum)?\s+marks)\b/i
 ]
+
+// Filename indicator regexes
+const FILENAME_ASSIGNMENT_REGEX = /\b(?:lab|practical|assignment|homework|questions?|quiz|exam|test|syllabus|notes|lecture|manual|exercise|record|viva|solution[s]?)\b/i
+const FILENAME_INVOICE_REGEX = /\b(?:invoice|receipt|statement|bill|payslip|salary|tax)\b/i
+const FILENAME_RESUME_REGEX = /\b(?:resume|cv|curriculum[\s_-]*vitae)\b/i
 
 // Strictly definite non-resume indicators (e.g. tax bills, legal agreements)
 const DEFINITE_NON_RESUME_INDICATORS = [
@@ -215,43 +226,22 @@ export function validateIsResume(
   const hasCompanyOrRole = STRUCTURAL_INDICATORS.companiesOrRoles.test(normalized)
   const hasTech = STRUCTURAL_INDICATORS.techKeywords.test(normalized)
 
-  // 4. Definite False Document Indicators (only applied if 0 resume sections/contacts exist)
+  // 4. Definite False Document Indicators
   let assignmentMatches = 0
   for (const pat of DEFINITE_ASSIGNMENT_INDICATORS) {
-    if (pat.test(normalized) || pat.test(lowerName)) assignmentMatches++
+    if (pat.test(normalized)) assignmentMatches++
   }
 
   let nonResumeMatches = 0
   for (const pat of DEFINITE_NON_RESUME_INDICATORS) {
-    if (pat.test(normalized) || pat.test(lowerName)) nonResumeMatches++
+    if (pat.test(normalized)) nonResumeMatches++
   }
 
-  // 5. Verification Rules
-  // Rule A: Candidate name + (Email OR Phone) + At least two major sections
-  const passesRuleA = Boolean(candidateName) && Boolean(detectedEmail || detectedPhone) && majorSectionsCount >= 2
-
-  // Rule B: > 300 extracted characters + Email detected + Bullet points
-  const passesRuleB = normalized.length > 300 && Boolean(detectedEmail) && hasBulletPoints
-
-  // Rule C: Contains dates, technologies, degree, company, education, skills (at least 2 cues)
-  const structuralHits = [hasDates, hasTech, hasDegree, hasCompanyOrRole, hasEducation, hasSkills].filter(Boolean).length
-  const passesRuleC = structuralHits >= 2
-
-  // Rule D: Parser confidence / general resume cues
-  const passesRuleD = /(?:resume|cv|curriculum|vitae)/i.test(lowerName) || majorSectionsCount >= 1 || normalized.length >= 150
-
-  // Any rule passing guarantees validity
-  const isRecognizedResume = passesRuleA || passesRuleB || passesRuleC || passesRuleD
-
-  // Compute confidence (30 to 100)
-  let confidence = 40
-  if (detectedEmail || detectedPhone) confidence += 20
-  if (hasExperience) confidence += 15
-  if (hasEducation || hasDegree) confidence += 15
-  if (hasSkills || hasTech) confidence += 10
-  if (hasProjects) confidence += 10
-  if (hasBulletPoints || hasDates) confidence += 10
-  confidence = Math.min(100, Math.max(20, confidence))
+  const isAssignmentName = FILENAME_ASSIGNMENT_REGEX.test(lowerName)
+  const isInvoiceName = FILENAME_INVOICE_REGEX.test(lowerName)
+  const isResumeName = FILENAME_RESUME_REGEX.test(lowerName)
+  const questionMatches = (normalized.match(/\b(?:q\d+[\.:\)]|question\s*[-#\d:]|problem\s*[-#\d:]|task\s*[-#\d:])/gi) || []).length
+  const hasContact = Boolean(detectedEmail || detectedPhone || linkedinMatch || githubMatch)
 
   // Determine Missing and Detected Pillars
   const detectedPillars: string[] = []
@@ -285,27 +275,47 @@ export function validateIsResume(
     warnings.push('No projects detected.')
   }
 
-  // Definite rejection ONLY if explicitly a homework sheet or receipt with ZERO resume signals
-  if (assignmentMatches >= 2 && majorSectionsCount === 0 && !detectedEmail && !hasSkills && !hasTech) {
-    return {
-      isValid: false,
-      confidence: 10,
-      detectedType: 'assignment',
-      reason: 'The uploaded file appears to be a homework assignment or classroom document, not a resume or CV.',
-      warnings: ['Document flagged as classroom assignment.'],
-      missingPillars,
-      detectedPillars,
-      detectedSections: detectedSectionsList,
-      detectedContact
+  // REJECTION 1: Filename identifies it as lab questions, exam, or assignment (e.g. "ASE PRACTICAL LAB QUESTIONS.docx")
+  if (isAssignmentName && !isResumeName) {
+    if (assignmentMatches > 0 || questionMatches > 0 || !hasContact || majorSectionsCount < 2) {
+      return {
+        isValid: false,
+        confidence: 5,
+        detectedType: 'assignment',
+        reason: `The uploaded document ('${fileName || 'file'}') appears to be a lab questions paper or academic assignment, not a candidate resume. Please upload a valid resume or use Resume Builder.`,
+        warnings: ['Document flagged as classroom assignment / lab questions.'],
+        missingPillars,
+        detectedPillars,
+        detectedSections: detectedSectionsList,
+        detectedContact
+      }
     }
   }
 
-  if (nonResumeMatches >= 2 && majorSectionsCount === 0 && !detectedEmail && !hasSkills && !hasTech) {
+  // REJECTION 2: Content strongly indicates classroom test, homework, or lab manual
+  if ((assignmentMatches >= 2 || (assignmentMatches >= 1 && questionMatches >= 2) || questionMatches >= 3) && !isResumeName) {
+    if (!hasContact || !hasExperience) {
+      return {
+        isValid: false,
+        confidence: 10,
+        detectedType: 'assignment',
+        reason: 'The uploaded file contains exam/lab questions or an academic assignment, not a professional resume. Please upload a valid resume or use Resume Builder.',
+        warnings: ['Document flagged as academic assignment / question paper.'],
+        missingPillars,
+        detectedPillars,
+        detectedSections: detectedSectionsList,
+        detectedContact
+      }
+    }
+  }
+
+  // REJECTION 3: Invoice, billing statement, or receipt
+  if ((isInvoiceName || nonResumeMatches >= 1) && !isResumeName && !hasContact) {
     return {
       isValid: false,
       confidence: 10,
       detectedType: 'invoice',
-      reason: 'The uploaded file appears to be an invoice or receipt, not a resume or CV.',
+      reason: 'The uploaded file appears to be an invoice or receipt, not a candidate resume. Please upload a valid resume.',
       warnings: ['Document flagged as invoice or financial receipt.'],
       missingPillars,
       detectedPillars,
@@ -314,15 +324,35 @@ export function validateIsResume(
     }
   }
 
-  // Standard non-blocking message as requested in Step 9:
-  // "We couldn't confidently detect every standard resume section, but we'll continue analyzing your resume and highlight any missing areas."
-  const standardAdvisoryMessage = "We couldn't confidently detect every standard resume section, but we'll continue analyzing your resume and highlight any missing areas."
+  // REJECTION 4: Arbitrary document with zero resume signals (no contact, no major resume sections, no degree, no experience dates)
+  if (!hasContact && majorSectionsCount === 0 && !isResumeName && !hasDates && !hasDegree) {
+    return {
+      isValid: false,
+      confidence: 15,
+      detectedType: 'unknown',
+      reason: 'This document does not contain recognizable resume sections (such as Work Experience, Education, Technical Skills, or Projects) or contact information. Please upload a valid resume.',
+      warnings: ['No standard resume sections or contact details detected.'],
+      missingPillars,
+      detectedPillars,
+      detectedSections: detectedSectionsList,
+      detectedContact
+    }
+  }
 
+  // Compute confidence (50 to 100) for valid resume
+  let confidence = 50
+  if (detectedEmail || detectedPhone) confidence += 20
+  if (hasExperience) confidence += 10
+  if (hasEducation || hasDegree) confidence += 10
+  if (hasSkills || hasTech) confidence += 5
+  if (hasProjects) confidence += 5
+  confidence = Math.min(100, Math.max(30, confidence))
+
+  const standardAdvisoryMessage = "We couldn't confidently detect every standard resume section, but we'll continue analyzing your resume and highlight any missing areas."
   if (warnings.length > 0) {
     warnings.unshift(standardAdvisoryMessage)
   }
 
-  // In all cases where readable text exists, isValid is ALWAYS true!
   return {
     isValid: true,
     confidence,

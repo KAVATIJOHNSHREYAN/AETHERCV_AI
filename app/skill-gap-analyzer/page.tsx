@@ -7,7 +7,12 @@ import {
   SkillGapAnalysisResult,
   SkillGapHistoryItem
 } from '@/types/skill-gap'
-import { performSkillGapAnalysis, NON_RESUME_ERROR_MESSAGE, EMPTY_JD_ERROR_MESSAGE } from '@/lib/skill-gap/analyzer-engine'
+import {
+  performSkillGapAnalysis,
+  validateResumeInput,
+  NON_RESUME_ERROR_MESSAGE,
+  EMPTY_JD_ERROR_MESSAGE
+} from '@/lib/skill-gap/analyzer-engine'
 import { ResumeSourceSelector } from '@/components/skill-gap/resume-source-selector'
 import { JobTargetSelector } from '@/components/skill-gap/job-target-selector'
 import { CircularMatchGauge } from '@/components/skill-gap/circular-match-gauge'
@@ -157,6 +162,13 @@ export default function SkillGapAnalyzerPage() {
     // Validation 1: Resume text present
     if (!resumeText.trim()) {
       setErrorMessage('Please upload a resume or paste your resume text before running analysis.')
+      return
+    }
+
+    // Validation 1.5: Resume Authenticity Check
+    const valCheck = validateResumeInput(resumeText, fileName)
+    if (!valCheck.isValid) {
+      setErrorMessage(valCheck.errorMessage || NON_RESUME_ERROR_MESSAGE)
       return
     }
 

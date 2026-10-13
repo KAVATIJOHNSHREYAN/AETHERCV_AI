@@ -147,16 +147,10 @@ export function validateResumeInput(resumeText: string, fileName: string = ''): 
   }
 
   const valResult = validateIsResume(resumeText, fileName)
-  if (
-    !valResult.isValid ||
-    valResult.detectedType === 'assignment' ||
-    valResult.detectedType === 'invoice' ||
-    valResult.detectedType === 'notes' ||
-    valResult.detectedType === 'paper'
-  ) {
+  if (!valResult.isValid) {
     return {
       isValid: false,
-      errorMessage: NON_RESUME_ERROR_MESSAGE
+      errorMessage: valResult.reason || NON_RESUME_ERROR_MESSAGE
     }
   }
 

@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { ResumeInputMode } from '@/types/skill-gap'
 import { extractTextFromPdfInBrowser, extractTextFromDocxInBrowser } from '@/lib/resume/client-pdf-extractor'
 import { defaultResumeData } from '@/lib/resume-builder/default-data'
+import { validateResumeInput } from '@/lib/skill-gap/analyzer-engine'
 import {
   Upload,
   FileText,
@@ -74,11 +75,22 @@ export function ResumeSourceSelector({
         throw new Error('Unable to extract sufficient text from file. Please paste your text or upload a standard text PDF.')
       }
 
+      // Strict Authenticity Validation: Immediately reject non-resumes (e.g. lab questions, assignments, invoices)
+      const valResult = validateResumeInput(extracted, file.name)
+      if (!valResult.isValid) {
+        onResumeTextChange('', '')
+        throw new Error(valResult.errorMessage || 'The uploaded file does not appear to be a resume. Please upload a valid resume or use Resume Builder.')
+      }
+
       onResumeTextChange(extracted, file.name)
     } catch (err: any) {
+      onResumeTextChange('', '')
       setExtractError(err.message || 'Failed to parse file text.')
     } finally {
       setIsExtracting(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
     }
   }
 
@@ -261,7 +273,7 @@ export function ResumeSourceSelector({
           }}
           onClick={() => fileInputRef.current?.click()}
           className={`group cursor-pointer border-2 border-dashed rounded-xl p-7 text-center transition-all ${
-            fileName
+            fileName && resumeText
               ? 'border-blue-500/60 bg-blue-950/20'
               : 'border-slate-700/80 hover:border-blue-500/50 bg-slate-950/40 hover:bg-slate-900/40'
           }`}
@@ -284,7 +296,7 @@ export function ResumeSourceSelector({
               <p className="text-sm font-semibold text-white">Extracting text from document...</p>
               <p className="text-xs text-slate-400 mt-1">Parsing sections with client-side OCR engine</p>
             </div>
-          ) : fileName ? (
+          ) : fileName && resumeText ? (
             <div className="flex flex-col items-center justify-center py-2">
               <div className="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-3">
                 <FileText className="w-6 h-6" />
@@ -399,9 +411,14 @@ export function ResumeSourceSelector({
 
       {/* Error message */}
       {extractError && (
-        <div className="mt-4 flex items-center gap-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs">
-          <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
-          <span>{extractError}</span>
+        <div className="mt-4 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs shadow-lg shadow-rose-950/20 animate-in fade-in duration-200">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 shrink-0 text-rose-400 mt-0.5" />
+            <div className="flex-1 space-y-1">
+              <span className="font-bold text-rose-300 block text-xs tracking-wide uppercase">Document Rejected: Not a Resume</span>
+              <p className="text-rose-200/95 leading-relaxed">{extractError}</p>
+            </div>
+          </div>
         </div>
       )}
     </div>

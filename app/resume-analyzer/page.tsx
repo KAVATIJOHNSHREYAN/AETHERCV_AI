@@ -172,7 +172,7 @@ export default function ResumeAnalyzerPage() {
       // 2. Authenticity Pre-Flight Validation
       if (textContent) {
         const validation = validateIsResume(textContent, fileName || file?.name || '', file?.type || '', file?.size || 0)
-        if (!validation.isValid && (validation.detectedType === 'assignment' || validation.detectedType === 'invoice')) {
+        if (!validation.isValid) {
           console.warn('[Resume Analyzer] Document failed authenticity check:', validation.reason)
           throw new Error(validation.reason)
         }
@@ -203,22 +203,19 @@ export default function ResumeAnalyzerPage() {
           } else {
             const errData = await res.json().catch(() => null)
             const errorMsg = errData?.error || `Server responded with status ${res.status}`
-            // If the document is specifically rejected and no textContent is present, throw!
-            if ((errData?.stage === 'resume_authenticity_check' || errData?.validation?.isValid === false) && !textContent) {
+            // If the document is specifically rejected, throw!
+            if (errData?.stage === 'resume_authenticity_check' || errData?.validation?.isValid === false) {
               throw new Error(errorMsg)
             }
-            // If we already have textContent, do NOT throw, we will process it locally!
             if (!textContent) {
               throw new Error(errorMsg)
             }
           }
         } catch (apiErr: any) {
           console.warn('[Resume Analyzer] API route call failed:', apiErr.message)
-          // If this is an authenticity rejection and we do not have textContent, bubble up
-          if ((apiErr.message.includes('not a resume') || apiErr.message.includes('assignment') || apiErr.message.includes('homework')) && !textContent) {
+          if (apiErr.message.includes('not a resume') || apiErr.message.includes('assignment') || apiErr.message.includes('homework') || apiErr.message.includes('questions')) {
             throw apiErr
           }
-          // If we have textContent, we fall through to the self-contained local pipeline below
           if (!textContent) {
             throw apiErr
           }
@@ -229,7 +226,7 @@ export default function ResumeAnalyzerPage() {
       // If API route was skipped or returned direct text, run self-contained local pipeline
       if (!resultData && textContent) {
         const validation = validateIsResume(textContent, fileName || file?.name || '')
-        if (!validation.isValid && (validation.detectedType === 'assignment' || validation.detectedType === 'invoice')) {
+        if (!validation.isValid) {
           throw new Error(validation.reason)
         }
 
