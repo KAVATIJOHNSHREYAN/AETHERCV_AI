@@ -10,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/'],
     },
-    sitemap: 'https://klattendance.vercel.app/sitemap.xml',
+    sitemap: 'https://aethercv-ai.vercel.app/sitemap.xml',
   }
 } 

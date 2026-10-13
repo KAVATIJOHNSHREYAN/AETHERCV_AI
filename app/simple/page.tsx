@@ -122,7 +122,7 @@ export default function SimpleCalculatorPage() {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'Simple Attendance Calculator',
-    url: 'https://klattendance.vercel.app/simple',
+    url: 'https://aethercv-ai.vercel.app/simple',
     description: 'Calculate your simple attendance percentage based on total classes and attended classes.',
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',

@@ -284,7 +284,7 @@ export default function LoginPage() {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'KL ERP Login',
-    url: 'https://klattendance.vercel.app/login',
+    url: 'https://aethercv-ai.vercel.app/login',
     description: 'Secure login to KL University ERP to fetch attendance and timetable details automatically.',
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',

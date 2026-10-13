@@ -13,7 +13,7 @@ export default function Home() {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'KL University Attendance Calculator',
-      url: 'https://klattendance.vercel.app/',
+      url: 'https://aethercv-ai.vercel.app/',
       description: 'Calculate your attendance percentage and check eligibility for KL University exams based on the University attendance policy.',
       applicationCategory: 'EducationalApplication',
       operatingSystem: 'Web',

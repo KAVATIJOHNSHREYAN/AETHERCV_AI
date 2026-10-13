@@ -171,7 +171,7 @@ export default function LTPSCalculatorPage() {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'LTPS Attendance Calculator',
-    url: 'https://klattendance.vercel.app/ltps',
+    url: 'https://aethercv-ai.vercel.app/ltps',
     description: 'Calculate weighted attendance for Lecture, Tutorial, Practical, and Skilling components.',
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',

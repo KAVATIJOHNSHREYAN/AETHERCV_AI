@@ -67,3 +67,4 @@ next-env.d.ts
 # Local Cache
 .npm-cache
 .eslintcache
+.env*

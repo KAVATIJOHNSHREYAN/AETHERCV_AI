@@ -56,11 +56,11 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://klattendance.vercel.app'),
+  metadataBase: new URL('https://aethercv-ai.vercel.app'),
   openGraph: {
     title: 'KL University Attendance Calculator',
     description: 'Calculate your attendance percentage and check eligibility for KL University exams based on university policy.',
-    url: 'https://klattendance.vercel.app',
+    url: 'https://aethercv-ai.vercel.app',
     siteName: 'KL University Attendance Calculator',
     images: [
       {
