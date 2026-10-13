@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import {
   SalaryPredictionInput,
   SalaryInputMode,
@@ -11,6 +11,9 @@ import {
 } from '@/types/salary-predictor'
 import { COUNTRIES_DATABASE, CURRENCY_RATES } from '@/lib/salary-predictor/countries-data'
 import { COMPANIES_DATABASE } from '@/lib/salary-predictor/companies-data'
+import { MASTER_JOB_ROLES } from '@/lib/job-roles/master-library'
+import { RoleBrowserModal } from './role-browser-modal'
+import { CompanyBrowserModal } from './company-browser-modal'
 import { defaultResumeData } from '@/lib/resume-builder/default-data'
 import { extractTextFromPdfInBrowser, extractTextFromDocxInBrowser } from '@/lib/resume/client-pdf-extractor'
 import { validateResumeInput } from '@/lib/skill-gap/analyzer-engine'
@@ -95,6 +98,49 @@ export function SalaryInputForm({
   const [isExtracting, setIsExtracting] = useState(false)
   const [roleSearchOpen, setRoleSearchOpen] = useState(false)
   const [companySearchOpen, setCompanySearchOpen] = useState(false)
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false)
+  const [isCompanyModalOpen, setIsCompanyModalOpen] = useState(false)
+
+  const roleDropdownRef = useRef<HTMLDivElement>(null)
+  const companyDropdownRef = useRef<HTMLDivElement>(null)
+
+  // Close search dropdowns when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (roleDropdownRef.current && !roleDropdownRef.current.contains(event.target as Node)) {
+        setRoleSearchOpen(false)
+      }
+      if (companyDropdownRef.current && !companyDropdownRef.current.contains(event.target as Node)) {
+        setCompanySearchOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  // Top 200 Roles filtered for dropdown autocomplete
+  const filteredRoleSuggestions = useMemo(() => {
+    const q = input.jobTitle.trim().toLowerCase()
+    if (!q) return MASTER_JOB_ROLES.slice(0, 30)
+    return MASTER_JOB_ROLES.filter(r =>
+      r.title.toLowerCase().includes(q) ||
+      r.category.toLowerCase().includes(q) ||
+      r.aliases.some(a => a.toLowerCase().includes(q))
+    ).slice(0, 40)
+  }, [input.jobTitle])
+
+  // Top 200 Companies filtered for dropdown autocomplete
+  const filteredCompanySuggestions = useMemo(() => {
+    const q = input.company.trim().toLowerCase()
+    if (!q) return COMPANIES_DATABASE.slice(0, 30)
+    return COMPANIES_DATABASE.filter(c =>
+      c.name.toLowerCase().includes(q) ||
+      (c.ticker && c.ticker.toLowerCase().includes(q)) ||
+      c.headquarters.toLowerCase().includes(q) ||
+      c.tier.toLowerCase().includes(q) ||
+      c.primaryIndustries.some(ind => ind.toLowerCase().includes(q))
+    ).slice(0, 40)
+  }, [input.company])
 
   // Current Country & State objects
   const selectedCountry =
@@ -348,72 +394,311 @@ export function SalaryInputForm({
 
       {/* Row 1: Job Title & Company */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Job Title */}
-        <div className="relative">
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-            <Briefcase className="w-3.5 h-3.5 text-blue-400" />
-            Job Title / Role
-          </label>
+        {/* Job Title / Role */}
+        <div className="relative" ref={roleDropdownRef}>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+              <Briefcase className="w-3.5 h-3.5 text-blue-400" />
+              <span>Job Title / Role</span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsRoleModalOpen(true)}
+              className="text-[11px] font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1 transition px-1.5 py-0.5 rounded-md hover:bg-blue-950/40"
+            >
+              <Sparkles className="w-3 h-3 text-blue-400" />
+              <span>Browse Top 200 Roles ({MASTER_JOB_ROLES.length})</span>
+            </button>
+          </div>
+
           <div className="relative">
             <input
               type="text"
               value={input.jobTitle}
-              onChange={e => onChange({ ...input, jobTitle: e.target.value })}
+              onChange={e => {
+                onChange({ ...input, jobTitle: e.target.value })
+                setRoleSearchOpen(true)
+              }}
               onFocus={() => setRoleSearchOpen(true)}
               placeholder="e.g. Software Engineer, AI Engineer, Full Stack..."
               className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-medium"
             />
+            {input.jobTitle && (
+              <button
+                type="button"
+                onClick={() => {
+                  onChange({ ...input, jobTitle: '' })
+                  setRoleSearchOpen(true)
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-0.5"
+                title="Clear job title"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            {/* Autocomplete Dropdown */}
+            {roleSearchOpen && (
+              <div className="absolute left-0 right-0 top-full mt-1.5 z-40 bg-[#0C162B] border border-blue-500/30 rounded-2xl shadow-2xl overflow-hidden max-h-72 flex flex-col animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="p-2 border-b border-slate-800/80 bg-slate-950/60 flex items-center justify-between text-[11px] text-slate-400 px-3">
+                  <span>Top Standardized Roles ({filteredRoleSuggestions.length} shown)</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRoleSearchOpen(false)
+                      setIsRoleModalOpen(true)
+                    }}
+                    className="text-blue-400 hover:text-blue-300 font-semibold"
+                  >
+                    View All {MASTER_JOB_ROLES.length} →
+                  </button>
+                </div>
+
+                <div className="overflow-y-auto p-1.5 space-y-0.5">
+                  {filteredRoleSuggestions.map(role => {
+                    const isSelected = input.jobTitle.toLowerCase() === role.title.toLowerCase()
+                    return (
+                      <button
+                        key={role.id}
+                        type="button"
+                        onClick={() => {
+                          onChange({ ...input, jobTitle: role.title })
+                          setRoleSearchOpen(false)
+                        }}
+                        className={`w-full px-3 py-2 rounded-xl text-left text-xs transition flex items-center justify-between group ${
+                          isSelected
+                            ? 'bg-blue-600/25 text-white font-semibold'
+                            : 'text-slate-300 hover:bg-slate-900 hover:text-white'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="truncate">{role.title}</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800 shrink-0">
+                            {role.category}
+                          </span>
+                        </div>
+                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />}
+                      </button>
+                    )
+                  })}
+                  {filteredRoleSuggestions.length === 0 && (
+                    <div className="p-3 text-center text-xs text-slate-400">
+                      No predefined role matched. You can still use &quot;{input.jobTitle}&quot; as custom title.
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-2 border-t border-slate-800 bg-slate-950/80 text-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRoleSearchOpen(false)
+                      setIsRoleModalOpen(true)
+                    }}
+                    className="text-xs text-blue-400 hover:text-blue-300 font-semibold flex items-center justify-center gap-1.5 w-full"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Open Categorized Gallery of All {MASTER_JOB_ROLES.length} Roles</span>
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Quick Popular Roles Suggestions */}
           <div className="flex flex-wrap gap-1.5 mt-2">
-            {POPULAR_TECH_ROLES.slice(0, 5).map(role => (
+            {[
+              'Software Engineer',
+              'Senior Software Engineer',
+              'Frontend Developer',
+              'Backend Developer',
+              'Full Stack Developer',
+              'AI Engineer',
+              'Data Scientist',
+              'DevOps Engineer'
+            ].map(role => (
               <button
                 key={role}
                 type="button"
-                onClick={() => onChange({ ...input, jobTitle: role })}
+                onClick={() => {
+                  onChange({ ...input, jobTitle: role })
+                  setRoleSearchOpen(false)
+                }}
                 className={`text-[11px] px-2 py-0.5 rounded-md border transition ${
                   input.jobTitle.toLowerCase() === role.toLowerCase()
-                    ? 'bg-blue-600/30 border-blue-500 text-blue-300'
+                    ? 'bg-blue-600/30 border-blue-500 text-blue-300 font-semibold'
                     : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
                 }`}
               >
                 {role}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => setIsRoleModalOpen(true)}
+              className="text-[11px] px-2 py-0.5 rounded-md border border-blue-500/40 bg-blue-950/40 text-blue-300 hover:bg-blue-900/60 hover:text-white transition flex items-center gap-1 font-semibold"
+            >
+              <Sparkles className="w-2.5 h-2.5 text-blue-400" />
+              <span>+ Top 200 ({MASTER_JOB_ROLES.length})</span>
+            </button>
           </div>
         </div>
 
-        {/* Company */}
-        <div>
-          <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-            <Building2 className="w-3.5 h-3.5 text-cyan-400" />
-            Target Employer / Company
-          </label>
-          <input
-            type="text"
-            value={input.company}
-            onChange={e => onChange({ ...input, company: e.target.value })}
-            placeholder="e.g. Google, Microsoft, Amazon, OpenAI, TCS, Infosys, Startup..."
-            className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-medium"
-          />
+        {/* Target Employer / Company */}
+        <div className="relative" ref={companyDropdownRef}>
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Target Employer / Company</span>
+            </label>
+            <button
+              type="button"
+              onClick={() => setIsCompanyModalOpen(true)}
+              className="text-[11px] font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 transition px-1.5 py-0.5 rounded-md hover:bg-cyan-950/40"
+            >
+              <Sparkles className="w-3 h-3 text-cyan-400" />
+              <span>Browse Top 200 Employers ({COMPANIES_DATABASE.length})</span>
+            </button>
+          </div>
+
+          <div className="relative">
+            <input
+              type="text"
+              value={input.company}
+              onChange={e => {
+                onChange({ ...input, company: e.target.value })
+                setCompanySearchOpen(true)
+              }}
+              onFocus={() => setCompanySearchOpen(true)}
+              placeholder="e.g. Google, Microsoft, Amazon, OpenAI, TCS, Infosys, Startup..."
+              className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-medium"
+            />
+            {input.company && (
+              <button
+                type="button"
+                onClick={() => {
+                  onChange({ ...input, company: '' })
+                  setCompanySearchOpen(true)
+                }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white p-0.5"
+                title="Clear company"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+
+            {/* Autocomplete Dropdown */}
+            {companySearchOpen && (
+              <div className="absolute left-0 right-0 top-full mt-1.5 z-40 bg-[#0C162B] border border-cyan-500/30 rounded-2xl shadow-2xl overflow-hidden max-h-72 flex flex-col animate-in fade-in slide-in-from-top-1 duration-150">
+                <div className="p-2 border-b border-slate-800/80 bg-slate-950/60 flex items-center justify-between text-[11px] text-slate-400 px-3">
+                  <span>Top Employers ({filteredCompanySuggestions.length} shown)</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCompanySearchOpen(false)
+                      setIsCompanyModalOpen(true)
+                    }}
+                    className="text-cyan-400 hover:text-cyan-300 font-semibold"
+                  >
+                    View All {COMPANIES_DATABASE.length} →
+                  </button>
+                </div>
+
+                <div className="overflow-y-auto p-1.5 space-y-0.5">
+                  {filteredCompanySuggestions.map(comp => {
+                    const isSelected = input.company.toLowerCase() === comp.name.toLowerCase()
+                    return (
+                      <button
+                        key={comp.name}
+                        type="button"
+                        onClick={() => {
+                          onChange({ ...input, company: comp.name })
+                          setCompanySearchOpen(false)
+                        }}
+                        className={`w-full px-3 py-2 rounded-xl text-left text-xs transition flex items-center justify-between group ${
+                          isSelected
+                            ? 'bg-cyan-600/25 text-white font-semibold'
+                            : 'text-slate-300 hover:bg-slate-900 hover:text-white'
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="truncate">{comp.name}</span>
+                          {comp.ticker && (
+                            <span className="text-[10px] px-1 py-0.2 rounded bg-slate-950 font-mono text-cyan-300 border border-slate-800 shrink-0">
+                              {comp.ticker}
+                            </span>
+                          )}
+                          <span className="text-[9.5px] px-1.5 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800 shrink-0">
+                            {comp.tier}
+                          </span>
+                        </div>
+                        {isSelected && <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 shrink-0" />}
+                      </button>
+                    )
+                  })}
+                  {filteredCompanySuggestions.length === 0 && (
+                    <div className="p-3 text-center text-xs text-slate-400">
+                      No predefined company matched. You can still predict for &quot;{input.company}&quot;.
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-2 border-t border-slate-800 bg-slate-950/80 text-center">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCompanySearchOpen(false)
+                      setIsCompanyModalOpen(true)
+                    }}
+                    className="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center justify-center gap-1.5 w-full"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Open Sector Gallery of All {COMPANIES_DATABASE.length} Employers</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Quick Companies Chips */}
           <div className="flex flex-wrap gap-1.5 mt-2">
-            {['Google', 'Microsoft', 'Amazon', 'OpenAI', 'Oracle', 'TCS', 'Infosys'].map(comp => (
+            {[
+              'Google',
+              'Microsoft',
+              'Amazon',
+              'Meta',
+              'Apple',
+              'NVIDIA',
+              'OpenAI',
+              'Oracle',
+              'TCS',
+              'Infosys',
+              'Stripe'
+            ].map(comp => (
               <button
                 key={comp}
                 type="button"
-                onClick={() => onChange({ ...input, company: comp })}
+                onClick={() => {
+                  onChange({ ...input, company: comp })
+                  setCompanySearchOpen(false)
+                }}
                 className={`text-[11px] px-2 py-0.5 rounded-md border transition ${
                   input.company.toLowerCase() === comp.toLowerCase()
-                    ? 'bg-cyan-600/30 border-cyan-500 text-cyan-300'
+                    ? 'bg-cyan-600/30 border-cyan-500 text-cyan-300 font-semibold'
                     : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
                 }`}
               >
                 {comp}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => setIsCompanyModalOpen(true)}
+              className="text-[11px] px-2 py-0.5 rounded-md border border-cyan-500/40 bg-cyan-950/40 text-cyan-300 hover:bg-cyan-900/60 hover:text-white transition flex items-center gap-1 font-semibold"
+            >
+              <Sparkles className="w-2.5 h-2.5 text-cyan-400" />
+              <span>+ Top 200 ({COMPANIES_DATABASE.length})</span>
+            </button>
           </div>
         </div>
       </div>
@@ -706,6 +991,22 @@ export function SalaryInputForm({
           )}
         </button>
       </div>
+
+      {/* Top 200 Roles Directory Modal */}
+      <RoleBrowserModal
+        isOpen={isRoleModalOpen}
+        onClose={() => setIsRoleModalOpen(false)}
+        selectedRole={input.jobTitle}
+        onSelectRole={role => onChange({ ...input, jobTitle: role })}
+      />
+
+      {/* Top 200 Companies Directory Modal */}
+      <CompanyBrowserModal
+        isOpen={isCompanyModalOpen}
+        onClose={() => setIsCompanyModalOpen(false)}
+        selectedCompany={input.company}
+        onSelectCompany={company => onChange({ ...input, company })}
+      />
     </div>
   )
 }
