@@ -36,8 +36,13 @@ export function extractResumeSignals(text: string): {
 
   const lower = text.toLowerCase()
   const foundSkills = commonTech.filter(tech => {
-    const regex = new RegExp(`\\b${tech.toLowerCase()}\\b`, 'i')
-    return regex.test(lower)
+    const escaped = tech.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    try {
+      const regex = new RegExp(`(?:^|[^a-zA-Z0-9_#+])${escaped}(?:$|[^a-zA-Z0-9_#+])`, 'i')
+      return regex.test(lower) || lower.includes(tech.toLowerCase())
+    } catch {
+      return lower.includes(tech.toLowerCase())
+    }
   })
 
   // Extract lines that look like project titles or company achievements
@@ -70,11 +75,11 @@ export function extractResumeSignals(text: string): {
  * Generates an enterprise-grade personalized mock interview
  */
 export function generateMockInterviewQuestions(input: InterviewInput): InterviewQuestion[] {
-  const company = input.company.trim() || 'Global Tech'
-  const role = input.jobRole.trim() || 'Software Engineer'
-  const level = input.experienceLevel || 'mid'
-  const type = input.interviewType || 'complete'
-  const country = input.country || 'Global'
+  const company = (input?.company || 'Global Tech').toString().trim() || 'Global Tech'
+  const role = (input?.jobRole || (input as any)?.role || 'Software Engineer').toString().trim() || 'Software Engineer'
+  const level = input?.experienceLevel || 'mid'
+  const type = input?.interviewType || 'complete'
+  const country = input?.country || 'Global'
 
   const resumeSignals = extractResumeSignals(input.resumeText)
   const primarySkill = resumeSignals.skills[0] || 'Modern Architecture'
