@@ -102,8 +102,8 @@ export function HistoryDrawer({
 
         {/* Compare Action Bar */}
         {compareSelectedIds.length > 0 && (
-          <div className="bg-indigo-950/40 border-b border-indigo-500/30 p-3 flex items-center justify-between text-xs">
-            <span className="text-indigo-300 font-semibold">
+          <div className="bg-blue-950/40 border-b border-blue-500/30 p-3 flex items-center justify-between text-xs">
+            <span className="text-blue-300 font-semibold">
               {compareSelectedIds.length}/2 selected to compare
             </span>
             <div className="flex items-center gap-2">
@@ -118,7 +118,7 @@ export function HistoryDrawer({
                 type="button"
                 disabled={compareSelectedIds.length !== 2}
                 onClick={handleRunCompare}
-                className="px-2.5 py-1 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-bold text-xs flex items-center gap-1"
+                className="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold text-xs flex items-center gap-1"
               >
                 <GitCompare className="w-3.5 h-3.5" />
                 <span>Compare</span>
@@ -146,7 +146,7 @@ export function HistoryDrawer({
                   key={item.id}
                   className={`bg-slate-950/80 border rounded-xl p-3.5 transition-all ${
                     isCompareActive
-                      ? 'border-indigo-500 shadow-lg shadow-indigo-500/10'
+                      ? 'border-blue-500 shadow-lg shadow-blue-500/10'
                       : 'border-slate-800 hover:border-slate-700'
                   }`}
                 >
@@ -220,7 +220,7 @@ export function HistoryDrawer({
                         onClick={() => toggleCompareSelect(item.id)}
                         className={`px-2 py-0.5 rounded text-[10.5px] font-semibold border transition ${
                           isCompareActive
-                            ? 'bg-indigo-600/30 border-indigo-500 text-indigo-300'
+                            ? 'bg-blue-600/30 border-blue-500 text-blue-300'
                             : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
                         }`}
                       >

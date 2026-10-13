@@ -71,15 +71,15 @@ export function MatchedSkillsView({ matchedSkills }: MatchedSkillsViewProps) {
       : [selectedCategory as SkillCategory]
 
   return (
-    <div className="bg-[#0C162B]/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md">
+    <div className="bg-gradient-to-b from-[#0A1A36] to-[#071328] border border-blue-900/50 rounded-2xl p-6 shadow-xl backdrop-blur-md">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 mb-5 gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-blue-950/80 mb-5 gap-3">
         <div>
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-emerald-400" />
             Matched Skills ({matchedSkills.length})
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-300 mt-0.5">
             Verified competencies in your resume matching target role requirements.
           </p>
         </div>
@@ -92,7 +92,7 @@ export function MatchedSkillsView({ matchedSkills }: MatchedSkillsViewProps) {
             className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition border whitespace-nowrap ${
               selectedCategory === 'All'
                 ? 'bg-emerald-600/20 border-emerald-500 text-emerald-300'
-                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                : 'bg-[#0A1730] border-blue-900/40 text-slate-300 hover:text-white'
             }`}
           >
             All Categories ({matchedSkills.length})
@@ -108,7 +108,7 @@ export function MatchedSkillsView({ matchedSkills }: MatchedSkillsViewProps) {
                 className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition border whitespace-nowrap ${
                   selectedCategory === cat
                     ? 'bg-emerald-600/20 border-emerald-500 text-emerald-300'
-                    : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white'
+                    : 'bg-[#0A1730] border-blue-900/40 text-slate-300 hover:text-white'
                 }`}
               >
                 {cat} ({count})
@@ -132,30 +132,30 @@ export function MatchedSkillsView({ matchedSkills }: MatchedSkillsViewProps) {
 
             return (
               <div key={cat} className="space-y-2.5">
-                <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
-                  <div className="w-5 h-5 rounded-md bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <div className="flex items-center gap-2 text-xs font-bold text-slate-200 uppercase tracking-wider">
+                  <div className="w-5 h-5 rounded-md bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-300">
                     <Icon className="w-3 h-3" />
                   </div>
                   <span>{cat}</span>
-                  <span className="text-[10px] text-emerald-400 font-mono">({skills.length})</span>
+                  <span className="text-[10px] text-emerald-300 font-mono font-bold">({skills.length})</span>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5">
                   {skills.map((skill, i) => (
                     <div
                       key={i}
-                      className="bg-slate-950/60 border border-slate-800/80 hover:border-emerald-500/40 rounded-xl p-3 flex flex-col justify-between transition-all group"
+                      className="bg-gradient-to-b from-[#07241C] to-[#051613] border border-emerald-500/30 hover:border-emerald-400/60 rounded-xl p-3 flex flex-col justify-between transition-all group shadow-sm"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white group-hover:text-emerald-300 transition-colors">
+                        <span className="text-xs font-bold text-white group-hover:text-emerald-200 transition-colors">
                           {skill.name}
                         </span>
-                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300">
                           {skill.proficiencyEstimate}
                         </span>
                       </div>
                       {skill.matchedContext && (
-                        <p className="text-[10.5px] text-slate-400 mt-2 line-clamp-2 italic font-mono bg-slate-900/40 p-1.5 rounded border border-slate-800/40">
+                        <p className="text-[10.5px] text-slate-300 mt-2 line-clamp-2 italic font-mono bg-black/40 p-1.5 rounded border border-emerald-500/20">
                           &quot;{skill.matchedContext}&quot;
                         </p>
                       )}

@@ -16,7 +16,7 @@ export function ExperienceGapView({ experienceGap }: ExperienceGapViewProps) {
       {/* Header */}
       <div className="pb-4 border-b border-slate-800/80 mb-5">
         <h3 className="text-base font-bold text-white flex items-center gap-2">
-          <Briefcase className="w-5 h-5 text-indigo-400" />
+          <Briefcase className="w-5 h-5 text-blue-400" />
           Experience & Seniority Gap Analysis
         </h3>
         <p className="text-xs text-slate-400 mt-0.5">
@@ -39,7 +39,7 @@ export function ExperienceGapView({ experienceGap }: ExperienceGapViewProps) {
           <span className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold block mb-1">
             Years Mentioned on Resume
           </span>
-          <div className="text-3xl font-black text-indigo-400">
+          <div className="text-3xl font-black text-blue-400">
             {experienceGap.yearsMentioned} <span className="text-sm font-semibold text-slate-400">Years</span>
           </div>
         </div>
@@ -145,9 +145,9 @@ export function ExperienceGapView({ experienceGap }: ExperienceGapViewProps) {
 
       {/* Project Scale Assessment & Responsibilities */}
       <div className="space-y-4">
-        <div className="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-indigo-300 uppercase tracking-wider mb-1.5">
-            <Scale className="w-4 h-4 text-indigo-400" />
+        <div className="bg-blue-950/20 border border-blue-500/30 rounded-xl p-4">
+          <div className="flex items-center gap-2 text-xs font-bold text-blue-300 uppercase tracking-wider mb-1.5">
+            <Scale className="w-4 h-4 text-blue-400" />
             Project Scale Assessment
           </div>
           <p className="text-xs text-slate-300">
@@ -166,7 +166,7 @@ export function ExperienceGapView({ experienceGap }: ExperienceGapViewProps) {
                   key={i}
                   className="bg-slate-950/60 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-300 flex items-start gap-2"
                 >
-                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 shrink-0 mt-1.5" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0 mt-1.5" />
                   <span>{resp}</span>
                 </div>
               ))}

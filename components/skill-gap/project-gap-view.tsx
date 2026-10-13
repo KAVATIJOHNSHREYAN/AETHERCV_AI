@@ -13,12 +13,12 @@ export function ProjectGapView({ projects, roleName }: ProjectGapViewProps) {
   return (
     <div className="bg-[#0C162B]/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md">
       {/* Header */}
-      <div className="pb-4 border-b border-slate-800/80 mb-5">
+      <div className="pb-4 border-b border-blue-950/80 mb-5">
         <h3 className="text-base font-bold text-white flex items-center gap-2">
-          <FolderGit2 className="w-5 h-5 text-purple-400" />
+          <FolderGit2 className="w-5 h-5 text-cyan-400" />
           Recommended Portfolio Projects to Bridge Skill Gap
         </h3>
-        <p className="text-xs text-slate-400 mt-0.5">
+        <p className="text-xs text-slate-300 mt-0.5">
           Building these specific production projects will demonstrate real-world competence for {roleName}.
         </p>
       </div>
@@ -31,15 +31,15 @@ export function ProjectGapView({ projects, roleName }: ProjectGapViewProps) {
           return (
             <div
               key={proj.id || i}
-              className="bg-slate-950/70 border border-slate-800/90 hover:border-purple-500/40 rounded-xl p-5 flex flex-col justify-between transition-all group"
+              className="bg-gradient-to-b from-[#091D3B] to-[#07142A] border border-blue-900/40 hover:border-cyan-400/60 rounded-xl p-5 flex flex-col justify-between transition-all group shadow-md"
             >
               <div>
                 <div className="flex items-start justify-between gap-3 mb-2.5">
                   <div>
-                    <span className="text-[10px] font-semibold text-purple-400 uppercase tracking-wider block mb-1">
+                    <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider block mb-1">
                       {proj.category}
                     </span>
-                    <h4 className="text-sm font-bold text-white group-hover:text-purple-300 transition-colors">
+                    <h4 className="text-sm font-bold text-white group-hover:text-cyan-200 transition-colors">
                       {proj.title}
                     </h4>
                   </div>
@@ -47,9 +47,9 @@ export function ProjectGapView({ projects, roleName }: ProjectGapViewProps) {
                   <span
                     className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${
                       isCrucial
-                        ? 'bg-purple-500/20 border-purple-500/40 text-purple-300'
+                        ? 'bg-cyan-500/20 border-cyan-400/50 text-cyan-300'
                         : isVeryHigh
-                        ? 'bg-blue-500/20 border-blue-500/40 text-blue-300'
+                        ? 'bg-blue-500/20 border-blue-400/50 text-blue-300'
                         : 'bg-slate-800/60 border-slate-700 text-slate-300'
                     }`}
                   >
@@ -64,13 +64,13 @@ export function ProjectGapView({ projects, roleName }: ProjectGapViewProps) {
                 {/* Tech stack */}
                 <div className="mb-4">
                   <span className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5 mb-1.5">
-                    <Layers className="w-3 h-3 text-purple-400" /> Technologies:
+                    <Layers className="w-3 h-3 text-cyan-400" /> Technologies:
                   </span>
                   <div className="flex flex-wrap gap-1.5">
                     {proj.technologies.map((t, tidx) => (
                       <span
                         key={tidx}
-                        className="text-[10.5px] font-mono bg-slate-900 border border-slate-800 text-slate-300 px-2 py-0.5 rounded"
+                        className="text-[10.5px] font-mono bg-blue-950/80 border border-blue-800/50 text-sky-200 px-2 py-0.5 rounded"
                       >
                         {t}
                       </span>
@@ -79,13 +79,13 @@ export function ProjectGapView({ projects, roleName }: ProjectGapViewProps) {
                 </div>
 
                 {/* Key Deliverables */}
-                <div className="mb-4 bg-slate-900/50 p-3 rounded-lg border border-slate-800/60">
-                  <span className="text-[11px] font-bold text-slate-300 block mb-2">
+                <div className="mb-4 bg-[#0A1A34] p-3 rounded-lg border border-blue-900/50">
+                  <span className="text-[11px] font-bold text-slate-200 block mb-2">
                     Key Deliverables:
                   </span>
                   <ul className="space-y-1.5">
                     {proj.keyDeliverables.map((deliv, didx) => (
-                      <li key={didx} className="text-xs text-slate-400 flex items-start gap-2">
+                      <li key={didx} className="text-xs text-slate-300 flex items-start gap-2">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
                         <span>{deliv}</span>
                       </li>
@@ -94,27 +94,27 @@ export function ProjectGapView({ projects, roleName }: ProjectGapViewProps) {
                 </div>
 
                 {/* GitHub Architecture */}
-                <div className="text-[11px] text-slate-400 flex items-start gap-1.5 font-mono bg-slate-950 p-2.5 rounded border border-slate-900">
-                  <GitBranch className="w-3.5 h-3.5 text-purple-400 shrink-0 mt-0.5" />
+                <div className="text-[11px] text-slate-300 flex items-start gap-1.5 font-mono bg-[#061224] p-2.5 rounded border border-blue-950">
+                  <GitBranch className="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5" />
                   <span>
-                    <strong className="text-slate-300">Architecture:</strong> {proj.githubArchitecture}
+                    <strong className="text-white">Architecture:</strong> {proj.githubArchitecture}
                   </span>
                 </div>
               </div>
 
               {/* Footer Meta */}
-              <div className="flex items-center justify-between text-xs text-slate-400 pt-4 mt-4 border-t border-slate-900">
+              <div className="flex items-center justify-between text-xs text-slate-300 pt-4 mt-4 border-t border-blue-950">
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-purple-400" />
+                  <Clock className="w-3.5 h-3.5 text-cyan-400" />
                   <span>Est. Time: {proj.estimatedTime}</span>
                 </div>
 
-                <div className="flex items-center gap-1 font-semibold text-slate-300">
+                <div className="flex items-center gap-1 font-semibold text-slate-200">
                   <span>Difficulty:</span>
                   <span
                     className={
                       proj.difficulty === 'Advanced'
-                        ? 'text-purple-400'
+                        ? 'text-sky-400'
                         : proj.difficulty === 'Intermediate'
                         ? 'text-blue-400'
                         : 'text-emerald-400'

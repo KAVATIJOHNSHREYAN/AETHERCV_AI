@@ -10,14 +10,14 @@ interface MissingKeywordsViewProps {
 
 export function MissingKeywordsView({ missingKeywords }: MissingKeywordsViewProps) {
   return (
-    <div className="bg-[#0C162B]/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md">
+    <div className="bg-gradient-to-b from-[#0A1A36] to-[#071328] border border-blue-900/50 rounded-2xl p-6 shadow-xl backdrop-blur-md">
       {/* Header */}
-      <div className="pb-4 border-b border-slate-800/80 mb-5">
+      <div className="pb-4 border-b border-blue-950/80 mb-5">
         <h3 className="text-base font-bold text-white flex items-center gap-2">
           <KeyRound className="w-5 h-5 text-sky-400" />
           Missing Recruiter Keywords ({missingKeywords.length})
         </h3>
-        <p className="text-xs text-slate-400 mt-0.5">
+        <p className="text-xs text-slate-300 mt-0.5">
           Critical ATS search queries and recruiter indexing terms absent from your document.
         </p>
       </div>
@@ -36,7 +36,7 @@ export function MissingKeywordsView({ missingKeywords }: MissingKeywordsViewProp
             return (
               <div
                 key={i}
-                className="bg-slate-950/70 border border-slate-800/90 hover:border-sky-500/40 rounded-xl p-4 transition-all flex flex-col justify-between"
+                className="bg-gradient-to-b from-[#091E3D] to-[#07142A] border border-blue-900/40 hover:border-sky-400/60 rounded-xl p-4 transition-all flex flex-col justify-between shadow-sm"
               >
                 <div>
                   <div className="flex items-center justify-between mb-2.5">

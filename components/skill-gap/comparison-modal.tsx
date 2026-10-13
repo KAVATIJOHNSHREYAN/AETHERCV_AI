@@ -22,9 +22,9 @@ export function ComparisonModal({ itemA, itemB, onClose }: ComparisonModalProps)
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
       <div className="w-full max-w-4xl bg-[#0C162B] border border-slate-800 rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+        <div className="p-5 border-b border-blue-950 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+            <div className="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
               <GitCompare className="w-5 h-5" />
             </div>
             <div>
@@ -49,7 +49,7 @@ export function ComparisonModal({ itemA, itemB, onClose }: ComparisonModalProps)
           {/* Top Score Comparison Banner */}
           <div className="grid grid-cols-2 gap-4">
             {/* Version A */}
-            <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-4 text-center">
+            <div className="bg-[#091833] border border-blue-900/50 rounded-xl p-4 text-center">
               <span className="text-[11px] font-mono text-slate-400 block mb-1">
                 {new Date(itemA.timestamp).toLocaleDateString()}
               </span>
@@ -60,19 +60,19 @@ export function ComparisonModal({ itemA, itemB, onClose }: ComparisonModalProps)
             </div>
 
             {/* Version B */}
-            <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-4 text-center">
+            <div className="bg-[#071F36] border border-cyan-900/50 rounded-xl p-4 text-center">
               <span className="text-[11px] font-mono text-slate-400 block mb-1">
                 {new Date(itemB.timestamp).toLocaleDateString()}
               </span>
               <h4 className="text-sm font-bold text-white mb-2">{itemB.title}</h4>
-              <div className="text-3xl font-black text-indigo-400">{dataB.overallScore}%</div>
+              <div className="text-3xl font-black text-cyan-400">{dataB.overallScore}%</div>
               <div className="text-xs font-semibold text-slate-300 mt-1">{dataB.matchLevel}</div>
               <div className="text-[11px] text-slate-400 mt-0.5">Role: {dataB.targetRole}</div>
             </div>
           </div>
 
           {/* Score Delta */}
-          <div className="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-3 text-center text-xs">
+          <div className="bg-blue-950/30 border border-blue-500/30 rounded-xl p-3 text-center text-xs">
             {scoreDiff > 0 ? (
               <span className="text-emerald-300 font-bold">
                 ▲ Score increased by +{scoreDiff}% in the later analysis!

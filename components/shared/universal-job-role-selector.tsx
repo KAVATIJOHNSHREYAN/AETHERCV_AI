@@ -470,8 +470,8 @@ export function UniversalJobRoleSelector({
                 {/* 3. Frequent Roles Section */}
                 {frequentRoles.length > 0 && (
                   <div className="pt-2 pb-2 space-y-1">
-                    <div className="flex items-center gap-1.5 text-[10.5px] font-bold text-purple-300 uppercase tracking-wider px-2 py-0.5">
-                      <Flame className="w-3 h-3 text-purple-400" />
+                    <div className="flex items-center gap-1.5 text-[10.5px] font-bold text-sky-300 uppercase tracking-wider px-2 py-0.5">
+                      <Flame className="w-3 h-3 text-sky-400" />
                       <span>Frequently Selected</span>
                     </div>
                     <div className="flex flex-wrap gap-1.5 px-1">
@@ -483,7 +483,7 @@ export function UniversalJobRoleSelector({
                           className={`px-2.5 py-1 rounded-lg text-xs font-medium flex items-center gap-1.5 transition border ${
                             value.toLowerCase() === role.toLowerCase()
                               ? 'bg-blue-600 text-white border-blue-400'
-                              : 'bg-purple-500/10 hover:bg-purple-500/20 text-purple-200 border-purple-500/20'
+                              : 'bg-sky-500/10 hover:bg-sky-500/20 text-sky-200 border-sky-500/20'
                           }`}
                         >
                           <span>{role}</span>

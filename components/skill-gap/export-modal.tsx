@@ -131,13 +131,13 @@ export function ExportModal({ isOpen, onClose, data }: ExportModalProps) {
           <button
             type="button"
             onClick={handleDownloadMarkdown}
-            className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-purple-500/50 transition text-left group"
+            className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-sky-500/50 transition text-left group"
           >
-            <div className="w-9 h-9 rounded-lg bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-purple-400 shrink-0 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-lg bg-sky-600/20 border border-sky-500/30 flex items-center justify-center text-sky-400 shrink-0 group-hover:scale-105 transition-transform">
               <FileCode className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-white group-hover:text-purple-300 transition-colors">
+              <div className="text-xs font-bold text-white group-hover:text-sky-300 transition-colors">
                 Markdown Report (.md)
               </div>
               <p className="text-[11px] text-slate-400 mt-0.5">
@@ -169,13 +169,13 @@ export function ExportModal({ isOpen, onClose, data }: ExportModalProps) {
           <button
             type="button"
             onClick={handleDownloadRoadmap}
-            className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-indigo-500/50 transition text-left group"
+            className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/80 hover:bg-slate-900 border border-slate-800 hover:border-blue-500/50 transition text-left group"
           >
-            <div className="w-9 h-9 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 group-hover:scale-105 transition-transform">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-xs font-bold text-white group-hover:text-indigo-300 transition-colors">
+              <div className="text-xs font-bold text-white group-hover:text-blue-300 transition-colors">
                 Career Roadmap (.md)
               </div>
               <p className="text-[11px] text-slate-400 mt-0.5">

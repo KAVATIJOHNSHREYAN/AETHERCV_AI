@@ -50,10 +50,10 @@ export function CircularMatchGauge({
     }
     if (score >= 55) {
       return {
-        stroke: 'url(#gradient-indigo)',
-        glow: 'rgba(99, 102, 241, 0.4)',
-        textColor: 'text-indigo-400',
-        badgeBg: 'bg-indigo-500/15 border-indigo-500/30 text-indigo-300'
+        stroke: 'url(#gradient-blue)',
+        glow: 'rgba(37, 99, 235, 0.45)',
+        textColor: 'text-blue-400',
+        badgeBg: 'bg-blue-500/15 border-blue-500/30 text-blue-300'
       }
     }
     if (score >= 40) {
@@ -91,9 +91,9 @@ export function CircularMatchGauge({
               <stop offset="0%" stopColor="#06B6D4" />
               <stop offset="100%" stopColor="#3B82F6" />
             </linearGradient>
-            <linearGradient id="gradient-indigo" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#6366F1" />
-              <stop offset="100%" stopColor="#8B5CF6" />
+            <linearGradient id="gradient-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#2563EB" />
+              <stop offset="100%" stopColor="#38BDF8" />
             </linearGradient>
             <linearGradient id="gradient-amber" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#F59E0B" />

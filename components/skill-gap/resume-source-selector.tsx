@@ -209,11 +209,11 @@ export function ResumeSourceSelector({
           }}
           className={`flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all border ${
             mode === 'builder'
-              ? 'bg-indigo-600/20 border-indigo-500 text-indigo-400 shadow-md shadow-indigo-500/10'
+              ? 'bg-blue-600/20 border-blue-500 text-blue-300 shadow-md shadow-blue-500/10'
               : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
           }`}
         >
-          <Sparkles className="w-4 h-4" />
+          <Sparkles className="w-4 h-4 text-blue-400" />
           <span>Resume Builder</span>
         </button>
 
@@ -324,9 +324,9 @@ export function ResumeSourceSelector({
 
       {/* Mode 2: Resume Builder Sync */}
       {mode === 'builder' && (
-        <div className="border border-indigo-500/30 bg-indigo-950/20 rounded-xl p-5">
+        <div className="border border-blue-500/30 bg-blue-950/20 rounded-xl p-5">
           <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-lg bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 shrink-0">
+            <div className="w-10 h-10 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0">
               <Sparkles className="w-5 h-5" />
             </div>
             <div className="flex-1 min-w-0">
@@ -335,7 +335,7 @@ export function ResumeSourceSelector({
                 <button
                   type="button"
                   onClick={loadFromResumeBuilder}
-                  className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                  className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1"
                 >
                   <RefreshCw className="w-3 h-3" /> Re-sync
                 </button>
@@ -343,7 +343,7 @@ export function ResumeSourceSelector({
               <p className="text-xs text-slate-300 mt-1">
                 Imported structured profile, experience, projects, and skills directly from your Resume Builder workspace.
               </p>
-              <div className="mt-3 text-xs text-indigo-300 font-mono bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 max-h-24 overflow-y-auto">
+              <div className="mt-3 text-xs text-blue-300 font-mono bg-slate-950/60 p-2.5 rounded-lg border border-slate-800 max-h-24 overflow-y-auto">
                 {resumeText.substring(0, 240)}...
               </div>
             </div>

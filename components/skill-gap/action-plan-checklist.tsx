@@ -21,25 +21,25 @@ export function ActionPlanChecklist({ initialItems }: ActionPlanChecklistProps) 
   const progressPercent = items.length > 0 ? Math.round((completedCount / items.length) * 100) : 0
 
   return (
-    <div className="bg-[#0C162B]/90 border border-slate-800 rounded-2xl p-6 shadow-xl backdrop-blur-md">
+    <div className="bg-gradient-to-b from-[#0A1A36] to-[#071328] border border-blue-900/50 rounded-2xl p-6 shadow-xl backdrop-blur-md">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800/80 mb-5 gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-blue-950/80 mb-5 gap-3">
         <div>
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <ListTodo className="w-5 h-5 text-emerald-400" />
             Prioritized Employability Action Plan
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-300 mt-0.5">
             Step-by-step checklist to systematically close skill gaps and maximize interview callbacks.
           </p>
         </div>
 
         {/* Progress Bar Badge */}
-        <div className="flex items-center gap-3 bg-slate-950/80 border border-slate-800 px-3.5 py-1.5 rounded-xl">
+        <div className="flex items-center gap-3 bg-[#091833] border border-blue-900/60 px-3.5 py-1.5 rounded-xl shadow-sm">
           <div className="text-xs font-bold text-emerald-400">
             {completedCount}/{items.length} Completed ({progressPercent}%)
           </div>
-          <div className="w-20 bg-slate-800 rounded-full h-2 overflow-hidden">
+          <div className="w-20 bg-slate-900 rounded-full h-2 overflow-hidden border border-blue-950">
             <div
               className="bg-emerald-400 h-2 rounded-full transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
@@ -60,8 +60,8 @@ export function ActionPlanChecklist({ initialItems }: ActionPlanChecklistProps) 
               onClick={() => toggleItem(item.id)}
               className={`cursor-pointer rounded-xl p-3.5 border transition-all flex items-start gap-3 select-none ${
                 item.completed
-                  ? 'bg-emerald-950/15 border-emerald-500/30 opacity-75'
-                  : 'bg-slate-950/70 border-slate-800 hover:border-slate-700 hover:bg-slate-900/60'
+                  ? 'bg-emerald-950/20 border-emerald-500/30 opacity-75'
+                  : 'bg-gradient-to-b from-[#091D3C] to-[#07142A] border-blue-900/40 hover:border-blue-400/60 shadow-sm'
               }`}
             >
               <button

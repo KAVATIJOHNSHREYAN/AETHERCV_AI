@@ -124,19 +124,19 @@ export function ResumeImprovementsView({ improvements }: ResumeImprovementsViewP
           {/* Summary & Skills Guidance */}
           <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4">
             <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-3 flex items-center gap-2">
-              <Lightbulb className="w-4 h-4 text-indigo-400" />
+              <Lightbulb className="w-4 h-4 text-sky-400" />
               Summary & Skills Section Tips
             </h4>
             <ul className="space-y-2">
               {improvements.weakSummaryTips.map((tip, i) => (
                 <li key={i} className="text-xs text-slate-300 flex items-start gap-2">
-                  <ArrowRight className="w-3.5 h-3.5 text-indigo-400 shrink-0 mt-0.5" />
+                  <ArrowRight className="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5" />
                   <span>{tip}</span>
                 </li>
               ))}
               {improvements.weakSkillsTips.map((tip, i) => (
                 <li key={`skill-${i}`} className="text-xs text-slate-300 flex items-start gap-2">
-                  <ArrowRight className="w-3.5 h-3.5 text-indigo-400 shrink-0 mt-0.5" />
+                  <ArrowRight className="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5" />
                   <span>{tip}</span>
                 </li>
               ))}

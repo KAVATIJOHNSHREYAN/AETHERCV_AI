@@ -273,7 +273,7 @@ export default function SkillGapAnalyzerPage() {
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             Bridge the Gap Between Your Resume & Your{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-300 to-cyan-400">
               Dream Tech Role
             </span>
           </h1>
@@ -355,20 +355,20 @@ export default function SkillGapAnalyzerPage() {
             type="button"
             onClick={handleRunAnalysis}
             disabled={isAnalyzing}
-            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold text-sm shadow-xl shadow-blue-600/25 hover:shadow-blue-600/40 transition-all duration-200 flex items-center justify-center gap-2.5 disabled:opacity-50"
+            className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-bold text-sm shadow-xl shadow-blue-600/30 hover:shadow-blue-500/50 hover:scale-[1.01] transition-all duration-200 flex items-center justify-center gap-2.5 disabled:opacity-50"
           >
-            <Target className="w-5 h-5" />
+            <Target className="w-5 h-5 text-sky-200" />
             <span>Run AI Skill Gap Analysis</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-sky-200" />
           </button>
 
           {(resumeText || analysisResult) && (
             <button
               type="button"
               onClick={handleReset}
-              className="px-5 py-4 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white font-semibold text-xs transition flex items-center gap-2"
+              className="px-5 py-4 rounded-2xl bg-[#0B172E] hover:bg-[#102244] border border-blue-500/30 text-slate-300 hover:text-white font-semibold text-xs transition flex items-center gap-2 shadow-md"
             >
-              <RotateCcw className="w-4 h-4" />
+              <RotateCcw className="w-4 h-4 text-slate-400" />
               <span>Reset</span>
             </button>
           )}
@@ -385,9 +385,9 @@ export default function SkillGapAnalyzerPage() {
         {analysisResult && !isAnalyzing && (
           <div id="analysis-results-section" className="space-y-8 pt-6 border-t border-slate-800/80">
             {/* Top Results Card: Gauge & Executive Summary */}
-            <div className="bg-[#0C162B] border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden backdrop-blur-xl">
+            <div className="bg-gradient-to-b from-[#0C1F42] via-[#091733] to-[#061226] border border-blue-500/40 rounded-3xl p-6 sm:p-8 shadow-[0_0_50px_rgba(37,99,235,0.2)] relative overflow-hidden backdrop-blur-xl">
               {/* Background Glow */}
-              <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
               <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                 {/* Left: Animated Score Gauge */}
@@ -403,10 +403,10 @@ export default function SkillGapAnalyzerPage() {
                 {/* Right: Summary & Role Insights */}
                 <div className="flex-1 space-y-4 text-center md:text-left">
                   <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                    <span className="text-xs font-bold text-blue-400 bg-blue-500/15 border border-blue-500/30 px-3 py-1 rounded-full uppercase tracking-wider">
+                    <span className="text-xs font-bold text-sky-300 bg-sky-500/20 border border-sky-400/40 px-3.5 py-1 rounded-full uppercase tracking-wider shadow-sm">
                       Target: {analysisResult.targetRole}
                     </span>
-                    <span className="text-xs font-semibold text-slate-400">
+                    <span className="text-xs font-semibold text-slate-300">
                       Candidate: <strong className="text-white">{analysisResult.candidateName}</strong>
                     </span>
                   </div>
@@ -415,10 +415,10 @@ export default function SkillGapAnalyzerPage() {
                     {analysisResult.summaryHeadline}
                   </h2>
 
-                  <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-2xl">
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-2xl">
                     Our AI cross-referenced {analysisResult.parsedResumeSnippet.textLength} characters from your resume against {analysisResult.targetRole} competencies. We detected{' '}
-                    <strong className="text-emerald-300">{analysisResult.matchedSkills.length} matched skills</strong> and identified{' '}
-                    <strong className="text-amber-300">{analysisResult.missingSkills.length} actionable skill gaps</strong>.
+                    <strong className="text-emerald-300 font-bold">{analysisResult.matchedSkills.length} matched skills</strong> and identified{' '}
+                    <strong className="text-amber-300 font-bold">{analysisResult.missingSkills.length} actionable skill gaps</strong>.
                   </p>
 
                   {/* Actions */}
@@ -426,7 +426,7 @@ export default function SkillGapAnalyzerPage() {
                     <button
                       type="button"
                       onClick={() => setIsExportOpen(true)}
-                      className="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs shadow-lg shadow-blue-600/20 transition flex items-center gap-2"
+                      className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 text-white font-bold text-xs shadow-lg shadow-blue-600/30 transition flex items-center gap-2"
                     >
                       <Download className="w-4 h-4" />
                       <span>Download Reports (PDF / TXT / MD)</span>
@@ -435,9 +435,9 @@ export default function SkillGapAnalyzerPage() {
                     <button
                       type="button"
                       onClick={() => setIsHistoryOpen(true)}
-                      className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white font-semibold text-xs transition flex items-center gap-2"
+                      className="px-4 py-2.5 rounded-xl bg-[#091833] border border-blue-500/30 text-slate-200 hover:text-white hover:border-blue-400/60 font-semibold text-xs transition flex items-center gap-2 shadow-sm"
                     >
-                      <History className="w-4 h-4 text-blue-400" />
+                      <History className="w-4 h-4 text-sky-400" />
                       <span>History</span>
                     </button>
                   </div>
@@ -449,7 +449,7 @@ export default function SkillGapAnalyzerPage() {
             <DashboardCards data={analysisResult} />
 
             {/* Tab Navigation Bar */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-thin border-b border-slate-800">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin border-b border-blue-950/60">
               {tabs.map(tab => {
                 const Icon = tab.icon
                 const isActive = activeTab === tab.id
@@ -461,16 +461,16 @@ export default function SkillGapAnalyzerPage() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 whitespace-nowrap shrink-0 border ${
                       isActive
-                        ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-600/20'
-                        : 'bg-slate-950/70 border-slate-800 text-slate-400 hover:text-white hover:bg-slate-900'
+                        ? 'bg-gradient-to-r from-blue-600 to-sky-600 text-white border-sky-400/80 shadow-md shadow-blue-600/30'
+                        : 'bg-[#0A1730] border-blue-900/40 text-slate-200 hover:text-white hover:bg-[#10244B] hover:border-blue-500/50 shadow-sm'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-sky-400'}`} />
                     <span>{tab.label}</span>
                     {tab.count !== undefined && (
                       <span
-                        className={`text-[10px] font-mono px-1.5 py-0.2 rounded ${
-                          isActive ? 'bg-white/20 text-white' : 'bg-slate-800 text-slate-300'
+                        className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
+                          isActive ? 'bg-white/20 text-white font-bold' : 'bg-blue-950 border border-blue-500/30 text-sky-300'
                         }`}
                       >
                         {tab.count}

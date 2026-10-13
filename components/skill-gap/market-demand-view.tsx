@@ -108,7 +108,7 @@ export function MarketDemandView({ marketDemand }: MarketDemandViewProps) {
         {/* Global Outlook */}
         <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-4">
           <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-1">
-            <Globe2 className="w-4 h-4 text-indigo-400" />
+            <Globe2 className="w-4 h-4 text-sky-400" />
             <span>Market Outlook</span>
           </div>
           <div className="text-lg font-bold text-white">
